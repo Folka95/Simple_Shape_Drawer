@@ -39,5 +39,11 @@ release/
 *.gcno
 *.prof
 
-# CLion workspace file (optional)
+# Build file
+build/
+
+# Visual Studio Code settings
+.vscode/
+
+# CLion workspace file
 .idea/workspace.xml
