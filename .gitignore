@@ -1,0 +1,43 @@
+# CLion / JetBrains IDE files
+.idea/
+*.iml
+
+# CMake build directories
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Compiled binaries
+*.exe
+*.out
+*.app
+
+# Object files
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.a
+
+# Logs and temp files
+*.log
+*.tmp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Debug folders
+/debug/
+release/
+
+# Coverage / profiling
+*.gcda
+*.gcno
+*.prof
+
+# CLion workspace file (optional)
+.idea/workspace.xml
