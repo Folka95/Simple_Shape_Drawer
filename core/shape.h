@@ -5,19 +5,24 @@
 #include "shape.h"
 #include <bits/stdc++.h>
 #include <windows.h>
-
 using namespace std;
+
+enum ShapeType {
+    SHAPE_LINE,
+    SHAPE_CIRCLE
+};
 
 class Shape {
 private:
     Shape() {}
 protected:
     string description;
+    ShapeType type;
 public:
+    vector< Point< int > > points;
     Shape(const Shape &other);
     COLORREF borderColor;
     COLORREF fillColor;
-    vector< Point< int > > points;
     bool addPoint(const Point< int > &point);
     bool isEnoughToDraw();
     void clear();
