@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SCREEN_WRITER_H
 #define SCREEN_WRITER_H
 #include <windows.h>

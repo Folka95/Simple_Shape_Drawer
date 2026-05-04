@@ -1,3 +1,4 @@
+#pragma once
 #ifndef FILLINGALGORITHM_H
 #define FILLINGALGORITHM_H
 #include "../core/shape.h"

@@ -4,19 +4,24 @@
 #include "point.h"
 #include "shape.h"
 #include <bits/stdc++.h>
+#include <windows.h>
+
 using namespace std;
 
 class Shape {
 private:
-    string description;
     Shape() {}
 protected:
-    string setDescription();
+    string description;
 public:
     Shape(const Shape &other);
+    COLORREF borderColor;
+    COLORREF fillColor;
     vector< Point< int > > points;
-    void addPoint(const Point< int > &point);
+    bool addPoint(const Point< int > &point);
+    bool isEnoughToDraw();
     void clear();
+    string getDescription();
 };
 
 #endif //SHAPE_H

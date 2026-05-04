@@ -16,4 +16,6 @@ add_executable(Simple_Shape_Drawer main.cpp
         rendering/screen_writer.h
         rendering/menu_creator.h
         app/app_manager.cpp
-        app/app_manager.h)
+        app/app_manager.h
+        algorithms/clipping_algorithm.h
+        algorithms/clipping_algorithm.h)

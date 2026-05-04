@@ -1,3 +1,4 @@
+#pragma once
 #ifndef DRAWINGALGORITH_H
 #define DRAWINGALGORITH_H
 #include "../core/shape.h"

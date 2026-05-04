@@ -26,11 +26,19 @@ void AppManager::setBackgroundColor(COLORREF color) {
 }
 
 void AppManager::applyRightClick(int x, int y) {
-
 }
 
 void AppManager::applyLeftClick(int x, int y) {
-
+    // if(currentShape->addPoint(x, y) == DRAW_ME) {
+    //     if(clippingRegion == nullptr) {
+    //         currentDrawingAlgorithm->draw(currentShape, borderColor);
+    //         currentShape->drawn();
+    //     }
+    //     else {
+    //         currentDrawingAlgorithm->draw(currentShape, clippingRegion, borderColor);
+    //         currentShape->drawn();
+    //     }
+    // }
 }
 
 void AppManager::clearScreen() {

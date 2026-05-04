@@ -1,5 +1,6 @@
-#include <Windows.h>
+#pragma once
 #include <bits/stdc++.h>
+#include <Windows.h>
 #include "rendering/menu_creator.h"
 #include "app/app_manager.h"
 using namespace std;
@@ -8,10 +9,12 @@ AppManager *appManager;
 
 void menuSelected(WPARAM &wp, LPARAM &lp) {
     switch (LOWORD(wp)) {
-        case MenuID::FILE_CLEAR:
+        case FILE_CLEAR:
             appManager->clearScreen();
             break;
-        case MenuID::FILE_EXIT:
+        case FILE_SAVE:
+            break;
+        case FILE_LOAD:
             break;
     }
 }

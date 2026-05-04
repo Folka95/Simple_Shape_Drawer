@@ -1,14 +1,15 @@
+#pragma once
 #ifndef APP_MANAGER_H
 #define APP_MANAGER_H
+#include "../algorithms/clipping_algorithm.h"
 #include "../rendering/screen_writer.h"
 #include "../core/shape.h"
 #include "../algorithms/drawing_algorithm.h"
 #include "../algorithms/filling_algorithm.h"
 
 class Element {
-    Shape shape;
-    COLORREF borderColor;
-    COLORREF fillColor;
+    Shape *shape;
+
 };
 
 class AppManager {
@@ -18,7 +19,12 @@ private:
     Shape *currentShape;
     DrawingAlgorithm *currentDrawingAlgorithm;
     FillingAlgorithm *currentFillingAlgorithm;
+    ClippingAlgorithm *currentClippingAlgorithm;
+    bool clippingMode;
     vector< Element > history;
+    Shape *clippingRegion;
+    COLORREF borderColor;
+    COLORREF fillColor;
 public:
     AppManager(HWND _hwnd);
     ~AppManager();
@@ -29,14 +35,7 @@ public:
     void setBackgroundColor(COLORREF color);
 
     void applyRightClick(int x, int y);
-    void applyLeftClick(int x, int y) {
-        if(currentShape->addPoint(Point(x, y)) == draw) {
-            currentDrawingAlgorithm->draw(*currentShape);
-        }
-        else if(currentShape->addPoint(Point(x, y)) == fill) {
-            currentFillingAlgorithm->fill(*currentShape);
-        }
-    }
+    void applyLeftClick(int x, int y);
 
     void clearScreen();
     void saveScreen();

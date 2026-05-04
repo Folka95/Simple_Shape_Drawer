@@ -1,7 +1,4 @@
-//
-// Created by ASUS on 5/4/2026.
-//
-
+#pragma once
 #ifndef FILE_MANAGER_H
 #define FILE_MANAGER_H
 
