@@ -6,6 +6,8 @@
 #include "../core/shape.h"
 #include "../algorithms/drawing_algorithm.h"
 #include "../algorithms/filling_algorithm.h"
+#include <vector>
+using namespace std;
 
 class AppManager {
 private:

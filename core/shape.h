@@ -1,11 +1,11 @@
 #pragma once
 #ifndef SHAPE_H
 #define SHAPE_H
+
 #include "point.h"
-#include "shape.h"
-#include <bits/stdc++.h>
+#include <string>
+#include <vector>
 #include <windows.h>
-using namespace std;
 
 enum ShapeType {
     SHAPE_LINE,
@@ -16,17 +16,18 @@ class Shape {
 private:
     Shape() {}
 protected:
-    string description;
+    std::string description;
     ShapeType type;
 public:
-    vector< Point< int > > points;
-    Shape(const Shape &other);
+    std::vector<Point> points;
     COLORREF borderColor;
     COLORREF fillColor;
-    bool addPoint(const Point< int > &point);
-    bool isEnoughToDraw();
+
+    bool addPoint(const Point &point);
+    virtual bool isEnoughToDraw() = 0;
     void clear();
-    string getDescription();
+    std::string getDescription();
+    virtual Shape* clone() = 0;
 };
 
-#endif //SHAPE_H
+#endif

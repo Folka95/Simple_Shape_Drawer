@@ -7,7 +7,7 @@ class ClippingAlgorithm {
 private:
     ClippingAlgorithm() { }
 public:
-    void clip(const Shape &shape, const Shape &region);
+    virtual void clip(const Shape &shape, const Shape &region) = 0;
 };
 
 #endif //CLIPPING_ALGORITHM_H

@@ -1,5 +1,6 @@
 #include "app_manager.h"
-
+#include <bits/stdc++.h>
+using namespace std;
 AppManager::AppManager(HWND _hwnd) {
     this->hwnd = _hwnd;
     this->sw = new ScreenWriter(_hwnd);
@@ -52,11 +53,11 @@ void AppManager::applyLeftClick(int x, int y) {
         return;
     }
     if(history.back()->isEnoughToDraw()) {
-        Shape *shape = new Shape(*history.back());
-        shape->clear();
-        history.push_back(shape);
+        history.push_back(history.back()->clone());
+        history.back()->clear();
     }
-    if(history.back()->addPoint(Point(x, y))) {
+    Point p(x, y);
+    if(history.back()->addPoint(p)) {
         if(clippingRegion == nullptr) {
             if(drawingAlgorithm == nullptr) {
                 cerr << "AppManager::applyLeftClick: drawingAlgorithm is null" << endl;
@@ -89,3 +90,5 @@ void AppManager::saveScreen() {
 void AppManager::loadScreen() {
     history.clear();
 }
+
+

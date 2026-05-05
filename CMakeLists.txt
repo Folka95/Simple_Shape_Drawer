@@ -4,7 +4,6 @@ project(Simple_Shape_Drawer)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Simple_Shape_Drawer main.cpp
-        core/point.cpp
         core/point.h
         core/shape.h
         core/shape.cpp
@@ -18,4 +17,16 @@ add_executable(Simple_Shape_Drawer main.cpp
         app/app_manager.cpp
         app/app_manager.h
         algorithms/clipping_algorithm.h
-        algorithms/clipping_algorithm.h)
+        algorithms/clipping_algorithm.h
+        io/input_reader.h
+        core/shapes/line.cpp
+        core/shapes/line.h
+        core/shapes/circle.cpp
+        core/shapes/circle.h
+        core/shapes/ellipse.cpp
+        core/shapes/ellipse.h
+        core/shapes/curve.cpp
+        core/shapes/curve.h
+        core/shapes/rectangle.cpp
+        core/shapes/rectangle.h
+)

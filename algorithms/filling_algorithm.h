@@ -7,7 +7,7 @@ class FillingAlgorithm {
 private:
     FillingAlgorithm() { }
 public:
-    void fill(const Shape &shape);
+    virtual void fill(const Shape &shape) = 0;
 };
 
 #endif

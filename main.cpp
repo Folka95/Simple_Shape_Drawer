@@ -2,19 +2,172 @@
 #include <bits/stdc++.h>
 #include <Windows.h>
 #include "rendering/menu_creator.h"
+#include "io/input_reader.h"
 #include "app/app_manager.h"
+#include "core/shapes/line.h"
 using namespace std;
 
 AppManager *appManager;
 
 void menuSelected(WPARAM &wp, LPARAM &lp) {
     switch (LOWORD(wp)) {
+
+        // ================= FILE =================
         case FILE_CLEAR:
             appManager->clearScreen();
             break;
+
         case FILE_SAVE:
+            appManager->saveScreen();
             break;
+
         case FILE_LOAD:
+            appManager->loadScreen();
+            break;
+
+        // ================= PREFERENCES =================
+        case PREFERENCES_BACKGROUND_COLOR:
+            appManager->setBackgroundColor(pickColor());
+            break;
+
+        case PREFERENCES_MOUSE_SHAPE:
+            break;
+
+        case PREFERENCES_BORDER_COLOR:
+            appManager->setBoarderColor(pickColor());
+            break;
+
+        case PREFERENCES_FILL_COLOR:
+            appManager->setFillColor(pickColor());
+            break;
+
+        // ================= LINE =================
+        case LINE_DDA:
+            // appManager->setShape(Line());
+            // appManager->setDrawingAlgorithm();
+            break;
+        //
+        // case LINE_MIDPOINT:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // case LINE_PARAMETRIC:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // // ================= CIRCLE =================
+        // case CIRCLE_Direct:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // case CIRCLE_POLAR:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // case CIRCLE_ITERATIVE_Polar:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // case CIRCLE_MIDPOINT:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // case CIRCLE_MODIFIED_MIDPOINT:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // // ================= ELLIPSE =================
+        // case ELLIPSE_DIRECT:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // case ELLIPSE_POLAR:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // case ELLIPSE_MIDPOINT:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // // ================= CURVES =================
+        // case CURVE_CARDINAL_SPLINE:
+        //     appManager->setDrawingAlgorithm();
+        //     break;
+        //
+        // // ================= FILLING =================
+        // case FILL_CIRCLE_LINES:
+        //     appManager->setFillingAlgorithm();
+        //     break;
+        //
+        // case FILL_CIRCLE_CIRCLES:
+        //     appManager->setFillingAlgorithm();
+        //     break;
+        //
+        // case FILL_SQUARE_HERMITE:
+        //     appManager->setFillingAlgorithm();
+        //     break;
+        //
+        // case FILL_RECTANGLE_BEZIER:
+        //     appManager->setFillingAlgorithm();
+        //     break;
+        //
+        // case FILL_CONVEX:
+        //     appManager->setFillingAlgorithm();
+        //     break;
+        //
+        // case FILL_NON_CONVEX:
+        //     appManager->setFillingAlgorithm();
+        //     break;
+        //
+        // case FILL_FLOOD_RECURSIVE:
+        //     appManager->setFillingAlgorithm();
+        //     break;
+        //
+        // case FILL_FLOOD_NON_RECURSIVE:
+        //     appManager->setFillingAlgorithm();
+        //     break;
+        //
+        // // ================= RECT CLIP =================
+        // case CLIP_RECT_POINT:
+        //     appManager->setClippingAlgorithm();
+        //     break;
+        //
+        // case CLIP_RECT_LINE:
+        //     appManager->setClippingAlgorithm();
+        //     break;
+        //
+        // case CLIP_RECT_POLYGON:
+        //     appManager->setClippingAlgorithm();
+        //     break;
+        //
+        // // ================= SQUARE CLIP =================
+        // case CLIP_SQUARE_POINT:
+        //     appManager->setClippingAlgorithm();
+        //     break;
+        //
+        // case CLIP_SQUARE_LINE:
+        //     appManager->setClippingAlgorithm();
+        //     break;
+        //
+        // // ================= CIRCLE CLIP =================
+        // case CLIP_CIRCLE_POINT:
+        //     appManager->setClippingAlgorithm();
+        //     break;
+        //
+        // case CLIP_CIRCLE_LINE:
+        //     appManager->setClippingAlgorithm();
+        //     break;
+        //
+        // // ================= SMILE =================
+        // case SMILE_HAPPY_FACE:
+        //     appManager->setShape();
+        //     break;
+        //
+        // case SMILE_SAD_FACE:
+        //     appManager->setShape();
+        //     break;
+
+        default:
             break;
     }
 }

@@ -7,7 +7,7 @@ class DrawingAlgorithm {
 private:
     DrawingAlgorithm() { }
 public:
-    void draw(const Shape &shape);
+    virtual void draw(const Shape &shape) = 0;
 };
 
 #endif
