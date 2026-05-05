@@ -7,7 +7,7 @@ class ClippingAlgorithm {
 private:
     ClippingAlgorithm() { }
 public:
-    void clip(const Shape &shape, const Shape &region, COLORREF color);
+    void clip(const Shape &shape, const Shape &region);
 };
 
 #endif //CLIPPING_ALGORITHM_H

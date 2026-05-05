@@ -7,7 +7,7 @@ class DrawingAlgorithm {
 private:
     DrawingAlgorithm() { }
 public:
-    void draw(const Shape &shape, COLORREF color);
+    void draw(const Shape &shape);
 };
 
 #endif

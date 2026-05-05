@@ -7,21 +7,17 @@
 #include "../algorithms/drawing_algorithm.h"
 #include "../algorithms/filling_algorithm.h"
 
-class Element {
-    Shape *shape;
-
-};
-
 class AppManager {
 private:
     HWND hwnd;
     ScreenWriter *sw;
-    Shape *currentShape;
-    DrawingAlgorithm *currentDrawingAlgorithm;
-    FillingAlgorithm *currentFillingAlgorithm;
-    ClippingAlgorithm *currentClippingAlgorithm;
-    bool clippingMode;
-    vector< Element > history;
+
+    DrawingAlgorithm *drawingAlgorithm;
+    FillingAlgorithm *fillingAlgorithm;
+    ClippingAlgorithm *clippingAlgorithm;
+
+    vector< Shape* > history;
+
     Shape *clippingRegion;
     COLORREF borderColor;
     COLORREF fillColor;
@@ -34,12 +30,18 @@ public:
     void setFillColor(COLORREF color);
     void setBackgroundColor(COLORREF color);
 
+    void setFillingAlgorithm(FillingAlgorithm *fillingAlgorithm);
+    void setDrawingAlgorithm(DrawingAlgorithm *drawingAlgorithm);
+    void setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm);
+
     void applyRightClick(int x, int y);
     void applyLeftClick(int x, int y);
 
     void clearScreen();
     void saveScreen();
     void loadScreen();
+
+    void clippingMode();
 };
 
 #endif
