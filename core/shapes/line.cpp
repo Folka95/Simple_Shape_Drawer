@@ -10,6 +10,15 @@ Line::Line() : Shape() {
     description += "    the end points of the line";
 }
 
+
+bool Line::isInside(const Point &point) const {
+    if(this->points[0].slope(point) == point.slope(this->points[1])) {
+        return true;
+    }
+    return false;
+}
+
+
 bool Line::isEnoughToDraw() const {
     if(this->points.size() > 2) {
         std::cerr << "Line::isEnoughToDraw: points size exceed the limit (2)" << std::endl;

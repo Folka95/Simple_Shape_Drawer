@@ -80,6 +80,7 @@ void AppManager::applyRightClick(int x, int y) {
         cerr << "AppManager::applyRightClick: fillingAlgorithm is null" << endl;
         return;
     }
+    // {x, y} inside shape
     if(history.back()->isEnoughToDraw()) {
         history.back()->fillColor = fillColor;
         fillingAlgorithm->fill(*history.back(), sw);
