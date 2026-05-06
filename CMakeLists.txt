@@ -29,4 +29,6 @@ add_executable(Simple_Shape_Drawer main.cpp
         core/shapes/curve.h
         core/shapes/rectangle.cpp
         core/shapes/rectangle.h
+        algorithms/line/line_dda_drawing_algorithm.cpp
+        algorithms/line/line_dda_drawing_algorithm.h
 )

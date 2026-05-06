@@ -8,26 +8,31 @@
 #include <windows.h>
 
 enum ShapeType {
+    SHAPE_NONE,
     SHAPE_LINE,
-    SHAPE_CIRCLE
+    SHAPE_CIRCLE,
+    SHAPE_ELLIPSE,
+    SHAPE_CURVE,
+    SHAPE_RECTANGLE,
+    SHAPE_SQUARE
 };
 
 class Shape {
 private:
-    Shape() {}
 protected:
+    Shape();
     std::string description;
     ShapeType type;
 public:
     std::vector<Point> points;
     COLORREF borderColor;
     COLORREF fillColor;
-
     bool addPoint(const Point &point);
-    virtual bool isEnoughToDraw() = 0;
     void clear();
-    std::string getDescription();
-    virtual Shape* clone() = 0;
+    std::string getDescription() const ;
+    ShapeType getType() const ;
+    virtual bool isEnoughToDraw() const = 0 ;
+    virtual Shape* clone() const = 0;
 };
 
 #endif

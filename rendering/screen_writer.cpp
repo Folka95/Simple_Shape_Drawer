@@ -4,9 +4,11 @@
 #include <ostream>
 
 ScreenWriter::ScreenWriter(HWND hwnd) {
-    this->hdc = nullptr;
+    isActive = false;
     this->hwnd = hwnd;
     backgroundColor = RGB(0, 0, 0);
+    isUserDrawn = vector< vector< bool > > (this->getWidth(), vector< bool >(this->getHeight(), false));
+    screen = vector< vector< COLORREF > > (this->getWidth(), vector< COLORREF >(this->getHeight(), backgroundColor));
 }
 
 ScreenWriter::~ScreenWriter() {
@@ -17,12 +19,28 @@ void ScreenWriter::setBackgroundColor(COLORREF color) {
     backgroundColor = color;
 }
 
+void ScreenWriter::changeBackgroundColor(COLORREF color) {
+    setBackgroundColor(color);
+    HDC hdc = GetDC(hwnd);
+    for(int i = 0; i < this->getWidth(); i++) {
+        for(int j = 0; j < this->getHeight(); j++) {
+            if(!isUserDrawn[i][j]) {
+                screen[i][j] = backgroundColor;
+                SetPixel(hdc, i, j, backgroundColor);
+            }
+        }
+    }
+    ReleaseDC(this->hwnd, hdc);
+}
+
 void ScreenWriter::setPixel(int x, int y, COLORREF color) {
     if(!this->hdc) {
         std::cerr << "ScreenWriter::setPixel: sw is not acticated";
         return;
     }
-    SetPixel(*(this->hdc), x, y, color);
+    SetPixel(this->hdc, x, y, color);
+    screen[x][y] = color;
+    isUserDrawn[x][y] = true;
 }
 
 void ScreenWriter::clearScreen() {
@@ -36,18 +54,20 @@ void ScreenWriter::clearScreen() {
 
     DeleteObject(brush);
     ReleaseDC(this->hwnd, hdc);
+    isUserDrawn = vector< vector< bool > > (this->getHeight(), vector< bool >(this->getWidth(), false));
+    screen = vector< vector< COLORREF > > (this->getHeight(), vector< COLORREF >(this->getWidth(), backgroundColor));
 }
 
 int ScreenWriter::getWidth() {
     RECT rect;
     GetClientRect(this->hwnd, &rect);
-    return rect.right - rect.left;
+    return rect.right;
 }
 
 int ScreenWriter::getHeight() {
     RECT rect;
     GetClientRect(this->hwnd, &rect);
-    return rect.bottom - rect.top;
+    return rect.bottom;
 }
 
 bool ScreenWriter::outOfBounds(int x, int y) {
@@ -55,17 +75,18 @@ bool ScreenWriter::outOfBounds(int x, int y) {
 }
 
 void ScreenWriter::activate() {
-    if(this->hdc) {
+    if(isActive) {
         return;
     }
-    *(this->hdc) = GetDC(this->hwnd);
+    isActive = true;
+    this->hdc = GetDC(this->hwnd);
 }
 
 void ScreenWriter::deactivate() {
-    if(!this->hdc) {
-        std::cerr << "ScreenWriter::deactivate: hdc is null";
+    if(!isActive) {
+        std::cerr << "ScreenWriter::deactivate: drawing is inactive already";
         return;
     }
-    ReleaseDC(this->hwnd, *(this->hdc));
-    this->hdc = nullptr;
+    ReleaseDC(this->hwnd, this->hdc);
+    isActive = false;
 }

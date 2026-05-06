@@ -15,41 +15,41 @@ public:
     ~Point() {}
 
     // Differential
-    double dx(const Point& other) {
-        return abs(x - other.x);
+    double dx(const Point& other) const {
+        return other.x - x;
     }
 
-    double dy(const Point& other) {
-        return abs(y - other.y);
+    double dy(const Point& other) const {
+        return other.y - y;
     }
 
-    double slope(const Point& other) {
+    double slope(const Point& other) const {
         return (double)dy(other) / (double)dx(other);
     }
 
     // Distance
-    long long manhattanDistance(const Point& other) {
+    long long manhattanDistance(const Point& other) const {
         return (long long)dx(other) + (long long)dy(other);
     }
 
-    double euclideanDistance(const Point& other) {
+    double euclideanDistance(const Point& other) const {
         return sqrt(dx(other) * dx(other) + dy(other) * dy(other));
     }
 
     // Operators
-    Point operator+(const Point& other) {
+    Point operator+(const Point& other) const {
         return Point(x + other.x, y + other.y);
     }
 
-    Point operator-(const Point& other) {
+    Point operator-(const Point& other) const {
         return Point(x - other.x, y - other.y);
     }
 
-    Point operator*(const Point& other) {
+    Point operator*(const Point& other) const {
         return Point(x * other.x, y * other.y);
     }
 
-    Point operator*(double factor) {
+    Point operator*(double factor) const {
         return Point(x * factor, y * factor);
     }
 

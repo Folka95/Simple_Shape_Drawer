@@ -2,16 +2,22 @@
 #ifndef SCREEN_WRITER_H
 #define SCREEN_WRITER_H
 #include <windows.h>
+#include <vector>
+using namespace std;
 
 class ScreenWriter {
 private:
-    HDC *hdc;
+    HDC hdc;
     HWND hwnd;
     COLORREF backgroundColor;
+    bool isActive;
+    vector< vector< bool > > isUserDrawn;
+    vector< vector< COLORREF > > screen;
 public:
     ScreenWriter(HWND hwnd);
     ~ScreenWriter();
     void setBackgroundColor(COLORREF color);
+    void changeBackgroundColor(COLORREF color);
     void setPixel(int x, int y, COLORREF color);
     void clearScreen();
     int getHeight();

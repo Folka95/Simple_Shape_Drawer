@@ -5,6 +5,10 @@
 #include "io/input_reader.h"
 #include "app/app_manager.h"
 #include "core/shapes/line.h"
+#include "core/shapes/circle.h"
+#include "core/shapes/rectangle.h"
+#include "algorithms/line/line_dda_drawing_algorithm.h"
+
 using namespace std;
 
 AppManager *appManager;
@@ -43,8 +47,10 @@ void menuSelected(WPARAM &wp, LPARAM &lp) {
 
         // ================= LINE =================
         case LINE_DDA:
-            // appManager->setShape(Line());
-            // appManager->setDrawingAlgorithm();
+            appManager->setShape(new Line());
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setDrawingAlgorithm(new Line_DDA_DrawingAlgorithm());
             break;
         //
         // case LINE_MIDPOINT:

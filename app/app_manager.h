@@ -32,9 +32,13 @@ public:
     void setFillColor(COLORREF color);
     void setBackgroundColor(COLORREF color);
 
-    void setFillingAlgorithm(FillingAlgorithm *fillingAlgorithm);
     void setDrawingAlgorithm(DrawingAlgorithm *drawingAlgorithm);
+    void setFillingAlgorithm(FillingAlgorithm *fillingAlgorithm);
     void setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm);
+
+    void removeDrawingAlgorithm();
+    void removeFillingAlgorithm();
+    void removeClippingAlgorithm();
 
     void applyRightClick(int x, int y);
     void applyLeftClick(int x, int y);

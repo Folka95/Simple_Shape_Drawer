@@ -4,10 +4,21 @@ using namespace std;
 AppManager::AppManager(HWND _hwnd) {
     this->hwnd = _hwnd;
     this->sw = new ScreenWriter(_hwnd);
+    this->drawingAlgorithm = nullptr;
+    this->fillingAlgorithm = nullptr;
+    this->clippingAlgorithm = nullptr;
+    this->clippingRegion = nullptr;
+    borderColor = RGB(255, 255, 255);
+    fillColor = RGB(255, 255, 255);
 }
 
 AppManager::~AppManager() {
     delete this->sw;
+    delete this->drawingAlgorithm;
+    delete this->fillingAlgorithm;
+    delete this->clippingAlgorithm;
+    delete this->clippingRegion;
+    history.clear();
 }
 
 void AppManager::setShape(Shape *shape) {
@@ -29,7 +40,35 @@ void AppManager::setFillColor(COLORREF color) {
 }
 
 void AppManager::setBackgroundColor(COLORREF color) {
-    sw->setBackgroundColor(color);
+    sw->changeBackgroundColor(color);
+}
+
+
+void AppManager::setFillingAlgorithm(FillingAlgorithm *fillingAlgorithm) {
+    delete this->fillingAlgorithm;
+    this->fillingAlgorithm = fillingAlgorithm;
+}
+
+void AppManager::setDrawingAlgorithm(DrawingAlgorithm *drawingAlgorithm) {
+    delete this->drawingAlgorithm;
+    this->drawingAlgorithm = drawingAlgorithm;
+}
+
+void AppManager::setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm) {
+    delete this->clippingAlgorithm;
+    this->clippingAlgorithm = clippingAlgorithm;
+}
+
+void AppManager::removeDrawingAlgorithm() {
+    delete this->drawingAlgorithm;
+}
+
+void AppManager::removeFillingAlgorithm() {
+    delete this->fillingAlgorithm;
+}
+
+void AppManager::removeClippingAlgorithm() {
+    delete this->clippingAlgorithm;
 }
 
 void AppManager::applyRightClick(int x, int y) {
@@ -43,7 +82,7 @@ void AppManager::applyRightClick(int x, int y) {
     }
     if(history.back()->isEnoughToDraw()) {
         history.back()->fillColor = fillColor;
-        fillingAlgorithm->fill(*history.back());
+        fillingAlgorithm->fill(*history.back(), sw);
     }
 }
 
@@ -64,7 +103,7 @@ void AppManager::applyLeftClick(int x, int y) {
                 return;
             }
             history.back()->borderColor = borderColor;
-            drawingAlgorithm->draw(*history.back());
+            drawingAlgorithm->draw(*history.back(), sw);
         }
         else {
             if(clippingAlgorithm == nullptr) {
@@ -72,7 +111,7 @@ void AppManager::applyLeftClick(int x, int y) {
                 return;
             }
             history.back()->borderColor = borderColor;
-            clippingAlgorithm->clip(*history.back(), *clippingRegion);
+            clippingAlgorithm->clip(*history.back(), *clippingRegion, sw);
         }
     }
 }

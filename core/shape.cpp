@@ -1,30 +1,26 @@
 #include "shape.h"
 
-// Add point to shape
+Shape::Shape() {
+    this->points.clear();
+    this->borderColor = RGB(255, 255, 255);
+    this->fillColor = RGB(255, 255, 255);
+}
+
 bool Shape::addPoint(const Point &point) {
-    // TODO
-    return false;
+    this->points.push_back(point);
+    return this->isEnoughToDraw();
 }
 
-// Check if enough points to draw shape
-bool Shape::isEnoughToDraw() {
-    // TODO
-    return false;
+ShapeType Shape::getType() const {
+    return this->type;
 }
 
-// Clear shape data
 void Shape::clear() {
-    // TODO
+    this->points.clear();
+    this->borderColor = RGB(255, 255, 255);
+    this->fillColor = RGB(255, 255, 255);
 }
 
-// Get description
-std::string Shape::getDescription() {
-    // TODO
-    return "";
-}
-
-// clone
-Shape* Shape::clone() {
-    // TODO
-    return nullptr;
+std::string Shape::getDescription() const {
+    return this->description;
 }

@@ -2,12 +2,13 @@
 #ifndef FILLINGALGORITHM_H
 #define FILLINGALGORITHM_H
 #include "../core/shape.h"
+#include "../rendering/screen_writer.h"
 
 class FillingAlgorithm {
-private:
+protected:
     FillingAlgorithm() { }
 public:
-    virtual void fill(const Shape &shape) = 0;
+    virtual void fill(const Shape &shape, ScreenWriter *sw) const = 0;
 };
 
 #endif
