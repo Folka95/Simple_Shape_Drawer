@@ -31,7 +31,7 @@ public:
     void clear();
     std::string getDescription() const ;
     ShapeType getType() const ;
-    virtual bool isInside(const Point &point) const ;
+    virtual bool isInside(const Point &point) const = 0 ;
     virtual bool isEnoughToDraw() const = 0 ;
     virtual Shape* clone() const = 0;
 };
