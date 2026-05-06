@@ -76,6 +76,12 @@ public:
         y *= factor;
         return *this;
     }
+
+    bool operator<(const Point& other) const {
+        double angle1 = atan2(y, x);
+        double angle2 = atan2(other.y, other.x);
+        return angle1 > angle2;
+    }
 };
 
 #endif //POINT_H
