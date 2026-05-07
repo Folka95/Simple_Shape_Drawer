@@ -34,8 +34,16 @@ void ScreenWriter::changeBackgroundColor(COLORREF color) {
 }
 
 void ScreenWriter::setPixel(int x, int y, COLORREF color) {
+    if (!isActive) {
+        std::cerr << "ScreenWriter::setPixel: sw is not acticated" << std::endl;
+        return;
+    }
     if(!this->hdc) {
-        std::cerr << "ScreenWriter::setPixel: sw is not acticated";
+        std::cerr << "ScreenWriter::setPixel: sw is not acticated" << std::endl;
+        return;
+    }
+    if (this->outOfBounds(x, y)) {
+        // std::cerr << "ScreenWriter::setPixel: coordinates (" << x << ", " << y << ") are out of bounds" << std::endl;
         return;
     }
     SetPixel(this->hdc, x, y, color);

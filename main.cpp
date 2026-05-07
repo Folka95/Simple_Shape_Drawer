@@ -8,6 +8,8 @@
 #include "core/shapes/circle.h"
 #include "core/shapes/rectangle.h"
 #include "algorithms/line/line_dda_drawing_algorithm.h"
+#include "algorithms/circle/circle_Polar_drawing_algorithm.h"
+#include "algorithms/circle/circle_iterativePolar_drawing_algorithm.h"
 
 using namespace std;
 
@@ -66,13 +68,19 @@ void menuSelected(WPARAM &wp, LPARAM &lp) {
         //     appManager->setDrawingAlgorithm();
         //     break;
         //
-        // case CIRCLE_POLAR:
-        //     appManager->setDrawingAlgorithm();
-        //     break;
+        case CIRCLE_POLAR:
+            appManager->setShape(new Circle());
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setDrawingAlgorithm(new Circle_Polar_DrawingAlgorithm());
+            break;
         //
-        // case CIRCLE_ITERATIVE_Polar:
-        //     appManager->setDrawingAlgorithm();
-        //     break;
+        case CIRCLE_ITERATIVE_Polar:
+            appManager->setShape(new Circle());
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setDrawingAlgorithm(new Circle_iterativePolar_DrawingAlgorithm());
+            break;
         //
         // case CIRCLE_MIDPOINT:
         //     appManager->setDrawingAlgorithm();

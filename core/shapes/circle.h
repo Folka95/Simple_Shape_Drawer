@@ -4,7 +4,11 @@
 
 
 class Circle : public Shape {
-
+public:
+    Circle();
+    bool isInside(const Point &point) const override;
+    bool isEnoughToDraw() const override;
+    Shape* clone() const override;
 };
 
 
