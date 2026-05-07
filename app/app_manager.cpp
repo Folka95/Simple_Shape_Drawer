@@ -80,11 +80,16 @@ void AppManager::applyRightClick(int x, int y) {
         cerr << "AppManager::applyRightClick: fillingAlgorithm is null" << endl;
         return;
     }
-    // {x, y} inside shape
-    if(history.back()->isEnoughToDraw()) {
-        history.back()->fillColor = fillColor;
-        fillingAlgorithm->fill(*history.back(), *clippingRegion, sw);
+    for(Shape* shape : history) {
+        if(shape->isEnoughToDraw() && shape->isInside(Point(x, y))) {
+            fillingAlgorithm->fill(*history.back(), *clippingRegion, sw);
+        }
     }
+    // {x, y} inside shape
+    // if(history.back()->isEnoughToDraw()) {
+    //     history.back()->fillColor = fillColor;
+    //     fillingAlgorithm->fill(*history.back(), *clippingRegion, sw);
+    // }
 }
 
 void AppManager::applyLeftClick(int x, int y) {
