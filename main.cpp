@@ -8,10 +8,10 @@
 #include "core/shapes/circle.h"
 #include "core/shapes/rectangle.h"
 #include "algorithms/line/line_dda_drawing_algorithm.h"
-#include "algorithms/circle/circle_Polar_drawing_algorithm.h"
-#include "algorithms/circle/circle_iterativePolar_drawing_algorithm.h"
+#include "algorithms/circle/circle_polar_drawing_algorithm.h"
+#include "algorithms/circle/circle_iterative_polar_drawing_algorithm.h"
 #include "algorithms/clipping/circle/circle_line_clipping_algorithm.h"
-#include "algorithms/filling/IterFloodFill_filling_algorithm.h"
+#include "algorithms/filling/iterive_flood_fill_filling_algorithm.h"
 
 using namespace std;
 
@@ -173,7 +173,7 @@ void menuSelected(WPARAM &wp, LPARAM &lp) {
         case CLIP_CIRCLE_LINE:
             appManager->removeDrawingAlgorithm();
             appManager->setClippingAlgorithm(
-                new Circle_line_ClippingAlgorithm(),
+                new Circle_Line_ClippingAlgorithm(),
                 new Circle_Polar_DrawingAlgorithm(),
                 new Circle()
             );

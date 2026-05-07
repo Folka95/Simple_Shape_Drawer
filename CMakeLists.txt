@@ -29,14 +29,14 @@ add_executable(Simple_Shape_Drawer main.cpp
         core/shapes/curve.h
         core/shapes/rectangle.cpp
         core/shapes/rectangle.h
-        algorithms/Circle/Circle_iterativePolar_drawing_algorithm.cpp
-        algorithms/Circle/Circle_iterativePolar_drawing_algorithm.h
-        algorithms/Circle/Circle_Polar_drawing_algorithm.cpp
-        algorithms/Circle/Circle_Polar_drawing_algorithm.h
+        algorithms/circle/circle_iterative_polar_drawing_algorithm.cpp
+        algorithms/circle/circle_iterative_polar_drawing_algorithm.h
+        algorithms/circle/Circle_Polar_drawing_algorithm.cpp
+        algorithms/circle/Circle_Polar_drawing_algorithm.h
         algorithms/line/line_dda_drawing_algorithm.cpp
         algorithms/line/line_dda_drawing_algorithm.h
-        algorithms/Filling/IterFloodFill_filling_algorithm.cpp
-        algorithms/Filling/IterFloodFill_filling_algorithm.h
+        algorithms/filling/iterive_flood_fill_filling_algorithm.cpp
+        algorithms/filling/iterive_flood_fill_filling_algorithm.h
         algorithms/clipping/circle/circle_line_clipping_algorithm.cpp
         algorithms/clipping/circle/circle_line_clipping_algorithm.h
 )

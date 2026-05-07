@@ -1,4 +1,4 @@
-#include "circle_Polar_drawing_algorithm.h"
+#include "circle_polar_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
 Circle_Polar_DrawingAlgorithm::Circle_Polar_DrawingAlgorithm() : DrawingAlgorithm() {
