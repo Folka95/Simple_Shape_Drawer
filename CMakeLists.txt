@@ -37,4 +37,6 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/line/line_dda_drawing_algorithm.h
         algorithms/Filling/IterFloodFill_filling_algorithm.cpp
         algorithms/Filling/IterFloodFill_filling_algorithm.h
+        algorithms/clipping/circle/circle_line_clipping_algorithm.cpp
+        algorithms/clipping/circle/circle_line_clipping_algorithm.h
 )

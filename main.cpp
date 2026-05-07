@@ -10,7 +10,8 @@
 #include "algorithms/line/line_dda_drawing_algorithm.h"
 #include "algorithms/circle/circle_Polar_drawing_algorithm.h"
 #include "algorithms/circle/circle_iterativePolar_drawing_algorithm.h"
-#include "algorithms/Filling/IterFloodFill_filling_algorithm.h"
+#include "algorithms/clipping/circle/circle_line_clipping_algorithm.h"
+#include "algorithms/filling/IterFloodFill_filling_algorithm.h"
 
 using namespace std;
 
@@ -70,16 +71,16 @@ void menuSelected(WPARAM &wp, LPARAM &lp) {
         //     break;
         //
         case CIRCLE_POLAR:
-            appManager->setShape(new Circle());
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
+            appManager->setShape(new Circle());
             appManager->setDrawingAlgorithm(new Circle_Polar_DrawingAlgorithm());
             break;
         //
         case CIRCLE_ITERATIVE_Polar:
-            appManager->setShape(new Circle());
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
+            appManager->setShape(new Circle());
             appManager->setDrawingAlgorithm(new Circle_iterativePolar_DrawingAlgorithm());
             break;
         //
@@ -169,9 +170,15 @@ void menuSelected(WPARAM &wp, LPARAM &lp) {
         //     appManager->setClippingAlgorithm();
         //     break;
         //
-        // case CLIP_CIRCLE_LINE:
-        //     appManager->setClippingAlgorithm();
-        //     break;
+        case CLIP_CIRCLE_LINE:
+            appManager->removeDrawingAlgorithm();
+            appManager->setClippingAlgorithm(
+                new Circle_line_ClippingAlgorithm(),
+                new Circle_Polar_DrawingAlgorithm(),
+                new Circle()
+            );
+            appManager->setShape(new Line());
+            break;
         //
         // // ================= SMILE =================
         // case SMILE_HAPPY_FACE:

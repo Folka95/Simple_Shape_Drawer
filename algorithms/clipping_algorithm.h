@@ -1,6 +1,7 @@
 #pragma once
 #ifndef CLIPPING_ALGORITHM_H
 #define CLIPPING_ALGORITHM_H
+#include "drawing_algorithm.h"
 #include "../core/shape.h"
 #include "../rendering/screen_writer.h"
 

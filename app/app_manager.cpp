@@ -8,6 +8,8 @@ AppManager::AppManager(HWND _hwnd) {
     this->fillingAlgorithm = nullptr;
     this->clippingAlgorithm = nullptr;
     this->clippingRegion = nullptr;
+    this->currentShape = nullptr;
+    this->clippingDrawingAlgorithm = nullptr;
     borderColor = RGB(255, 255, 255);
     fillColor = RGB(255, 255, 255);
 }
@@ -25,10 +27,11 @@ void AppManager::setShape(Shape *shape) {
     if(!history.empty() && !history.back()->isEnoughToDraw()) {
         history.pop_back();
     }
+    currentShape = shape->clone();
     history.push_back(shape);
-    cout << string(20, '=') << endl;
+    cout << mediumSeparator << endl;
     cout << shape->getDescription() << endl;
-    cout << string(20, '=') << endl;
+    cout << mediumSeparator << endl;
 }
 
 void AppManager::setBoarderColor(COLORREF color) {
@@ -44,18 +47,24 @@ void AppManager::setBackgroundColor(COLORREF color) {
 }
 
 void AppManager::setFillingAlgorithm(FillingAlgorithm *fillingAlgorithm) {
-    delete this->fillingAlgorithm;
+    this->removeFillingAlgorithm();
     this->fillingAlgorithm = fillingAlgorithm;
 }
 
 void AppManager::setDrawingAlgorithm(DrawingAlgorithm *drawingAlgorithm) {
-    delete this->drawingAlgorithm;
+    this->removeDrawingAlgorithm();
     this->drawingAlgorithm = drawingAlgorithm;
 }
 
-void AppManager::setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm) {
-    delete this->clippingAlgorithm;
+void AppManager::setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm, DrawingAlgorithm *clipDrawingAlgorithm, Shape *region) {
+    this->removeClippingAlgorithm();
     this->clippingAlgorithm = clippingAlgorithm;
+    this->clippingDrawingAlgorithm = clipDrawingAlgorithm;
+    this->clippingRegion = region;
+    cout << largeSeparator << endl;
+    cout << "# This is the clipping region ---- " << endl;
+    cout << this->clippingRegion->getDescription() << endl;
+    cout << largeSeparator << endl;
 }
 
 void AppManager::removeDrawingAlgorithm() {
@@ -68,6 +77,8 @@ void AppManager::removeFillingAlgorithm() {
 
 void AppManager::removeClippingAlgorithm() {
     delete this->clippingAlgorithm;
+    delete this->clippingRegion;
+    delete this->clippingDrawingAlgorithm;
 }
 
 void AppManager::applyRightClick(int x, int y) {
@@ -91,33 +102,72 @@ void AppManager::applyRightClick(int x, int y) {
     // }
 }
 
-void AppManager::applyLeftClick(int x, int y) {
+void AppManager::applyLeftClickClippingMode(int x, int y) {
+    if(clippingRegion == nullptr) {
+        cerr << "AppManager::applyLeftClickClippingMode: clippingAlgorithm is null" << endl;
+        return;
+    }
+    if(this->clippingRegion->isEnoughToDraw()) {
+        if(history.empty()) {
+            cerr << "AppManager::applyLeftClickClippingMode: history is empty" << endl;
+            return;
+        }
+        if(history.back()->isEnoughToDraw()) {
+            history.push_back(currentShape->clone());
+            history.back()->clear();
+        }
+        Point p(x, y);
+        if(history.back()->addPoint(p)) {
+            if(this->clippingAlgorithm == nullptr) {
+                cerr << "AppManager::applyLeftClickClippingMode: clippingAlgorithm is null" << endl;
+                return;
+            }
+            history.back()->borderColor = borderColor;
+            clippingAlgorithm->clip(*history.back(), *this->clippingRegion, sw);
+        }
+    }
+    else {
+        if(this->clippingRegion->addPoint(Point(x, y))) {
+            if(this->clippingDrawingAlgorithm == nullptr) {
+                cerr << "AppManager::applyLeftClickClippingMode: clippingDrawingAlgorithm is null" << endl;
+                return;
+            }
+            this->clippingRegion->borderColor = borderColor;
+            this->clippingDrawingAlgorithm->draw(*this->clippingRegion, sw);
+        }
+    }
+}
+
+void AppManager::applyLeftClickNoneClipping(int x, int y) {
+    if(clippingRegion != nullptr) {
+        cerr << "AppManager::applyLeftClickNoneClipping: clippingAlgorithm is NOT null" << endl;
+        return;
+    }
     if(history.empty()) {
         cerr << "AppManager::applyLeftClick: history is empty" << endl;
         return;
     }
     if(history.back()->isEnoughToDraw()) {
-        history.push_back(history.back()->clone());
+        history.push_back(currentShape->clone());
         history.back()->clear();
     }
     Point p(x, y);
     if(history.back()->addPoint(p)) {
-        if(clippingRegion == nullptr) {
-            if(drawingAlgorithm == nullptr) {
-                cerr << "AppManager::applyLeftClick: drawingAlgorithm is null" << endl;
-                return;
-            }
-            history.back()->borderColor = borderColor;
-            drawingAlgorithm->draw(*history.back(), sw);
+        if(drawingAlgorithm == nullptr) {
+            cerr << "AppManager::applyLeftClickNoneClipping: drawingAlgorithm is null" << endl;
+            return;
         }
-        else {
-            if(clippingAlgorithm == nullptr) {
-                cerr << "AppManager::applyLeftClick: clippingAlgorithm is null" << endl;
-                return;
-            }
-            history.back()->borderColor = borderColor;
-            clippingAlgorithm->clip(*history.back(), *clippingRegion, sw);
-        }
+        history.back()->borderColor = borderColor;
+        drawingAlgorithm->draw(*history.back(), sw);
+    }
+}
+
+void AppManager::applyLeftClick(int x, int y) {
+    if(clippingAlgorithm == nullptr) {
+        applyLeftClickNoneClipping(x, y);
+    }
+    else {
+        applyLeftClickClippingMode(x, y);
     }
 }
 
@@ -134,5 +184,3 @@ void AppManager::saveScreen() {
 void AppManager::loadScreen() {
     history.clear();
 }
-
-

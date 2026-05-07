@@ -9,6 +9,10 @@
 #include <vector>
 using namespace std;
 
+#define largeSeparator string(30, '=')
+#define mediumSeparator string(20, '=')
+#define smallSeparator string(10, '=')
+
 class AppManager {
 private:
     HWND hwnd;
@@ -17,12 +21,18 @@ private:
     DrawingAlgorithm *drawingAlgorithm;
     FillingAlgorithm *fillingAlgorithm;
     ClippingAlgorithm *clippingAlgorithm;
+    DrawingAlgorithm *clippingDrawingAlgorithm;
+
+    Shape *currentShape;
 
     vector< Shape* > history;
 
     Shape *clippingRegion;
     COLORREF borderColor;
     COLORREF fillColor;
+
+    void applyLeftClickClippingMode(int x, int y);
+    void applyLeftClickNoneClipping(int x, int y);
 public:
     AppManager(HWND _hwnd);
     ~AppManager();
@@ -34,7 +44,7 @@ public:
 
     void setDrawingAlgorithm(DrawingAlgorithm *drawingAlgorithm);
     void setFillingAlgorithm(FillingAlgorithm *fillingAlgorithm);
-    void setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm);
+    void setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm, DrawingAlgorithm *clipDrawingAlgorithm, Shape *region);
 
     void removeDrawingAlgorithm();
     void removeFillingAlgorithm();
