@@ -4,6 +4,8 @@
 
 
 class Circle : public Shape {
+private:
+    double radius;
 public:
     Circle();
     void initialize() override;

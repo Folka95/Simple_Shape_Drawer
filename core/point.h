@@ -24,7 +24,7 @@ public:
     }
 
     double slope(const Point& other) const {
-        return (double)dy(other) / (double)dx(other);
+        return dy(other) / dx(other);
     }
 
     // Distance

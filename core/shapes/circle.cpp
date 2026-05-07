@@ -10,7 +10,7 @@ Circle::Circle() : Shape() {
 }
 
 void Circle::initialize() {
-
+    this->radius = points[0].euclideanDistance(points[1]);
 }
 
 bool Circle::isInside(const Point &point) const {

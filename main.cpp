@@ -11,7 +11,9 @@
 #include "algorithms/circle/circle_polar_drawing_algorithm.h"
 #include "algorithms/circle/circle_iterative_polar_drawing_algorithm.h"
 #include "algorithms/clipping/circle/circle_line_clipping_algorithm.h"
+#include "algorithms/clipping/circle/circle_point_clipping_algorithm.h"
 #include "algorithms/filling/iterive_flood_fill_filling_algorithm.h"
+#include "core/shapes/polygon.h"
 
 using namespace std;
 
@@ -166,10 +168,15 @@ void menuSelected(WPARAM &wp, LPARAM &lp) {
         //     break;
         //
         // // ================= CIRCLE CLIP =================
-        // case CLIP_CIRCLE_POINT:
-        //     appManager->setClippingAlgorithm();
-        //     break;
-        //
+        case CLIP_CIRCLE_POINT:
+            appManager->removeDrawingAlgorithm();
+            appManager->setClippingAlgorithm(
+                new Circle_Point_ClippingAlgorithm(),
+                new Circle_Polar_DrawingAlgorithm(),
+                new Circle()
+            );
+            appManager->setShape(new PolygonShape<1>());
+            break;
         case CLIP_CIRCLE_LINE:
             appManager->removeDrawingAlgorithm();
             appManager->setClippingAlgorithm(

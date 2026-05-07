@@ -66,8 +66,8 @@ void ScreenWriter::clearScreen() {
 
     DeleteObject(brush);
     ReleaseDC(this->hwnd, hdc);
-    isUserDrawn = vector< vector< bool > > (this->getHeight(), vector< bool >(this->getWidth(), false));
-    screen = vector< vector< COLORREF > > (this->getHeight(), vector< COLORREF >(this->getWidth(), backgroundColor));
+    isUserDrawn = vector< vector< bool > > (this->getWidth(), vector< bool >(this->getHeight(), false));
+    screen = vector< vector< COLORREF > > (this->getWidth(), vector< COLORREF >(this->getHeight(), backgroundColor));
 }
 
 int ScreenWriter::getWidth() {

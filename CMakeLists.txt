@@ -39,4 +39,7 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/filling/iterive_flood_fill_filling_algorithm.h
         algorithms/clipping/circle/circle_line_clipping_algorithm.cpp
         algorithms/clipping/circle/circle_line_clipping_algorithm.h
+        algorithms/clipping/circle/circle_point_clipping_algorithm.cpp
+        algorithms/clipping/circle/circle_point_clipping_algorithm.h
+        core/shapes/polygon.h
 )

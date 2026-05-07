@@ -11,6 +11,7 @@
 
 enum ShapeType {
     SHAPE_NONE,
+    SHAPE_POLYGON,
     SHAPE_LINE,
     SHAPE_CIRCLE,
     SHAPE_ELLIPSE,
