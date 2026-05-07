@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 #include <windows.h>
+#include <cmath>
+#include <iostream>
 
 enum ShapeType {
     SHAPE_NONE,

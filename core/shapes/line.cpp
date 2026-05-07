@@ -1,5 +1,4 @@
 #include "line.h"
-#include <iostream>
 
 Line::Line() : Shape() {
     type = SHAPE_LINE;

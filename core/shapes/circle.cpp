@@ -1,5 +1,4 @@
 #include "circle.h"
-#include <iostream>
 
 Circle::Circle() : Shape() {
     type = SHAPE_CIRCLE;
@@ -11,9 +10,6 @@ Circle::Circle() : Shape() {
 }
 
 bool Circle::isInside(const Point &point) const {
-    if (points.size() < 2) {
-        return false;
-    }
     double distance = sqrt(pow(point.x - points[0].x, 2) + pow(point.y - points[0].y, 2));
     return distance <= sqrt(pow(points[1].x - points[0].x, 2) + pow(points[1].y - points[0].y, 2));
 }
