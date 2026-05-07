@@ -9,6 +9,9 @@ Line::Line() : Shape() {
     description += "    the end points of the line";
 }
 
+void Line::initialize() {
+
+}
 
 bool Line::isInside(const Point &point) const {
     if(this->points[0].slope(point) == point.slope(this->points[1])) {

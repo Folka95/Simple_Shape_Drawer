@@ -9,6 +9,10 @@ Rectangle::Rectangle() {
     description += "    2nd point: Bottom Right\n";
 }
 
+void Rectangle::initialize() {
+
+}
+
 bool Rectangle::isInside(const Point &point) const {
     if (points.size() < 2) {
         return false;

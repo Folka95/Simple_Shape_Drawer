@@ -9,6 +9,10 @@ Circle::Circle() : Shape() {
     description += "    the center and a point on the circumference of the circle\n";
 }
 
+void Circle::initialize() {
+
+}
+
 bool Circle::isInside(const Point &point) const {
     double distance = sqrt(pow(point.x - points[0].x, 2) + pow(point.y - points[0].y, 2));
     return distance <= sqrt(pow(points[1].x - points[0].x, 2) + pow(points[1].y - points[0].y, 2));

@@ -7,6 +7,7 @@
 class Line : public Shape {
 public:
     Line();
+    void initialize() override;
     bool isInside(const Point &point) const ;
     bool isEnoughToDraw() const ;
     Shape* clone() const ;

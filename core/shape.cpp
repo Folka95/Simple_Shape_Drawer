@@ -8,6 +8,9 @@ Shape::Shape() {
 
 bool Shape::addPoint(const Point &point) {
     this->points.push_back(point);
+    if(this->isEnoughToDraw()) {
+        this->initialize();
+    }
     return this->isEnoughToDraw();
 }
 

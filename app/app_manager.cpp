@@ -43,7 +43,6 @@ void AppManager::setBackgroundColor(COLORREF color) {
     sw->changeBackgroundColor(color);
 }
 
-
 void AppManager::setFillingAlgorithm(FillingAlgorithm *fillingAlgorithm) {
     delete this->fillingAlgorithm;
     this->fillingAlgorithm = fillingAlgorithm;
@@ -82,11 +81,11 @@ void AppManager::applyRightClick(int x, int y) {
     }
     for(Shape* shape : history) {
         if(shape->isEnoughToDraw() && shape->isInside(Point(x, y))) {
-            fillingAlgorithm->fill(*history.back(), *clippingRegion, sw);
+            shape->fillColor = fillColor;
+            fillingAlgorithm->fill(*shape, *clippingRegion, Point(x, y), sw);
         }
     }
-    // {x, y} inside shape
-    // if(history.back()->isEnoughToDraw()) {
+    // if(history.back()->isEnoughToDraw() && history.back()->isInside(Point(x, y))) {
     //     history.back()->fillColor = fillColor;
     //     fillingAlgorithm->fill(*history.back(), *clippingRegion, sw);
     // }
