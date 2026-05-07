@@ -8,7 +8,7 @@
 class IterFloodFill_FillingAlgorithm : public FillingAlgorithm {
 public:
     IterFloodFill_FillingAlgorithm();
-    void fill(const Shape &shape, ScreenWriter *sw) const;
+    void fill(const Shape &shape, const Shape &clippingRegion, ScreenWriter *sw) const;
 };
 
 

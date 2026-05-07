@@ -4,8 +4,7 @@ IterFloodFill_FillingAlgorithm::IterFloodFill_FillingAlgorithm() : FillingAlgori
 
 }
 
-void IterFloodFill_FillingAlgorithm::fill(const Shape &shape, ScreenWriter *sw) const {
-    /*
+void IterFloodFill_FillingAlgorithm::fill(const Shape &shape, const Shape &clippingRegion, ScreenWriter *sw) const {
     sw->activate();
     std::vector<Point> stack;
     stack.push_back(shape.points[0]);
@@ -26,6 +25,5 @@ void IterFloodFill_FillingAlgorithm::fill(const Shape &shape, ScreenWriter *sw) 
             stack.push_back(Point(current.x, current.y - 1));
         }
     }
-    */
     sw->deactivate();
 }

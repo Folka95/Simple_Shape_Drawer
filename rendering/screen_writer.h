@@ -19,6 +19,7 @@ public:
     void setBackgroundColor(COLORREF color);
     void changeBackgroundColor(COLORREF color);
     void setPixel(int x, int y, COLORREF color);
+    COLORREF getPixel(int x, int y);
     void clearScreen();
     int getHeight();
     int getWidth();

@@ -10,6 +10,7 @@
 #include "algorithms/line/line_dda_drawing_algorithm.h"
 #include "algorithms/circle/circle_Polar_drawing_algorithm.h"
 #include "algorithms/circle/circle_iterativePolar_drawing_algorithm.h"
+#include "algorithms/Filling/IterFloodFill_filling_algorithm.h"
 
 using namespace std;
 
@@ -137,10 +138,10 @@ void menuSelected(WPARAM &wp, LPARAM &lp) {
         //     appManager->setFillingAlgorithm();
         //     break;
         //
-        // case FILL_FLOOD_NON_RECURSIVE:
-        //     appManager->setFillingAlgorithm();
-        //     break;
-        //
+        case FILL_FLOOD_NON_RECURSIVE:
+            appManager->setFillingAlgorithm(new IterFloodFill_FillingAlgorithm());
+            break;
+
         // // ================= RECT CLIP =================
         // case CLIP_RECT_POINT:
         //     appManager->setClippingAlgorithm();

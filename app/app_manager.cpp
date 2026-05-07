@@ -83,7 +83,7 @@ void AppManager::applyRightClick(int x, int y) {
     // {x, y} inside shape
     if(history.back()->isEnoughToDraw()) {
         history.back()->fillColor = fillColor;
-        fillingAlgorithm->fill(*history.back(), sw);
+        fillingAlgorithm->fill(*history.back(), *clippingRegion, sw);
     }
 }
 
