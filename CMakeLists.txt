@@ -37,6 +37,8 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/circle/Circle_Polar_drawing_algorithm.h
         algorithms/line/line_dda_drawing_algorithm.cpp
         algorithms/line/line_dda_drawing_algorithm.h
+        algorithms/line/line_parametric_drawing_algorithm.cpp
+        algorithms/line/line_parametric_drawing_algorithm.h
         algorithms/filling/iterive_flood_fill_filling_algorithm.cpp
         algorithms/filling/iterive_flood_fill_filling_algorithm.h
         algorithms/clipping/circle/circle_line_clipping_algorithm.cpp

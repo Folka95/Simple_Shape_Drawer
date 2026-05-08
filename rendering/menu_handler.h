@@ -7,6 +7,7 @@
 #include "../core/shapes/circle.h"
 #include "../core/shapes/rectangle.h"
 #include "../algorithms/line/line_dda_drawing_algorithm.h"
+#include "../algorithms/line/line_parametric_drawing_algorithm.h"
 #include "../algorithms/circle/circle_polar_drawing_algorithm.h"
 #include "../algorithms/circle/circle_iterative_polar_drawing_algorithm.h"
 #include "../algorithms/circle/circle_direct_drawing_algorithm.h"
@@ -273,19 +274,22 @@ void selectPreferencesMenu(short value, AppManager *appManager) {
 void selectLineMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         case LINE_DDA:
-            appManager->setShape(new Line());
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
+            appManager->setShape(new Line());
             appManager->setDrawingAlgorithm(new Line_DDA_DrawingAlgorithm());
             break;
 
         // case LINE_MIDPOINT:
         //     appManager->setDrawingAlgorithm(new Line_Midpoint_DrawingAlgorithm());
         //     break;
-        //
-        // case LINE_PARAMETRIC:
-        //     appManager->setDrawingAlgorithm(new Line_Parametric_DrawingAlgorithm());
-        //     break;
+
+        case LINE_PARAMETRIC:
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new Line());
+            appManager->setDrawingAlgorithm(new Line_Parametric_DrawingAlgorithm());
+            break;
 
         default:
             std::cerr << "selectLineMenu: Unknown Line Menu value: " << value << '\n';
