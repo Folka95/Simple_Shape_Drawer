@@ -48,6 +48,12 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/clipping/circle/circle_point_clipping_algorithm.cpp
         algorithms/clipping/circle/circle_point_clipping_algorithm.h
         core/shapes/polygon.h
+        algorithms/ellipse/ellipse_direct_drawing_algorithm.cpp
+        algorithms/ellipse/ellipse_direct_drawing_algorithm.h
+        algorithms/ellipse/ellipse_Polar_drawing_algorithm.cpp
+        algorithms/ellipse/ellipse_Polar_drawing_algorithm.h
+        algorithms/ellipse/ellipse_midpoint_drawing_algorithm.cpp
+        algorithms/ellipse/ellipse_midpoint_drawing_algorithm.h
         algorithms/filling/flood_fill_filling_algorithm.h
         algorithms/filling/flood_fill_filling_algorithm.cpp
         algorithms/Circle/circle_direct_drawing_algorithm.h

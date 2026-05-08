@@ -1,0 +1,17 @@
+#pragma once
+#ifndef ELLIPSE_MIDPOINT_DRAWING_ALGORITHM_H
+#define ELLIPSE_MIDPOINT_DRAWING_ALGORITHM_H
+#include "../drawing_algorithm.h"
+
+
+class Ellipse_MidPoint_DrawingAlgorithm : public DrawingAlgorithm {
+private:
+    void Draw8Points(ScreenWriter *sw, int xc, int yc, int x, int y, COLORREF color) const;
+public:
+    Ellipse_MidPoint_DrawingAlgorithm();
+    void draw(const Shape &shape, ScreenWriter *sw) const;
+};
+
+
+
+#endif

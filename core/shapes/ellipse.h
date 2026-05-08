@@ -2,11 +2,16 @@
 #define ELLIPSE_H
 #include "../shape.h"
 
-
-class Ellipse : public Shape {
-
+class EllipseShape : public Shape {
+private:
+    double radius1;
+    double radius2;
+public:
+    EllipseShape();
+    void initialize() override;
+    bool isInside(const Point &point) const override;
+    bool isEnoughToDraw() const override;
+    Shape* clone() const override;
 };
 
-
-
-#endif //ELLIPSE_H
+#endif

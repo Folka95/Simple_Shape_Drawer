@@ -6,6 +6,7 @@
 #include "../core/shapes/line.h"
 #include "../core/shapes/circle.h"
 #include "../core/shapes/rectangle.h"
+#include "../core/shapes/ellipse.h"
 #include "../algorithms/line/line_dda_drawing_algorithm.h"
 #include "../algorithms/line/line_parametric_drawing_algorithm.h"
 #include "../algorithms/line/line_midpoint_drawing_algorithm.h"
@@ -14,6 +15,9 @@
 #include "../algorithms/circle/circle_direct_drawing_algorithm.h"
 #include "../algorithms/circle/circle_midpoint_drawing_algorithm.h"
 #include "../algorithms/circle/circle_midpoint_fast_drawing_algorithm.h"
+#include "../algorithms/ellipse/ellipse_direct_drawing_algorithm.h"
+#include "../algorithms/ellipse/ellipse_Polar_drawing_algorithm.h"
+#include "../algorithms/ellipse/ellipse_midpoint_drawing_algorithm.h"
 #include "../algorithms/clipping/circle/circle_line_clipping_algorithm.h"
 #include "../algorithms/clipping/circle/circle_point_clipping_algorithm.h"
 #include "../algorithms/filling/iterive_flood_fill_filling_algorithm.h"
@@ -346,17 +350,26 @@ void selectCircleMenu(short value, AppManager *appManager) {
 
 void selectEllipseMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
-        // case ELLIPSE_DIRECT:
-        //     appManager->setDrawingAlgorithm(new Ellipse_Direct_DrawingAlgorithm());
-        //     break;
-        //
-        // case ELLIPSE_POLAR:
-        //     appManager->setDrawingAlgorithm(new Ellipse_Polar_DrawingAlgorithm());
-        //     break;
-        //
-        // case ELLIPSE_MIDPOINT:
-        //     appManager->setDrawingAlgorithm(new Ellipse_Midpoint_DrawingAlgorithm());
-        //     break;
+        case ELLIPSE_DIRECT:
+            // appManager->removeClippingAlgorithm();
+            // appManager->removeFillingAlgorithm();
+            // appManager->setShape(new EllipseShape());
+            // appManager->setDrawingAlgorithm(new Ellipse_Direct_DrawingAlgorithm());
+            // break;
+        
+        case ELLIPSE_POLAR:
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new EllipseShape());
+            appManager->setDrawingAlgorithm(new Ellipse_Polar_DrawingAlgorithm());
+            break;
+        
+        case ELLIPSE_MIDPOINT:
+            // appManager->removeClippingAlgorithm();
+            // appManager->removeFillingAlgorithm();
+            // appManager->setShape(new EllipseShape());
+            // appManager->setDrawingAlgorithm(new Ellipse_MidPoint_DrawingAlgorithm());
+            // break;
 
         default:
             std::cerr << "selectEllipseMenu: Unknown Ellipse Menu value: " << value << '\n';
