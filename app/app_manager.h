@@ -13,9 +13,16 @@ using namespace std;
 #define mediumSeparator string(20, '=')
 #define smallSeparator string(10, '=')
 
+
+
 class AppManager {
 private:
+    struct Action {
+
+    };
+
     HWND hwnd;
+
     ScreenWriter *sw;
 
     DrawingAlgorithm *drawingAlgorithm;
@@ -58,6 +65,7 @@ public:
     void loadScreen();
 
     void clippingMode();
+    HWND getScreenOwner();
 };
 
 #endif

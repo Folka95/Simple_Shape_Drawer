@@ -15,7 +15,7 @@ add_executable(Simple_Shape_Drawer main.cpp
         io/file_manager.h
         rendering/screen_writer.cpp
         rendering/screen_writer.h
-        rendering/menu_creator.h
+        rendering/menu_handler.h
         app/app_manager.cpp
         app/app_manager.h
         algorithms/clipping_algorithm.h
@@ -48,4 +48,5 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/filling/flood_fill_filling_algorithm.cpp
         algorithms/Circle/circle_direct_drawing_algorithm.h
         algorithms/Circle/circle_direct_drawing_algorithm.cpp
+        io/action.h
 )

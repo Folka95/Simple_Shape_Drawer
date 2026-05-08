@@ -182,6 +182,7 @@ void AppManager::applyLeftClick(int x, int y) {
 
 void AppManager::clearScreen() {
     sw->clearScreen();
+    history.clear();
 }
 
 void AppManager::saveScreen() {
@@ -192,4 +193,9 @@ void AppManager::saveScreen() {
 
 void AppManager::loadScreen() {
     history.clear();
+}
+
+
+HWND AppManager::getScreenOwner() {
+    return this->hwnd;
 }
