@@ -5,8 +5,6 @@
 #include "app/app_manager.h"
 using namespace std;
 
-const int FRAME_WIDTH = 800;
-const int FRAME_HEIGHT = 600;
 const int SCREEN_WIDTH = GetSystemMetrics(SM_CXSCREEN);
 const int SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 
@@ -61,8 +59,11 @@ int APIENTRY WinMain(HINSTANCE h, HINSTANCE, LPSTR, int nsh) {
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpszClassName = "myclass";
 
-    int posX = (SCREEN_WIDTH - FRAME_WIDTH) / 2;
-    int posY = (SCREEN_HEIGHT - FRAME_HEIGHT) / 2;
+    int frameWidth = SCREEN_WIDTH * 3 / 4;
+    int frameHeight = SCREEN_HEIGHT * 3 / 4;
+
+    int posX = (SCREEN_WIDTH - frameWidth) / 2;
+    int posY = (SCREEN_HEIGHT - frameHeight) / 2;
 
     RegisterClass(&wc);
 
@@ -70,7 +71,7 @@ int APIENTRY WinMain(HINSTANCE h, HINSTANCE, LPSTR, int nsh) {
         wc.lpszClassName,
         "Simple Drawer",
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU ,
-        posX, posY, FRAME_WIDTH, FRAME_HEIGHT,
+        posX, posY, frameWidth, frameHeight,
         NULL, NULL, h, 0
     );
 
