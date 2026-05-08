@@ -5,6 +5,11 @@
 #include "app/app_manager.h"
 using namespace std;
 
+const int FRAME_WIDTH = 800;
+const int FRAME_HEIGHT = 600;
+const int SCREEN_WIDTH = GetSystemMetrics(SM_CXSCREEN);
+const int SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
+
 AppManager *appManager;
 
 void menuSelected(short value) {
@@ -56,13 +61,16 @@ int APIENTRY WinMain(HINSTANCE h, HINSTANCE, LPSTR, int nsh) {
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpszClassName = "myclass";
 
+    int posX = (SCREEN_WIDTH - FRAME_WIDTH) / 2;
+    int posY = (SCREEN_HEIGHT - FRAME_HEIGHT) / 2;
+
     RegisterClass(&wc);
 
     HWND hwnd = CreateWindow(
         wc.lpszClassName,
         "Simple Drawer",
         WS_OVERLAPPEDWINDOW,
-        0, 0, 800, 600,
+        posX, posY, FRAME_WIDTH, FRAME_HEIGHT,
         NULL, NULL, h, 0
     );
 
