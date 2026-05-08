@@ -10,6 +10,8 @@
 #include "../algorithms/circle/circle_polar_drawing_algorithm.h"
 #include "../algorithms/circle/circle_iterative_polar_drawing_algorithm.h"
 #include "../algorithms/circle/circle_direct_drawing_algorithm.h"
+#include "../algorithms/circle/circle_midpoint_drawing_algorithm.h"
+#include "../algorithms/circle/circle_midpoint_fast_drawing_algorithm.h"
 #include "../algorithms/clipping/circle/circle_line_clipping_algorithm.h"
 #include "../algorithms/clipping/circle/circle_point_clipping_algorithm.h"
 #include "../algorithms/filling/iterive_flood_fill_filling_algorithm.h"
@@ -314,13 +316,19 @@ void selectCircleMenu(short value, AppManager *appManager) {
             appManager->setDrawingAlgorithm(new Circle_iterativePolar_DrawingAlgorithm());
             break;
 
-        // case CIRCLE_MIDPOINT:
-        //     appManager->setDrawingAlgorithm(new Circle_Midpoint_DrawingAlgorithm());
-        //     break;
-        //
-        // case CIRCLE_MODIFIED_MIDPOINT:
-        //     appManager->setDrawingAlgorithm(new Circle_Modified_Midpoint_DrawingAlgorithm());
-        //     break;
+        case CIRCLE_MIDPOINT:
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new Circle());
+            appManager->setDrawingAlgorithm(new Circle_MidPoint_DrawingAlgorithm());
+            break;
+    
+        case CIRCLE_MODIFIED_MIDPOINT:
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new Circle());
+            appManager->setDrawingAlgorithm(new Circle_MidPoint_Fast_DrawingAlgorithm());
+            break;
 
         default:
             std::cerr << "selectCircleMenu: Unknown Circle Menu value: " << value << '\n';
