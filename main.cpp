@@ -69,7 +69,7 @@ int APIENTRY WinMain(HINSTANCE h, HINSTANCE, LPSTR, int nsh) {
     HWND hwnd = CreateWindow(
         wc.lpszClassName,
         "Simple Drawer",
-        WS_OVERLAPPEDWINDOW,
+        WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU ,
         posX, posY, FRAME_WIDTH, FRAME_HEIGHT,
         NULL, NULL, h, 0
     );
