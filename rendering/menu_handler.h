@@ -8,6 +8,7 @@
 #include "../core/shapes/rectangle.h"
 #include "../algorithms/line/line_dda_drawing_algorithm.h"
 #include "../algorithms/line/line_parametric_drawing_algorithm.h"
+#include "../algorithms/line/line_midpoint_drawing_algorithm.h"
 #include "../algorithms/circle/circle_polar_drawing_algorithm.h"
 #include "../algorithms/circle/circle_iterative_polar_drawing_algorithm.h"
 #include "../algorithms/circle/circle_direct_drawing_algorithm.h"
@@ -280,9 +281,12 @@ void selectLineMenu(short value, AppManager *appManager) {
             appManager->setDrawingAlgorithm(new Line_DDA_DrawingAlgorithm());
             break;
 
-        // case LINE_MIDPOINT:
-        //     appManager->setDrawingAlgorithm(new Line_Midpoint_DrawingAlgorithm());
-        //     break;
+        case LINE_MIDPOINT:
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new Line());
+            appManager->setDrawingAlgorithm(new Line_Midpoint_DrawingAlgorithm());
+            break;
 
         case LINE_PARAMETRIC:
             appManager->removeClippingAlgorithm();
