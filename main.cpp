@@ -10,6 +10,7 @@
 #include "algorithms/line/line_dda_drawing_algorithm.h"
 #include "algorithms/circle/circle_polar_drawing_algorithm.h"
 #include "algorithms/circle/circle_iterative_polar_drawing_algorithm.h"
+#include "algorithms/circle/circle_direct_drawing_algorithm.h"
 #include "algorithms/clipping/circle/circle_line_clipping_algorithm.h"
 #include "algorithms/clipping/circle/circle_point_clipping_algorithm.h"
 #include "algorithms/filling/iterive_flood_fill_filling_algorithm.h"
@@ -69,10 +70,13 @@ void menuSelected(WPARAM &wp, LPARAM &lp) {
         //     break;
         //
         // // ================= CIRCLE =================
-        // case CIRCLE_Direct:
-        //     appManager->setDrawingAlgorithm();
-        //     break;
-        //
+        case CIRCLE_Direct:
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new Circle());
+            appManager->setDrawingAlgorithm(new Circle_Direct_DrawingAlgorithm());
+            break;
+        
         case CIRCLE_POLAR:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();

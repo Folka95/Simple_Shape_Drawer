@@ -10,7 +10,13 @@ Rectangle::Rectangle() {
 }
 
 void Rectangle::initialize() {
-
+    if (points.size() > 2) {
+        return;
+    }
+    if (points.size() == 2) {
+        width = points[1].x - points[0].x;
+        height = points[1].y - points[0].y;
+    }
 }
 
 bool Rectangle::isInside(const Point &point) const {

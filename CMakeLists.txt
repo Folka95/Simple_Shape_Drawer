@@ -46,4 +46,6 @@ add_executable(Simple_Shape_Drawer main.cpp
         core/shapes/polygon.h
         algorithms/filling/flood_fill_filling_algorithm.h
         algorithms/filling/flood_fill_filling_algorithm.cpp
+        algorithms/Circle/circle_direct_drawing_algorithm.h
+        algorithms/Circle/circle_direct_drawing_algorithm.cpp
 )

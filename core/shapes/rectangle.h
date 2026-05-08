@@ -4,6 +4,9 @@
 
 
 class Rectangle : public Shape  {
+private:
+    double width;
+    double height;
 public:
     Rectangle();
     void initialize() override;
