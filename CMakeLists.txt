@@ -3,6 +3,8 @@ project(Simple_Shape_Drawer)
 
 set(CMAKE_CXX_STANDARD 20)
 
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,268435456")
+
 add_executable(Simple_Shape_Drawer main.cpp
         core/point.h
         core/shape.h
@@ -42,4 +44,6 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/clipping/circle/circle_point_clipping_algorithm.cpp
         algorithms/clipping/circle/circle_point_clipping_algorithm.h
         core/shapes/polygon.h
+        algorithms/filling/flood_fill_filling_algorithm.h
+        algorithms/filling/flood_fill_filling_algorithm.cpp
 )

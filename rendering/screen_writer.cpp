@@ -48,8 +48,12 @@ void ScreenWriter::setPixel(int x, int y, COLORREF color) {
 }
 
 COLORREF ScreenWriter::getPixel(int x, int y) {
+    if (!isActive) {
+        std::cerr << "ScreenWriter::getPixel: sw is not activated" << std::endl;
+        return backgroundColor;
+    }
     if (this->outOfBounds(x, y)) {
-        std::cerr << "ScreenWriter::setPixel: coordinates (" << x << ", " << y << ") are out of bounds" << std::endl;
+        std::cerr << "ScreenWriter::getPixel: coordinates (" << x << ", " << y << ") are out of bounds" << std::endl;
         return backgroundColor;
     }
     return screen[x][y];

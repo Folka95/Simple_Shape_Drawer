@@ -13,6 +13,7 @@
 #include "algorithms/clipping/circle/circle_line_clipping_algorithm.h"
 #include "algorithms/clipping/circle/circle_point_clipping_algorithm.h"
 #include "algorithms/filling/iterive_flood_fill_filling_algorithm.h"
+#include "algorithms/filling/flood_fill_filling_algorithm.h"
 #include "core/shapes/polygon.h"
 
 using namespace std;
@@ -137,10 +138,10 @@ void menuSelected(WPARAM &wp, LPARAM &lp) {
         //     appManager->setFillingAlgorithm();
         //     break;
         //
-        // case FILL_FLOOD_RECURSIVE:
-        //     appManager->setFillingAlgorithm();
-        //     break;
-        //
+        case FILL_FLOOD_RECURSIVE:
+            appManager->setFillingAlgorithm(new FloodFill_FillingAlgorithm());
+            break;
+        
         case FILL_FLOOD_NON_RECURSIVE:
             appManager->setFillingAlgorithm(new IterFloodFill_FillingAlgorithm());
             break;
