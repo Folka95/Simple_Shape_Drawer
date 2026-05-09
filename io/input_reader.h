@@ -2,7 +2,7 @@
 #ifndef INPUT_READER_H
 #define INPUT_READER_H
 
-COLORREF pickColor(HWND hwndOwner) {
+inline COLORREF pickColor(HWND hwndOwner) {
     CHOOSECOLOR cc = {};
     static COLORREF customColors[16] = {0};
 

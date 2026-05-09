@@ -11,7 +11,7 @@ const int SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 AppManager *appManager;
 
 void menuSelected(short value) {
-    selectMainMenu(value, appManager);
+    // selectMainMenu(value, appManager);
     appManager->applyMenuSelection(value);
 }
 

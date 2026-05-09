@@ -35,6 +35,7 @@ private:
 
     void applyLeftClickClippingMode(short x, short y);
     void applyLeftClickNoneClipping(short x, short y);
+    void reset();
 public:
     AppManager(HWND _hwnd);
     ~AppManager();

@@ -26,6 +26,17 @@ AppManager::~AppManager() {
     actionHistory.clear();
 }
 
+void AppManager::reset() {
+    delete this->drawingAlgorithm;
+    delete this->fillingAlgorithm;
+    delete this->clippingAlgorithm;
+    delete this->clippingRegion;
+    shapeHistory.clear();
+    actionHistory.clear();
+    sw->setBackgroundColor(RGB(0, 0, 0));
+    sw->clearScreen();
+}
+
 void AppManager::setShape(Shape *shape) {
     if(!shapeHistory.empty() && !shapeHistory.back()->isEnoughToDraw()) {
         shapeHistory.pop_back();
@@ -189,13 +200,19 @@ void AppManager::applyLeftClick(short x, short y) {
     this->sw->updateScreen();
 }
 
+#include "../rendering/menu_handler.h"
+
 void AppManager::applyMenuSelection(short choice) {
-    actionHistory.push_back(new MenuSelectAction(2, choice));
+    selectMainMenu(choice, this);
+    if(subMenuDecoder(choice) != FileMenu::FILE_LOAD) {
+        actionHistory.push_back(new MenuSelectAction(2, choice));
+    }
     this->sw->updateScreen();
 }
 
 void AppManager::clearScreen() {
     sw->clearScreen();
+    this->shapeHistory.clear();
 }
 
 void AppManager::hardSaveScreen() {
@@ -206,19 +223,40 @@ void AppManager::hardSaveScreen() {
     if(!tmp.empty() && tmp.back()->getRank() < 3) {
         tmp.pop_back();
     }
-    FileManager::saveActions(tmp, "outH.sdv");
+    FileManager::saveActions(tmp, "out.hsv");
 }
 
 void AppManager::softSaveScreen() {
     vector< vector< COLORREF > > screen = sw->getScreen();
-    FileManager::saveScreen(screen, "outS.sdv");
+    FileManager::saveScreen(screen, "out.ssv");
 }
 
 void AppManager::loadScreen() {
     actionHistory.clear();
     shapeHistory.clear();
-    vector< vector< COLORREF > > screen = FileManager::loadScreen("outS.sdv");
-    sw->setScreen(screen);
+    string filename ="out.hsv";
+    if(filename.substr(filename.size() - 4, 4) == ".ssv") {
+        vector< vector< COLORREF > > screen = FileManager::loadScreen(filename);
+        sw->setScreen(screen, true);
+    }
+    else {
+        vector< Action* > actions = FileManager::loadActions(filename);
+        this->reset();
+        for(Action *action : actions) {
+            if(action->getActionType() == ACTION_LEFT_CLICK) {
+                this->applyLeftClick(action->getData()[0], action->getData()[1]);
+            }
+            else if(action->getActionType() == ACTION_RIGHT_CLICK) {
+                this->applyRightClick(action->getData()[0], action->getData()[1]);
+            }
+            else if(action->getActionType() == ACTION_MENU_SELECT) {
+                this->applyMenuSelection(action->getData()[0]);
+            }
+            else {
+                cerr << "AppManager::loadScreen: unknown action type" << endl;
+            }
+        }
+    }
 }
 
 void AppManager::undoStep() {

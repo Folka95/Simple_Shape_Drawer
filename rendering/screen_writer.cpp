@@ -24,16 +24,14 @@ void ScreenWriter::setBackgroundColor(COLORREF color) {
 
 void ScreenWriter::changeBackgroundColor(COLORREF color) {
     setBackgroundColor(color);
-    HDC hdc = GetDC(hwnd);
     for(int i = 0; i < this->getWidth(); i++) {
         for(int j = 0; j < this->getHeight(); j++) {
             if(!isUserDrawn[i][j]) {
                 screen[i][j] = backgroundColor;
-                SetPixel(hdc, i, j, backgroundColor);
             }
         }
     }
-    ReleaseDC(this->hwnd, hdc);
+    this->setScreen(screen, false);
 }
 
 void ScreenWriter::setPixel(int x, int y, COLORREF color) {
@@ -63,18 +61,13 @@ COLORREF ScreenWriter::getPixel(int x, int y) {
 }
 
 void ScreenWriter::clearScreen() {
-    HDC hdc = GetDC(hwnd);
-
-    RECT rect;
-    GetClientRect(this->hwnd, &rect);
-
-    HBRUSH brush = CreateSolidBrush(backgroundColor);
-    FillRect(hdc, &rect, brush);
-
-    DeleteObject(brush);
-    ReleaseDC(this->hwnd, hdc);
-    isUserDrawn = vector< vector< bool > > (this->getWidth(), vector< bool >(this->getHeight(), false));
-    screen = vector< vector< COLORREF > > (this->getWidth(), vector< COLORREF >(this->getHeight(), backgroundColor));
+    for(int y = 0; y < getHeight(); y++) {
+        for(int x = 0; x < getWidth(); x++) {
+            screen[x][y] = backgroundColor;
+            this->isUserDrawn[x][y] = false;
+        }
+    }
+    this->setScreen(screen, true);
 }
 
 int ScreenWriter::getWidth() {
@@ -115,45 +108,64 @@ vector< vector< COLORREF > > ScreenWriter::getScreen() {
 }
 
 void ScreenWriter::updateScreen() {
-    this->setScreen(screen);
+    this->setScreen(screen, false);
 }
 
-void ScreenWriter::setScreen(const vector<vector<COLORREF>>& screen) {
+void ScreenWriter::setScreen(const vector<vector<COLORREF>>& screen, bool setUserFalse) {
     int width = this->getWidth();
     int height = this->getHeight();
 
+    if (screen.size() != width || screen[0].size() != height) {
+        std::cerr << "ScreenWriter::setScreenAnimated: wrong size\n";
+        return;
+    }
+
     vector<COLORREF> pixels(width * height);
 
-    // Convert to contiguous buffer
-    for(int y = 0; y < height; y++) {
-        for(int x = 0; x < width; x++) {
-            pixels[y * width + x] = screen[x][y];
+    // Convert to contiguous BGRA-compatible buffer
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+
+            COLORREF c = screen[x][y];
+
+            BYTE r = GetRValue(c);
+            BYTE g = GetGValue(c);
+            BYTE b = GetBValue(c);
+
+            // Convert RGB -> BGR for DIB
+            pixels[y * width + x] =
+                (r << 16) |
+                (g << 8)  |
+                (b);
+
             this->screen[x][y] = screen[x][y];
-            this->isUserDrawn[x][y] = false;
+            if(setUserFalse) {
+                this->isUserDrawn[x][y] = false;
+            }
         }
     }
 
     BITMAPINFO bmi{};
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     bmi.bmiHeader.biWidth = width;
-    bmi.bmiHeader.biHeight = -height;
+    bmi.bmiHeader.biHeight = -height; // top-down bitmap
     bmi.bmiHeader.biPlanes = 1;
     bmi.bmiHeader.biBitCount = 32;
     bmi.bmiHeader.biCompression = BI_RGB;
 
     this->activate();
 
-    const int STEP = 20; // bigger = faster animation
+    const int STEP = 20;
 
-    for(int x = 0; x < width; x += STEP) {
+    for (int drawnWidth = STEP; drawnWidth <= width; drawnWidth += STEP) {
 
-        int currentWidth = min(STEP, width - x);
+        int currentWidth = min(drawnWidth, width);
 
         StretchDIBits(
             this->hdc,
-            x, 0,                     // destination
+            0, 0,
             currentWidth, height,
-            x, 0,                     // source
+            0, 0,
             currentWidth, height,
             pixels.data(),
             &bmi,
@@ -161,9 +173,21 @@ void ScreenWriter::setScreen(const vector<vector<COLORREF>>& screen) {
             SRCCOPY
         );
 
-        // Small delay for animation effect
         this_thread::sleep_for(chrono::milliseconds(10));
     }
+
+    // Ensure final frame fully drawn
+    StretchDIBits(
+        this->hdc,
+        0, 0,
+        width, height,
+        0, 0,
+        width, height,
+        pixels.data(),
+        &bmi,
+        DIB_RGB_COLORS,
+        SRCCOPY
+    );
 
     this->deactivate();
 }
