@@ -1,11 +1,14 @@
 #pragma once
 #ifndef APP_MANAGER_H
 #define APP_MANAGER_H
+
 #include "../algorithms/clipping_algorithm.h"
 #include "../rendering/screen_writer.h"
 #include "../core/shape.h"
 #include "../algorithms/drawing_algorithm.h"
 #include "../algorithms/filling_algorithm.h"
+#include "../io/action.h"
+
 #include <vector>
 using namespace std;
 
@@ -13,16 +16,9 @@ using namespace std;
 #define mediumSeparator string(20, '=')
 #define smallSeparator string(10, '=')
 
-
-
 class AppManager {
 private:
-    struct Action {
-
-    };
-
     HWND hwnd;
-
     ScreenWriter *sw;
 
     DrawingAlgorithm *drawingAlgorithm;
@@ -30,16 +26,15 @@ private:
     ClippingAlgorithm *clippingAlgorithm;
     DrawingAlgorithm *clippingDrawingAlgorithm;
 
-    Shape *currentShape;
-
-    vector< Shape* > history;
+    vector< Action* > actionHistory;
+    vector< Shape * > shapeHistory;
 
     Shape *clippingRegion;
     COLORREF borderColor;
     COLORREF fillColor;
 
-    void applyLeftClickClippingMode(int x, int y);
-    void applyLeftClickNoneClipping(int x, int y);
+    void applyLeftClickClippingMode(short x, short y);
+    void applyLeftClickNoneClipping(short x, short y);
 public:
     AppManager(HWND _hwnd);
     ~AppManager();
@@ -57,14 +52,18 @@ public:
     void removeFillingAlgorithm();
     void removeClippingAlgorithm();
 
-    void applyRightClick(int x, int y);
-    void applyLeftClick(int x, int y);
+    void applyRightClick(short x, short y);
+    void applyLeftClick(short x, short y);
+    void applyMenuSelection(short choice);
+
+    void undoStep();
+    void redoStep();
 
     void clearScreen();
-    void saveScreen();
+    void softSaveScreen();
+    void hardSaveScreen();
     void loadScreen();
 
-    void clippingMode();
     HWND getScreenOwner();
 };
 

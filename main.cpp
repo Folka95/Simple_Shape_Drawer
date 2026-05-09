@@ -1,8 +1,8 @@
-#pragma once
 #include <bits/stdc++.h>
 #include <Windows.h>
-#include "rendering/menu_handler.h"
 #include "app/app_manager.h"
+#include "rendering/menu_handler.h"
+
 using namespace std;
 
 const int SCREEN_WIDTH = GetSystemMetrics(SM_CXSCREEN);
@@ -11,7 +11,8 @@ const int SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 AppManager *appManager;
 
 void menuSelected(short value) {
-    selectMenu(value, appManager);
+    selectMainMenu(value, appManager);
+    appManager->applyMenuSelection(value);
 }
 
 void mouseRightClick(short x, short y) {
