@@ -351,11 +351,11 @@ void selectCircleMenu(short value, AppManager *appManager) {
 void selectEllipseMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         case ELLIPSE_DIRECT:
-            // appManager->removeClippingAlgorithm();
-            // appManager->removeFillingAlgorithm();
-            // appManager->setShape(new EllipseShape());
-            // appManager->setDrawingAlgorithm(new Ellipse_Direct_DrawingAlgorithm());
-            // break;
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new EllipseShape());
+            appManager->setDrawingAlgorithm(new Ellipse_Direct_DrawingAlgorithm());
+            break;
         
         case ELLIPSE_POLAR:
             appManager->removeClippingAlgorithm();
@@ -365,11 +365,11 @@ void selectEllipseMenu(short value, AppManager *appManager) {
             break;
         
         case ELLIPSE_MIDPOINT:
-            // appManager->removeClippingAlgorithm();
-            // appManager->removeFillingAlgorithm();
-            // appManager->setShape(new EllipseShape());
-            // appManager->setDrawingAlgorithm(new Ellipse_MidPoint_DrawingAlgorithm());
-            // break;
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new EllipseShape());
+            appManager->setDrawingAlgorithm(new Ellipse_MidPoint_DrawingAlgorithm());
+            break;
 
         default:
             std::cerr << "selectEllipseMenu: Unknown Ellipse Menu value: " << value << '\n';

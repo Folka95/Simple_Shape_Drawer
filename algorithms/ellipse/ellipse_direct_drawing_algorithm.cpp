@@ -5,41 +5,45 @@ Ellipse_Direct_DrawingAlgorithm::Ellipse_Direct_DrawingAlgorithm() : DrawingAlgo
 
 }
 
-void Ellipse_Direct_DrawingAlgorithm::Draw8Points(ScreenWriter *sw, int xc, int yc, int x, int y, COLORREF color) const {
-    sw->setPixel(xc+x, yc+y, color);
-    sw->setPixel(xc+x, yc-y, color);
-    sw->setPixel(xc-x, yc+y, color);
-    sw->setPixel(xc-x, yc-y, color);
-    sw->setPixel(xc+y, yc+x, color);
-    sw->setPixel(xc+y, yc-x, color);
-    sw->setPixel(xc-y, yc+x, color);
-    sw->setPixel(xc-y, yc-x, color);
+// Change to 4-point symmetry for Ellipses
+void Ellipse_Direct_DrawingAlgorithm::Draw4Points(ScreenWriter *sw, int xc, int yc, int x, int y, COLORREF color) const {
+    sw->setPixel(xc + x, yc + y, color);
+    sw->setPixel(xc + x, yc - y, color);
+    sw->setPixel(xc - x, yc + y, color);
+    sw->setPixel(xc - x, yc - y, color);
 }
-
 void Ellipse_Direct_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const {
-    if(shape.getType() != SHAPE_ELLIPSE) {
+    if(shape.getType() != SHAPE_ELLIPSE)  {
         std::cerr << "Ellipse_Direct_DrawingAlgorithm::draw : shape to draw must be Ellipse" << std::endl;
         return;
     }
-    Point p0(shape.points[0]);
-    Point p1(shape.points[1]);
-    Point p2(shape.points[2]);
-    double a = p0.euclideanDistance(p1);
-    double b = p0.euclideanDistance(p2);
 
-    if(a < 1.0 || b < 1.0) {
-        std::cerr << "Ellipse_Direct_DrawingAlgorithm::draw : semi-axes must be greater than 0" << std::endl;
-        return;
+    Point p0 = shape.points[0]; // Center
+    double a = p0.euclideanDistance(shape.points[1]); // Horizontal semi-axis
+    double b = p0.euclideanDistance(shape.points[2]); // Vertical semi-axis
+
+    if(a < 1.0 || b < 1.0) return;
+
+    sw->activate();
+    
+    // REGION 1: Iterate x from 0 until the slope becomes steeper than 1
+    // The slope is > 1 when (b^2 * x) / (a^2 * y) > 1
+    int x = 0;
+    double y = b;
+    while ((b * b * x) <= (a * a * y)) {
+        Draw4Points(sw, p0.x, p0.y, x, (int)round(y), shape.borderColor);
+        x++;
+        y = b * sqrt(1.0 - (double)(x * x) / (a * a));
     }
 
-    int x=0,y=b;
-    int Rsq=a*a*b*b;
-    sw->activate();
-    Draw8Points(sw, shape.points[0].x, shape.points[0].y, x, y, shape.borderColor);
-    while(x<y) {
-        x++;
-        y=round(sqrt((double)(Rsq-x*x)));
-        Draw8Points(sw, shape.points[0].x, shape.points[0].y, x, y, shape.borderColor);
+    // REGION 2: Iterate y from 0 until the slope becomes less than 1
+    // This fills the "gaps" at the steep sides of the ellipse
+    int iy = 0;
+    double ix = a;
+    while ((a * a * iy) < (b * b * ix)) {
+        Draw4Points(sw, p0.x, p0.y, (int)round(ix), iy, shape.borderColor);
+        iy++;
+        ix = a * sqrt(1.0 - (double)(iy * iy) / (b * b));
     }
     sw->deactivate();
 }

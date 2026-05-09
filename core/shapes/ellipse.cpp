@@ -12,8 +12,28 @@ EllipseShape::EllipseShape() : Shape() {
 }
 
 void EllipseShape::initialize() {
-    this->radius1 = points[0].euclideanDistance(points[1]);
-    this->radius2 = points[0].euclideanDistance(points[2]);
+    // 1. Calculate absolute horizontal and vertical distances from both points relative to the center
+    double dx1 = abs(points[1].x - points[0].x);
+    double dy1 = abs(points[1].y - points[0].y);
+    double dx2 = abs(points[2].x - points[0].x);
+    double dy2 = abs(points[2].y - points[0].y);
+
+    // 2. Protect the order: 
+    // radius1 is the "most horizontal" distance found in either point
+    // radius2 is the "most vertical" distance found in either point
+    this->radius1 = (dx1 > dx2) ? dx1 : dx2;
+    this->radius2 = (dy1 > dy2) ? dy1 : dy2;
+
+    // 3. Cleanup/Align points for internal storage logic
+    // Point 1: Must stay on the center's Y-level (Horizontal Axis)
+    points[1].y = points[0].y;
+    // (Optional) We set its X to the center + radius1 to keep it visually "snapped"
+    points[1].x = points[0].x + this->radius1; 
+
+    // Point 2: Must stay on the center's X-level (Vertical Axis)
+    points[2].x = points[0].x;
+    // (Optional) We set its Y to the center + radius2 to keep it visually "snapped"
+    points[2].y = points[0].y + this->radius2;
 }
 
 bool EllipseShape::isInside(const Point &point) const {

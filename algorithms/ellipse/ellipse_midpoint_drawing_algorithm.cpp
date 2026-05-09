@@ -6,47 +6,72 @@ Ellipse_MidPoint_DrawingAlgorithm::Ellipse_MidPoint_DrawingAlgorithm() : Drawing
 }
 
 
-void Ellipse_MidPoint_DrawingAlgorithm::Draw8Points(ScreenWriter *sw, int xc, int yc, int x, int y, COLORREF color) const {
-    sw->setPixel(xc+x, yc+y, color);
-    sw->setPixel(xc+x, yc-y, color);
-    sw->setPixel(xc-x, yc+y, color);
-    sw->setPixel(xc-x, yc-y, color);
-    sw->setPixel(xc+y, yc+x, color);
-    sw->setPixel(xc+y, yc-x, color);
-    sw->setPixel(xc-y, yc+x, color);
-    sw->setPixel(xc-y, yc-x, color);
+void Ellipse_MidPoint_DrawingAlgorithm::Draw4Points(ScreenWriter *sw, int xc, int yc, int x, int y, COLORREF color) const {
+    sw->setPixel(xc + x, yc + y, color);
+    sw->setPixel(xc + x, yc - y, color);
+    sw->setPixel(xc - x, yc + y, color);
+    sw->setPixel(xc - x, yc - y, color);
 }
 
 void Ellipse_MidPoint_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const {
-    if(shape.getType() != SHAPE_ELLIPSE) {
-        std::cerr << "Ellipse_MidPoint_DrawingAlgorithm::draw : shape to draw must be Ellipse" << std::endl;
-        return;
-    }
-    Point p0(shape.points[0]);
-    Point p1(shape.points[1]);
-    Point p2(shape.points[2]);
-    double a = p0.euclideanDistance(p1);
-    double b = p0.euclideanDistance(p2);
+    if(shape.getType() != SHAPE_ELLIPSE) return;
 
-    if(a < 1.0 || b < 1.0) {
-        std::cerr << "Ellipse_MidPoint_DrawingAlgorithm::draw : semi-axes must be greater than 0" << std::endl;
-        return;
-    }
+    Point p0 = shape.points[0];
+    // Use your recently protected radii logic
+    double a = abs(shape.points[1].x - p0.x); 
+    double b = abs(shape.points[2].y - p0.y);
 
-    int x=0,y=b;
-    int d=1-b;
+    if(a < 1.0 || b < 1.0) return;
+
+    long long a2 = a * a;
+    long long b2 = b * b;
+    long long twoA2 = 2 * a2;
+    long long twoB2 = 2 * b2;
+
+    int x = 0;
+    int y = b;
+    
     sw->activate();
-    Draw8Points(sw, shape.points[0].x, shape.points[0].y, x, y, shape.borderColor);
-    while(x<y) {
-        if(d<0) {
-            d+=2*x+2;
-        }
-        else {
-            d+=2*(x-y)+5;
+
+    // --- REGION 1: Slope < 1 ---
+    // Initial decision parameter for Region 1
+    double d1 = b2 - (a2 * b) + (0.25 * a2);
+    long long dx = twoB2 * x;
+    long long dy = twoA2 * y;
+
+    while (dx < dy) {
+        Draw4Points(sw, p0.x, p0.y, x, y, shape.borderColor);
+        if (d1 < 0) {
+            x++;
+            dx += twoB2;
+            d1 += dx + b2;
+        } else {
+            x++;
             y--;
+            dx += twoB2;
+            dy -= twoA2;
+            d1 += dx - dy + b2;
         }
-        x++;
-        Draw8Points(sw, shape.points[0].x, shape.points[0].y, x, y, shape.borderColor);
     }
+
+    // --- REGION 2: Slope > 1 ---
+    // Initial decision parameter for Region 2
+    double d2 = (b2 * (x + 0.5) * (x + 0.5)) + (a2 * (y - 1) * (y - 1)) - (a2 * b2);
+
+    while (y >= 0) {
+        Draw4Points(sw, p0.x, p0.y, x, y, shape.borderColor);
+        if (d2 > 0) {
+            y--;
+            dy -= twoA2;
+            d2 += a2 - dy;
+        } else {
+            y--;
+            x++;
+            dx += twoB2;
+            dy -= twoA2;
+            d2 += dx - dy + a2;
+        }
+    }
+
     sw->deactivate();
 }

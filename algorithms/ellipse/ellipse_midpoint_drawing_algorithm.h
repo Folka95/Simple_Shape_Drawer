@@ -6,7 +6,7 @@
 
 class Ellipse_MidPoint_DrawingAlgorithm : public DrawingAlgorithm {
 private:
-    void Draw8Points(ScreenWriter *sw, int xc, int yc, int x, int y, COLORREF color) const;
+    void Draw4Points(ScreenWriter *sw, int xc, int yc, int x, int y, COLORREF color) const;
 public:
     Ellipse_MidPoint_DrawingAlgorithm();
     void draw(const Shape &shape, ScreenWriter *sw) const;
