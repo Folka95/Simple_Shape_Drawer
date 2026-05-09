@@ -62,5 +62,7 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/Circle/circle_midpoint_drawing_algorithm.cpp
         algorithms/Circle/circle_midpoint_fast_drawing_algorithm.h
         algorithms/Circle/circle_midpoint_fast_drawing_algorithm.cpp
+        algorithms/curve/curve_spline_drawing_algorithm.h
+        algorithms/curve/curve_spline_drawing_algorithm.cpp
         io/action.h
 )
