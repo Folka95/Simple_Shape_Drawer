@@ -7,6 +7,7 @@
 #include "../core/shapes/circle.h"
 #include "../core/shapes/rectangle.h"
 #include "../core/shapes/ellipse.h"
+#include "../core/shapes/curve.h"
 #include "../algorithms/line/line_dda_drawing_algorithm.h"
 #include "../algorithms/line/line_parametric_drawing_algorithm.h"
 #include "../algorithms/line/line_midpoint_drawing_algorithm.h"
@@ -18,6 +19,7 @@
 #include "../algorithms/ellipse/ellipse_direct_drawing_algorithm.h"
 #include "../algorithms/ellipse/ellipse_Polar_drawing_algorithm.h"
 #include "../algorithms/ellipse/ellipse_midpoint_drawing_algorithm.h"
+#include "../algorithms/curve/curve_spline_drawing_algorithm.h"
 #include "../algorithms/clipping/circle/circle_line_clipping_algorithm.h"
 #include "../algorithms/clipping/circle/circle_point_clipping_algorithm.h"
 #include "../algorithms/filling/iterive_flood_fill_filling_algorithm.h"
@@ -377,9 +379,12 @@ void selectEllipseMenu(short value, AppManager *appManager) {
 
 void selectCurvesMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
-        // case CURVE_CARDINAL_SPLINE:
-        //     appManager->setDrawingAlgorithm(new Cardinal_Spline_DrawingAlgorithm());
-        //     break;
+        case CURVE_CARDINAL_SPLINE:
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new CurveShape());
+            appManager->setDrawingAlgorithm(new Curve_Spline_DrawingAlgorithm());
+            break;
 
         default:
             std::cerr << "selectCurvesMenu: Unknown Curves Menu value: " << value << '\n';
