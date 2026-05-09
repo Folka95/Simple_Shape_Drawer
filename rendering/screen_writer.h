@@ -27,7 +27,7 @@ public:
     void activate();
     void deactivate();
     vector< vector< COLORREF > > getScreen();
-    void setScreen(const vector< vector< COLORREF > > &screen);
+    void setScreen(const vector< vector< COLORREF > > &screen, bool setUserFalse);
     void updateScreen();
 };
 

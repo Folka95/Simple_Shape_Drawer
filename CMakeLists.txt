@@ -3,7 +3,7 @@ project(Simple_Shape_Drawer)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,8073741824")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,1073741824")
 
 add_executable(Simple_Shape_Drawer main.cpp
         core/point.h

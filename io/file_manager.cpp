@@ -1,6 +1,6 @@
 #include "file_manager.h"
 using namespace std;
-#define WORD_SIZE 16
+#define WORD_SIZE 24
 #define SAVES_PATH "../saves/"
 
 
@@ -77,26 +77,28 @@ string FileManager::screenToString(const vector<vector<COLORREF>> &screen) {
             int r = GetRValue(screen[i][j]);
             int g = GetGValue(screen[i][j]);
             int b = GetBValue(screen[i][j]);
-            // result += decimalToBinary(r * 256 * 256 + g * 256 + b);
-            result += decimalToBinary(r);
-            result += decimalToBinary(g);
-            result += decimalToBinary(b);
+            result += decimalToBinary( (r << 16) + (g << 8) + b);
+            // result += decimalToBinary(r);
+            // result += decimalToBinary(g);
+            // result += decimalToBinary(b);
         }
     }
     return result;
 }
 
 vector<Action*> FileManager::stringToAction(const string & binary) {
-    int n = binaryToDecimal(binary.substr(0, WORD_SIZE));
+    int it = 0;
+    int n = binaryToDecimal(binary.substr(WORD_SIZE * (it++), WORD_SIZE));
     vector<Action*> actions(n);
     for (Action* &action : actions) {
-        int type = binaryToDecimal(binary.substr(WORD_SIZE * 1, WORD_SIZE));
-        int typeRank = binaryToDecimal(binary.substr(WORD_SIZE * 2, WORD_SIZE));
-        int dataSize = binaryToDecimal(binary.substr(WORD_SIZE * 3, WORD_SIZE));
+        int type = binaryToDecimal(binary.substr(WORD_SIZE * (it++), WORD_SIZE));
+        int typeRank = binaryToDecimal(binary.substr(WORD_SIZE * (it++), WORD_SIZE));
+        int dataSize = binaryToDecimal(binary.substr(WORD_SIZE * (it++), WORD_SIZE));
         vector< short > data(dataSize);
         for(int i = 0; i < dataSize; i++) {
-            data[i] = binaryToDecimal(binary.substr(WORD_SIZE * (4 + i), WORD_SIZE));
+            data[i] = binaryToDecimal(binary.substr(WORD_SIZE * (it++), WORD_SIZE));
         }
+        cout << type << " " << typeRank << " " << dataSize << endl;
         if(type == ACTION_MENU_SELECT) {
             action = new MenuSelectAction(typeRank, data[0]);
         }
@@ -120,9 +122,10 @@ vector<vector<COLORREF>> FileManager::stringToScreen(const string & binary) {
     vector<vector<COLORREF>> screen(width, vector<COLORREF> (length));
     for(int i = 0; i < width; i++) {
         for(int j = 0; j < length; j++) {
-            int r = binaryToDecimal(binary.substr(WORD_SIZE * (it++), WORD_SIZE));
-            int g = binaryToDecimal(binary.substr(WORD_SIZE * (it++), WORD_SIZE));
-            int b = binaryToDecimal(binary.substr(WORD_SIZE * (it++), WORD_SIZE));
+            int rgb = binaryToDecimal(binary.substr(WORD_SIZE * (it++), WORD_SIZE));
+            int r = rgb >> 16;
+            int g = (rgb >> 8) & ((1 << 8) - 1);
+            int b = rgb & ((1 << 8) - 1);
             screen[i][j] = RGB(r, g, b);
         }
     }

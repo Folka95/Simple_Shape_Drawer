@@ -39,7 +39,8 @@ enum Menu {
 
 enum FileMenu {
     FILE_CLEAR,
-    FILE_SAVE,
+    FILE_SOFT_SAVE,
+    FILE_HARD_SAVE,
     FILE_LOAD
 };
 
@@ -105,27 +106,28 @@ enum SmileMenu {
 const int MAX_ENUM_SIZE = 20;
 
 
-short enumEncoder(short menu, short submenu) {
+inline short enumEncoder(short menu, short submenu) {
     return menu * MAX_ENUM_SIZE + submenu;
 }
 
-short mainMenuDecoder(short value) {
+inline short mainMenuDecoder(short value) {
     return value / MAX_ENUM_SIZE;
 }
 
-short subMenuDecoder(short value) {
+inline short subMenuDecoder(short value) {
     return value % MAX_ENUM_SIZE;
 }
 
-HMENU createFileMenu() {
+inline HMENU createFileMenu() {
     HMENU hSubMenu = CreatePopupMenu();
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_CLEAR), "Clear Screen");
-    AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_SAVE), "Save Screen");
+    AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_SOFT_SAVE), "Soft Save Screen");
+    AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_HARD_SAVE), "Hard Save Screen");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_LOAD), "Load Screen");
     return hSubMenu;
 }
 
-HMENU createPreferencesMenu() {
+inline HMENU createPreferencesMenu() {
     HMENU hSubMenu = CreatePopupMenu();
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_BACKGROUND_COLOR), "Change background color");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_BORDER_COLOR), "Change border color");
@@ -133,7 +135,7 @@ HMENU createPreferencesMenu() {
     return hSubMenu;
 }
 
-HMENU createLineMenu() {
+inline HMENU createLineMenu() {
     HMENU hSubMenu = CreatePopupMenu();
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(LINE_MENU, LINE_DDA), "DDA");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(LINE_MENU, LINE_MIDPOINT), "Midpoint");
@@ -141,7 +143,7 @@ HMENU createLineMenu() {
     return hSubMenu;
 }
 
-HMENU createCircleMenu() {
+inline HMENU createCircleMenu() {
     HMENU hSubMenu = CreatePopupMenu();
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(CIRCLE_MENU, CIRCLE_DIRECT), "Direct");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(CIRCLE_MENU, CIRCLE_POLAR), "Polar");
@@ -151,7 +153,7 @@ HMENU createCircleMenu() {
     return hSubMenu;
 }
 
-HMENU createEllipseMenu() {
+inline HMENU createEllipseMenu() {
     HMENU hSubMenu = CreatePopupMenu();
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(ELLIPSE_MENU, ELLIPSE_DIRECT), "Direct");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(ELLIPSE_MENU, ELLIPSE_POLAR), "Polar");
@@ -159,13 +161,13 @@ HMENU createEllipseMenu() {
     return hSubMenu;
 }
 
-HMENU createCurvesMenu() {
+inline HMENU createCurvesMenu() {
     HMENU hSubMenu = CreatePopupMenu();
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(CURVE_MENU, CURVE_CARDINAL_SPLINE), "Cardinal Spline");
     return hSubMenu;
 }
 
-HMENU createFillingMenu() {
+inline HMENU createFillingMenu() {
     HMENU hSubMenu = CreatePopupMenu();
 
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILL_MENU, FILL_CIRCLE_LINES), "Fill Circle (Lines)");
@@ -189,7 +191,7 @@ HMENU createFillingMenu() {
     return hSubMenu;
 }
 
-HMENU createClippingMenu() {
+inline HMENU createClippingMenu() {
     HMENU hMain = CreatePopupMenu();
 
     HMENU hRect = CreatePopupMenu();
@@ -212,14 +214,14 @@ HMENU createClippingMenu() {
     return hMain;
 }
 
-HMENU createSmileFaceMenu() {
+inline HMENU createSmileFaceMenu() {
     HMENU hSubMenu = CreatePopupMenu();
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(SMILE_MENU, SMILE_HAPPY_FACE), "Happy Face");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(SMILE_MENU, SMILE_SAD_FACE), "Sad Face");
     return hSubMenu;
 }
 
-void createAppMenu(HMENU hMenu) {
+inline void createAppMenu(HMENU hMenu) {
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createFileMenu(), "File");
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createPreferencesMenu(), "Preferences");
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createLineMenu(), "Line");
@@ -231,14 +233,18 @@ void createAppMenu(HMENU hMenu) {
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createSmileFaceMenu(), "Smile Face");
 }
 
-void selectFileMenu(short value, AppManager *appManager) {
+inline void selectFileMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         case FILE_CLEAR:
             appManager->clearScreen();
             break;
 
-        case FILE_SAVE:
+        case FILE_SOFT_SAVE:
             appManager->softSaveScreen();
+            break;
+
+        case FILE_HARD_SAVE:
+            appManager->hardSaveScreen();
             break;
 
         case FILE_LOAD:
@@ -251,7 +257,7 @@ void selectFileMenu(short value, AppManager *appManager) {
     }
 }
 
-void selectPreferencesMenu(short value, AppManager *appManager) {
+inline void selectPreferencesMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         case PREFERENCES_MOUSE_SHAPE:
             break;
@@ -274,7 +280,7 @@ void selectPreferencesMenu(short value, AppManager *appManager) {
     }
 }
 
-void selectLineMenu(short value, AppManager *appManager) {
+inline void selectLineMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         case LINE_DDA:
             appManager->removeClippingAlgorithm();
@@ -303,7 +309,7 @@ void selectLineMenu(short value, AppManager *appManager) {
     }
 }
 
-void selectCircleMenu(short value, AppManager *appManager) {
+inline void selectCircleMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         case CIRCLE_DIRECT:
             appManager->removeClippingAlgorithm();
@@ -346,7 +352,7 @@ void selectCircleMenu(short value, AppManager *appManager) {
     }
 }
 
-void selectEllipseMenu(short value, AppManager *appManager) {
+inline void selectEllipseMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         case ELLIPSE_DIRECT:
             appManager->removeClippingAlgorithm();
@@ -375,7 +381,7 @@ void selectEllipseMenu(short value, AppManager *appManager) {
     }
 }
 
-void selectCurvesMenu(short value, AppManager *appManager) {
+inline void selectCurvesMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         // case CURVE_CARDINAL_SPLINE:
         //     appManager->setDrawingAlgorithm(new Cardinal_Spline_DrawingAlgorithm());
@@ -387,7 +393,7 @@ void selectCurvesMenu(short value, AppManager *appManager) {
     }
 }
 
-void selectFillingMenu(short value, AppManager *appManager) {
+inline void selectFillingMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         // case FILL_CIRCLE_LINES:
         //     appManager->setFillingAlgorithm(new FillCircleLines_FillingAlgorithm());
@@ -427,7 +433,7 @@ void selectFillingMenu(short value, AppManager *appManager) {
     }
 }
 
-void selectClippingMenu(short value, AppManager *appManager) {
+inline void selectClippingMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         // case CLIP_RECT_POINT:
         //     appManager->setClippingAlgorithm();
@@ -475,7 +481,7 @@ void selectClippingMenu(short value, AppManager *appManager) {
     }
 }
 
-void selectSmileMenu(short value, AppManager *appManager) {
+inline void selectSmileMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         // case SMILE_HAPPY_FACE:
         //     appManager->setShape();
@@ -490,7 +496,7 @@ void selectSmileMenu(short value, AppManager *appManager) {
     }
 }
 
-void selectMainMenu(short value, AppManager *appManager) {
+inline void selectMainMenu(short value, AppManager *appManager) {
     switch (mainMenuDecoder(value)) {
         case FILE_MENU:
             selectFileMenu(value, appManager);
@@ -534,6 +540,6 @@ void selectMainMenu(short value, AppManager *appManager) {
     }
 }
 
-void selectMenu(short value, AppManager *appManager) {
+inline void selectMenu(short value, AppManager *appManager) {
     selectMainMenu(value, appManager);
 }
