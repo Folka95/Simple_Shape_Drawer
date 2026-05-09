@@ -26,6 +26,9 @@ public:
     bool outOfBounds(int x, int y);
     void activate();
     void deactivate();
+    vector< vector< COLORREF > > getScreen();
+    void setScreen(const vector< vector< COLORREF > > &screen);
+    void updateScreen();
 };
 
 #endif //SCREEN_WRITER_H

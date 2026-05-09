@@ -231,8 +231,6 @@ void createAppMenu(HMENU hMenu) {
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createSmileFaceMenu(), "Smile Face");
 }
 
-#include <iostream>
-
 void selectFileMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         case FILE_CLEAR:
@@ -240,7 +238,7 @@ void selectFileMenu(short value, AppManager *appManager) {
             break;
 
         case FILE_SAVE:
-            appManager->saveScreen();
+            appManager->softSaveScreen();
             break;
 
         case FILE_LOAD:
