@@ -1,5 +1,4 @@
 #include "curve_spline_drawing_algorithm.h"
-#include <bits/stdc++.h>
 
 Curve_Spline_DrawingAlgorithm::Curve_Spline_DrawingAlgorithm() : DrawingAlgorithm() {
 
@@ -21,9 +20,15 @@ void Curve_Spline_DrawingAlgorithm::drawCurveHermite(Point t0, Point t1, Point p
 	}
 }
 
-void Curve_Spline_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const {
+void Curve_Spline_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const
+{
     if(shape.getType() != SHAPE_CURVE) {
         std::cerr << "Curve_Spline_DrawingAlgorithm::draw : shape to draw must be Curve" << std::endl;
+        return;
+    }
+
+    if(shape.points.size() < 4) {
+        std::cerr << "Curve spline requires at least 4 points" << std::endl;
         return;
     }
 
@@ -31,25 +36,18 @@ void Curve_Spline_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) c
 
     sw->activate();
 
-    // Calculate the initial tangent at P[1] using neighbors P[2] and P[0]
     Point T0;
     T0.x = c1 * (shape.points[2].x - shape.points[0].x);
     T0.y = c1 * (shape.points[2].y - shape.points[0].y);
 
-    // Loop through the points starting from the second point
-    for (int i = 2; i < shape.points.size(); i++) 
-    {
-        // Calculate the tangent at the end of the current segment (at P[i])
-        // using neighbors P[i+1] and P[i-1]
+    for (int i = 2; i < shape.points.size() - 1; i++) {
         Point T1;
+
         T1.x = c1 * (shape.points[i + 1].x - shape.points[i - 1].x);
         T1.y = c1 * (shape.points[i + 1].y - shape.points[i - 1].y);
 
-        // Draw the segment between P[i-1] and P[i] 
-        // using the tangents T0 (at start) and T1 (at end)
-        drawCurveHermite(T0, T1, shape.points[i - 1], shape.points[i], sw, shape);
+        drawCurveHermite(T0,T1,shape.points[i - 1],shape.points[i],sw, shape);
 
-        // The current end tangent becomes the start tangent for the next segment
         T0 = T1;
     }
 
