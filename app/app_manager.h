@@ -15,11 +15,14 @@ using namespace std;
 #define largeSeparator string(30, '=')
 #define mediumSeparator string(20, '=')
 #define smallSeparator string(10, '=')
+#include "../rendering/mouse_cursor_manager.h"
 
 class AppManager {
 private:
     HWND hwnd;
     ScreenWriter *sw;
+    MouseCursorManager mouse;
+
 
     DrawingAlgorithm *drawingAlgorithm;
     FillingAlgorithm *fillingAlgorithm;
@@ -62,8 +65,8 @@ public:
     void applyLeftClick(short x, short y);
     void applyMenuSelection(short choice);
 
-    void undoStep();
-    void redoStep();
+    void changeMouse();
+    void applyMouseCursor();
 
     void clearScreen();
     void softSaveScreen();

@@ -25,6 +25,10 @@ void mouseLeftClick(short x, short y) {
 
 LRESULT WINAPI WndProc(HWND hwnd, UINT mcode, WPARAM wp, LPARAM lp) {
     switch (mcode) {
+        case WM_SETCURSOR:
+            appManager->applyMouseCursor();
+            return TRUE;
+
         case WM_COMMAND:
             menuSelected(LOWORD(wp));
             break;

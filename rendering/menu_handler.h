@@ -137,6 +137,7 @@ inline HMENU createPreferencesMenu() {
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_BACKGROUND_COLOR), "Change background color");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_BORDER_COLOR), "Change border color");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_FILL_COLOR), "Change filling color");
+    AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_MOUSE_SHAPE), "Change mouse randomly");
     return hSubMenu;
 }
 
@@ -265,6 +266,7 @@ inline void selectFileMenu(short value, AppManager *appManager) {
 inline void selectPreferencesMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         case PREFERENCES_MOUSE_SHAPE:
+            appManager->changeMouse();
             break;
 
         case PREFERENCES_BACKGROUND_COLOR:

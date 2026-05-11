@@ -313,12 +313,34 @@ void AppManager::loadScreen() {
     }
 }
 
-void AppManager::undoStep() {
 
+void AppManager::changeMouse() {
+    static const LPCTSTR cursors[] = {
+        IDC_ARROW,
+        IDC_HAND,
+        IDC_WAIT,
+        IDC_CROSS,
+        IDC_IBEAM,
+        IDC_SIZEALL,
+        IDC_NO,
+        IDC_SIZEWE,
+        IDC_SIZENS,
+        IDC_SIZENWSE,
+        IDC_SIZENESW
+    };
+
+    static bool seeded = false;
+    if (!seeded) {
+        std::srand((unsigned)std::time(nullptr));
+        seeded = true;
+    }
+
+    int index = std::rand() % (sizeof(cursors) / sizeof(cursors[0]));
+    mouse.setSystemCursor(cursors[index]);
 }
 
-void AppManager::redoStep() {
-
+void AppManager::applyMouseCursor() {
+    mouse.apply();
 }
 
 HWND AppManager::getScreenOwner() {

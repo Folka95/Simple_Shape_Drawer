@@ -75,5 +75,4 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/rectangle/rectangle_drawing_algorithm.h
         rendering/mouse_cursor_manager.cpp
         rendering/mouse_cursor_manager.h
-        core/shapes/polygon.cpp
 )
