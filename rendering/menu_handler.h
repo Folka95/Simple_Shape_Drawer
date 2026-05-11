@@ -22,6 +22,9 @@
 #include "../algorithms/curve/curve_spline_drawing_algorithm.h"
 #include "../algorithms/clipping/circle/circle_line_clipping_algorithm.h"
 #include "../algorithms/clipping/circle/circle_point_clipping_algorithm.h"
+#include "../algorithms/clipping/rectangle/rectangle_line_clipping_algorithm.h"
+#include "../algorithms/clipping/rectangle/rectangle_point_clipping_algorithm.h"
+#include "../algorithms/rectangle/rectangle_drawing_algorithm.h"
 #include "../algorithms/filling/iterive_flood_fill_filling_algorithm.h"
 #include "../algorithms/filling/flood_fill_filling_algorithm.h"
 #include "../core/shapes/polygon.h"
@@ -440,13 +443,28 @@ inline void selectFillingMenu(short value, AppManager *appManager) {
 
 inline void selectClippingMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
-        // case CLIP_RECT_POINT:
-        //     appManager->setClippingAlgorithm();
-        //     break;
+         case CLIP_RECT_POINT:
+             appManager->removeDrawingAlgorithm();
+             appManager->removeFillingAlgorithm();
+             appManager->setShape(new PolygonShape<1>());
+             appManager->setClippingAlgorithm(
+                     new Rectangle_Point_ClippingAlgorithm(),
+                     new Rectangle_drawing_algorithm(),
+                     new class Rectangle()
+                     );
+
+             break;
         //
-        // case CLIP_RECT_LINE:
-        //     appManager->setClippingAlgorithm();
-        //     break;
+         case CLIP_RECT_LINE:
+             appManager->removeDrawingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new Line());
+            appManager->setClippingAlgorithm(
+                    new Rectangle_Line_ClippingAlgorithm(),
+                    new Rectangle_drawing_algorithm(),
+                    new class Rectangle()
+            );
+             break;
         //
         // case CLIP_RECT_POLYGON:
         //     appManager->setClippingAlgorithm();

@@ -65,6 +65,14 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/curve/curve_spline_drawing_algorithm.h
         algorithms/curve/curve_spline_drawing_algorithm.cpp
         io/action.h
+        algorithms/clipping/rectangle/rectangle_point_clipping_algorithm.h
+        algorithms/clipping/rectangle/rectangle_line_clipping_algorithm.h
+        algorithms/clipping/rectangle/rectangle_polygon_clipping_algorithm.h
+        algorithms/clipping/rectangle/rectangle_point_clipping_algorithm.cpp
+        algorithms/clipping/rectangle/rectangle_line_clipping_algorithm.cpp
+        algorithms/clipping/rectangle/rectangle_polygon_clipping_algorithm.cpp
+        algorithms/rectangle/rectangle_drawing_algorithm.cpp
+        algorithms/rectangle/rectangle_drawing_algorithm.h
         rendering/mouse_cursor_manager.cpp
         rendering/mouse_cursor_manager.h
 )
