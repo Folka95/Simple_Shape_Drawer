@@ -42,3 +42,7 @@ Shape* Rectangle::clone() const {
     newRectangle->fillColor = this->fillColor;
     return newRectangle;
 }
+
+void Rectangle::takeAction(int actionID) {
+
+}

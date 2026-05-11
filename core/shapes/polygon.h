@@ -11,6 +11,7 @@ public:
     void initialize() override;
     bool isInside(const Point &point) const override;
     bool isEnoughToDraw() const override;
+    void takeAction(int actionID) override;
     Shape* clone() const override;
 };
 
@@ -62,5 +63,9 @@ Shape* PolygonShape<size>::clone() const {
     return newPolygon;
 }
 
+template< int size >
+void PolygonShape<size>::takeAction(int actionID) {
+
+}
 
 #endif

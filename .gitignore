@@ -9,6 +9,11 @@ CMakeCache.txt
 cmake_install.cmake
 Makefile
 
+# Saves
+saves/
+*.hsv
+*.ssv
+
 # Compiled binaries
 *.exe
 *.out

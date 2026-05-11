@@ -27,3 +27,7 @@ void Shape::clear() {
 std::string Shape::getDescription() const {
     return this->description;
 }
+
+int Shape::getSize() const {
+    return this->points.size();
+}

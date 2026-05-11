@@ -39,6 +39,7 @@ private:
 
     void Private_applyLeftClick(short x, short y, bool isUser);
     void Private_applyRightClick(short x, short y, bool isUser);
+    void Private_applyRightClickCurve(short x, short y, bool isUser);
     void Private_applyMenuSelection(short choice, bool isUser);
 public:
     AppManager(HWND _hwnd);

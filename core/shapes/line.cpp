@@ -36,3 +36,7 @@ Shape* Line::clone() const {
     tmp->fillColor = this->fillColor;
     return tmp;
 }
+
+void Line::takeAction(int actionID) {
+
+}

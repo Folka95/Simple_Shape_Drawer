@@ -34,6 +34,8 @@ public:
     void clear();
     std::string getDescription() const ;
     ShapeType getType() const ;
+    int getSize() const ;
+    virtual void takeAction(int actionID) = 0;
     virtual void initialize() = 0 ;
     virtual bool isInside(const Point &point) const = 0 ;
     virtual bool isEnoughToDraw() const = 0 ;

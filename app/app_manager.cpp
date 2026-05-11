@@ -124,8 +124,43 @@ void AppManager::Private_applyRightClick(short x, short y, bool isUser) {
     }
 }
 
+void AppManager::Private_applyRightClickCurve(short x, short y, bool isUser) {
+    if(clippingRegion != nullptr) {
+        cerr << "AppManager::Private_applyRightClickCurve: clippingRegion is NOT null" << endl;
+        return;
+    }
+    if(clippingAlgorithm != nullptr) {
+        cerr << "AppManager::Private_applyRightClickCurve: clippingAlgorithm is NOT null" << endl;
+        return;
+    }
+    if(shapeHistory.empty()) {
+        cerr << "AppManager::Private_applyRightClickCurve: shapeHistory is empty" << endl;
+        return;
+    }
+    if(drawingAlgorithm == nullptr) {
+        cerr << "AppManager::Private_applyRightClickCurve: drawingAlgorithm is null" << endl;
+        return;
+    }
+    this->shapeHistory.back()->takeAction(1);
+    if(!shapeHistory.back()->isEnoughToDraw()) {
+        cerr << "AppManager::Private_applyRightClickCurve: not enough to draw" << endl;
+        return;
+    }
+    shapeHistory.back()->borderColor = borderColor;
+    drawingAlgorithm->draw(*shapeHistory.back(), sw);
+    actionHistory.push_back(new RightClickAction(3, x, y));
+    if(isUser) {
+        this->sw->updateScreen();
+    }
+}
+
 void AppManager::applyRightClick(short x, short y) {
-    Private_applyRightClick(x, y, true);
+    if(this->shapeHistory.back()->getType() == SHAPE_CURVE) {
+        Private_applyRightClickCurve(x, y, true);
+    }
+    else {
+        Private_applyRightClick(x, y, true);
+    }
 }
 
 void AppManager::applyLeftClickClippingMode(short x, short y) {

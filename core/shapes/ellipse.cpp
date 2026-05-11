@@ -64,3 +64,7 @@ Shape* EllipseShape::clone() const {
     newEllipse->fillColor = this->fillColor;
     return newEllipse;
 }
+
+void EllipseShape::takeAction(int actionID) {
+
+}

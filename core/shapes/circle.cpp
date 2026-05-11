@@ -34,3 +34,7 @@ Shape* Circle::clone() const {
     newCircle->fillColor = this->fillColor;
     return newCircle;
 }
+
+void Circle::takeAction(int actionID) {
+
+}
