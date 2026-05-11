@@ -11,12 +11,14 @@ void Rectangle_Point_ClippingAlgorithm::clip(const Shape &shape, const Shape &re
         std::cerr << "rectanglePointClippingAlgorithm::clip : shape to draw must be Line" << std::endl;
         return;
     }
-
+    if (shape.getSize() != 1){
+        std::cerr << "Rectangle_Point_ClippingAlgorithm::clip : shape to draw must be Line" << std::endl;
+        return;
+    }
     if (region.getType() != SHAPE_RECTANGLE){
         std::cerr << "rectanglePointClippingAlgorithm::clip : Region must be a Rectangle" << std::endl;
         return;
     }
-
     sw->activate();
     if (region.isInside(shape.points[0])){
         sw->setPixel(shape.points[0].x, shape.points[0].y, shape.borderColor);

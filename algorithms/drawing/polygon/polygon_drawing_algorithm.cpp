@@ -26,11 +26,8 @@ void Polygon_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const 
     }
     Shape *tmp = shape.clone();
     sort(tmp->points.begin(), tmp->points.end());
-    sw->activate();
-    sw->setPixel(tmp->points[0].x, tmp->points[0].y, tmp->borderColor);
-    sw->deactivate();
-    for(int i = 0; i + 1 < tmp->points.size(); i++) {
-        drawLine(tmp->points[i], tmp->points[i + 1], sw);
+    for(int i = 0; i < tmp->points.size(); i++) {
+        drawLine(tmp->points[i], tmp->points[(i + 1) % tmp->points.size()], sw);
     }
 }
 

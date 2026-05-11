@@ -3,7 +3,7 @@ using namespace std;
 
 SadSmileFace::SadSmileFace() : Shape (
     SHAPE_SAD_SMILE_FACE,
-    "Shape Type : Happy Smile Face\n"s +
+    "Shape Type : Sad Smile Face\n"s +
     "How to draw ?\n" +
     "    Use mouse left-click to make 2 clicks represents \n" +
     "    the center of the face and a point on the circumference\n"

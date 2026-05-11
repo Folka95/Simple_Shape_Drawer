@@ -1,7 +1,7 @@
 #include "curve_spline_drawing_algorithm.h"
 
-Curve_Spline_DrawingAlgorithm::Curve_Spline_DrawingAlgorithm() : DrawingAlgorithm() {
-
+Curve_Spline_DrawingAlgorithm::Curve_Spline_DrawingAlgorithm(int Cvalue) : DrawingAlgorithm() {
+	this->Cvalue = Cvalue / 100.0;
 }
 
 void Curve_Spline_DrawingAlgorithm::drawCurveHermite(Point t0, Point t1, Point p0, Point p3, ScreenWriter *sw, const Shape &shape) const {
@@ -32,7 +32,7 @@ void Curve_Spline_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) c
         return;
     }
 
-    double c1 = 1.0;
+    double c1 = Cvalue;
 
     sw->activate();
 

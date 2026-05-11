@@ -24,14 +24,19 @@
 #include "../algorithms/clipping/circle/circle_point_clipping_algorithm.h"
 #include "../algorithms/clipping/rectangle/rectangle_line_clipping_algorithm.h"
 #include "../algorithms/clipping/rectangle/rectangle_point_clipping_algorithm.h"
+#include "../algorithms/clipping/rectangle/rectangle_polygon_clipping_algorithm.h"
+#include "../algorithms/clipping/square/square_line_clipping_algorithm.h"
+#include "../algorithms/clipping/square/square_point_clipping_algorithm.h"
 #include "../algorithms/drawing/rectangle/rectangle_drawing_algorithm.h"
 #include "../algorithms/drawing/smile_face/happy_smile_face_drawing_algorithm.h"
 #include "../algorithms/drawing/smile_face/sad_smile_face_drawing_algorithm.h"
+#include "../algorithms/drawing/square/square_drawing_algorithm.h"
 #include "../algorithms/filling/iterive_flood_fill_filling_algorithm.h"
 #include "../algorithms/filling/flood_fill_filling_algorithm.h"
 #include "../core/shapes/happy_smile_face.h"
 #include "../core/shapes/polygon.h"
 #include "../core/shapes/sad_smile_face.h"
+#include "../core/shapes/square.h"
 
 
 enum Menu {
@@ -394,13 +399,14 @@ inline void selectEllipseMenu(short value, AppManager *appManager) {
 
 inline void selectCurvesMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
-        case CURVE_CARDINAL_SPLINE:
+        case CURVE_CARDINAL_SPLINE: {
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
+            int Cvalue = pickRange(appManager->getScreenOwner(), 0, 100, 50, "Sharpness Percent %");
             appManager->setShape(new CurveShape());
-            appManager->setDrawingAlgorithm(new Curve_Spline_DrawingAlgorithm());
+            appManager->setDrawingAlgorithm(new Curve_Spline_DrawingAlgorithm(Cvalue));
             break;
-
+        }
         default:
             std::cerr << "selectCurvesMenu: Unknown Curves Menu value: " << value << '\n';
             break;
@@ -471,18 +477,36 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
                     new class Rectangle()
             );
              break;
-        //
-        // case CLIP_RECT_POLYGON:
-        //     appManager->setClippingAlgorithm();
-        //     break;
-        //
-        // case CLIP_SQUARE_POINT:
-        //     appManager->setClippingAlgorithm();
-        //     break;
-        //
-        // case CLIP_SQUARE_LINE:
-        //     appManager->setClippingAlgorithm();
-        //     break;
+        case CLIP_RECT_POLYGON:
+            appManager->removeDrawingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            // const int sz = pickRange(appManager->getScreenOwner(), 3, 10, 5, "Polygon Size");
+            appManager->setShape(new PolygonShape<5>());
+            appManager->setClippingAlgorithm(
+                new Rectangle_Polygon_ClippingAlgorithm(),
+                new Rectangle_DrawingAlgorithm(),
+                new class Rectangle());
+            break;
+
+        case CLIP_SQUARE_POINT:
+            appManager->removeDrawingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new PolygonShape<1>());
+            appManager->setClippingAlgorithm(
+                new Square_Point_ClippingAlgorithm(),
+                new Square_DrawingAlgorithm(),
+                new Square());
+            break;
+
+        case CLIP_SQUARE_LINE:
+            appManager->removeDrawingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new Line());
+            appManager->setClippingAlgorithm(
+                new Square_Line_ClippingAlgorithm(),
+                new Square_DrawingAlgorithm(),
+                new Square());
+            break;
 
         case CLIP_CIRCLE_POINT:
             appManager->removeDrawingAlgorithm();

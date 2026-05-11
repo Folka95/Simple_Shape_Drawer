@@ -1,6 +1,3 @@
-//
-// Created by frasa on 5/11/2026.
-
 #include "rectangle_drawing_algorithm.h"
 #include "../line/line_midpoint_drawing_algorithm.h"
 #include "../../../core/shapes/line.h"
@@ -21,8 +18,8 @@ void Rectangle_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) cons
         std::cerr << "Rectangle_DrawingAlgorithm::draw : shape to draw must be Rectangle" << std::endl;
         return;
     }
-    if(shape.points.size() != 2){
-        std::cerr << "Rectangle_DrawingAlgorithm::draw : shape must have 2 points" << std::endl;
+    if(!shape.isEnoughToDraw()){
+        std::cerr << "Rectangle_DrawingAlgorithm::draw : shape is not enough to draw" << std::endl;
         return;
     }
     Point topLeft(shape.points[0]);

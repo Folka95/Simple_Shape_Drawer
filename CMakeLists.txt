@@ -85,4 +85,12 @@ add_executable(Simple_Shape_Drawer main.cpp
         core/shapes/sad_smile_face.h
         algorithms/drawing/polygon/polygon_drawing_algorithm.cpp
         algorithms/drawing/polygon/polygon_drawing_algorithm.h
+        algorithms/clipping/square/square_line_clipping_algorithm.cpp
+        algorithms/clipping/square/square_line_clipping_algorithm.h
+        algorithms/clipping/square/square_point_clipping_algorithm.cpp
+        algorithms/clipping/square/square_point_clipping_algorithm.h
+        core/shapes/square.cpp
+        core/shapes/square.h
+        algorithms/drawing/square/square_drawing_algorithm.cpp
+        algorithms/drawing/square/square_drawing_algorithm.h
 )

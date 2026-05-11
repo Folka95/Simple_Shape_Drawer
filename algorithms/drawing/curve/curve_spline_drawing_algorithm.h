@@ -6,9 +6,10 @@
 
 class Curve_Spline_DrawingAlgorithm : public DrawingAlgorithm {
 private:
+    double Cvalue;
     void drawCurveHermite(Point t0, Point t1, Point p0, Point p1, ScreenWriter *sw, const Shape &shape) const;
 public:
-    Curve_Spline_DrawingAlgorithm();
+    Curve_Spline_DrawingAlgorithm(int Cvalue);
     void draw(const Shape &shape, ScreenWriter *sw) const;
 };
 

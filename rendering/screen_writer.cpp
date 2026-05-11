@@ -11,7 +11,6 @@ ScreenWriter::ScreenWriter(HWND hwnd) {
     backgroundColor = RGB(0, 0, 0);
     isUserDrawn = vector< vector< bool > > (this->getWidth(), vector< bool >(this->getHeight(), false));
     screen = vector< vector< COLORREF > > (this->getWidth(), vector< COLORREF >(this->getHeight(), backgroundColor));
-    cout << this->getWidth() << ' ' << this->getHeight() << endl;
 }
 
 ScreenWriter::~ScreenWriter() {
