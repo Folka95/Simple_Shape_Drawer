@@ -4,7 +4,9 @@
 enum ActionType {
     ACTION_LEFT_CLICK,
     ACTION_RIGHT_CLICK,
-    ACTION_MENU_SELECT
+    ACTION_MENU_SELECT,
+    ACTION_MENU_COLOR_PICK,
+    ACTION_MENU_CURVE
 };
 
 class Action {
@@ -59,6 +61,30 @@ public:
     }
     Action* clone() {
         return new MenuSelectAction(this->getRank(), this->getData()[0]);
+    }
+};
+
+class MenuCurveAction : public Action {
+public:
+    MenuCurveAction(short rank, short Cvalue) : Action(ACTION_MENU_CURVE, rank, {Cvalue}){
+
+    }
+    Action* clone() {
+        return new MenuCurveAction(this->getRank(), this->getData()[0]);
+    }
+};
+
+class MenuColorPickAction : public Action {
+public:
+    MenuColorPickAction(short rank, COLORREF color) : Action(ACTION_MENU_COLOR_PICK, rank, {
+        GetRValue(color),
+        GetGValue(color),
+        GetBValue(color)
+    }){
+
+    }
+    Action* clone() {
+        return new MenuColorPickAction(this->getRank(), this->getData()[0]);
     }
 };
 

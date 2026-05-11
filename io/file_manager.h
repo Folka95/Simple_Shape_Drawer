@@ -21,6 +21,8 @@ private:
     static std::vector< Action* > stringToAction(const std::string &binary);
     static std::vector<std::vector<COLORREF>> stringToScreen(const std::string &binary);
 
+    static std::string encode(std::string binary);
+    static std::string decode(std::string content);
 
 public:
     FileManager();

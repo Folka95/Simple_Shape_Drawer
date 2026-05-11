@@ -2,6 +2,7 @@
 #include <bits/stdc++.h>
 #include "../io/action.h"
 #include "../io/file_manager.h"
+#include "../rendering/menu_handler.h"
 
 using namespace std;
 AppManager::AppManager(HWND _hwnd) {
@@ -99,7 +100,7 @@ void AppManager::removeClippingAlgorithm() {
     this->clippingDrawingAlgorithm = nullptr;
 }
 
-void AppManager::applyRightClick(short x, short y) {
+void AppManager::Private_applyRightClick(short x, short y, bool isUser) {
     if(shapeHistory.empty()) {
         cerr << "AppManager::applyLeftClick: shapeHistory is empty" << endl;
         return;
@@ -118,7 +119,13 @@ void AppManager::applyRightClick(short x, short y) {
         }
     }
     actionHistory.push_back(new RightClickAction(actionRank, x, y));
-    this->sw->updateScreen();
+    if(isUser) {
+        this->sw->updateScreen();
+    }
+}
+
+void AppManager::applyRightClick(short x, short y) {
+    Private_applyRightClick(x, y, true);
 }
 
 void AppManager::applyLeftClickClippingMode(short x, short y) {
@@ -190,24 +197,35 @@ void AppManager::applyLeftClickNoneClipping(short x, short y) {
     actionHistory.push_back(new LeftClickAction(actionRank, x, y));
 }
 
-void AppManager::applyLeftClick(short x, short y) {
+void AppManager::Private_applyLeftClick(short x, short y, bool isUser) {
     if(clippingAlgorithm == nullptr) {
         applyLeftClickNoneClipping(x, y);
     }
     else {
         applyLeftClickClippingMode(x, y);
     }
-    this->sw->updateScreen();
+    if(isUser) {
+        this->sw->updateScreen();
+    }
 }
 
-#include "../rendering/menu_handler.h"
+void AppManager::applyLeftClick(short x, short y) {
+    Private_applyLeftClick(x, y, true);
+}
 
-void AppManager::applyMenuSelection(short choice) {
+
+void AppManager::Private_applyMenuSelection(short choice, bool isUser) {
     selectMainMenu(choice, this);
     if(subMenuDecoder(choice) != FileMenu::FILE_LOAD) {
         actionHistory.push_back(new MenuSelectAction(2, choice));
     }
-    this->sw->updateScreen();
+    if(isUser) {
+        this->sw->updateScreen();
+    }
+}
+
+void AppManager::applyMenuSelection(short choice) {
+    Private_applyMenuSelection(choice, true);
 }
 
 void AppManager::clearScreen() {
@@ -234,7 +252,7 @@ void AppManager::softSaveScreen() {
 void AppManager::loadScreen() {
     actionHistory.clear();
     shapeHistory.clear();
-    string filename ="out.hsv";
+    string filename ="out.ssv";
     if(filename.substr(filename.size() - 4, 4) == ".ssv") {
         vector< vector< COLORREF > > screen = FileManager::loadScreen(filename);
         sw->setScreen(screen, true);
@@ -244,18 +262,19 @@ void AppManager::loadScreen() {
         this->reset();
         for(Action *action : actions) {
             if(action->getActionType() == ACTION_LEFT_CLICK) {
-                this->applyLeftClick(action->getData()[0], action->getData()[1]);
+                this->Private_applyLeftClick(action->getData()[0], action->getData()[1], false);
             }
             else if(action->getActionType() == ACTION_RIGHT_CLICK) {
-                this->applyRightClick(action->getData()[0], action->getData()[1]);
+                this->Private_applyRightClick(action->getData()[0], action->getData()[1], false);
             }
             else if(action->getActionType() == ACTION_MENU_SELECT) {
-                this->applyMenuSelection(action->getData()[0]);
+                this->Private_applyMenuSelection(action->getData()[0], false);
             }
             else {
                 cerr << "AppManager::loadScreen: unknown action type" << endl;
             }
         }
+        this->sw->updateScreen();
     }
 }
 

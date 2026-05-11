@@ -27,13 +27,29 @@ int FileManager::binaryToDecimal(const string &binary) {
     return result;
 }
 
+string FileManager::encode(string binary) {
+    string encoded;
+    for(int i = 0; i < binary.size(); i += 8) {
+        encoded += char(binaryToDecimal(binary.substr(i, 8)));
+    }
+    return encoded;
+}
+
+string FileManager::decode(string content) {
+    string decoded;
+    for(int i = 0; i < content.size(); i++) {
+        decoded += decimalToBinary(content[i]).substr(WORD_SIZE - 8);
+    }
+    return decoded;
+}
+
 void FileManager::saveToFile(const string &content, const string &filename) {
     ofstream file(filename, ios::binary);
     if (!file.is_open()) {
         cerr << "Cannot open file for writing\n";
         return;
     }
-    file << content;
+    file << encode(content);
     file.close();
 }
 
@@ -48,7 +64,7 @@ string FileManager::loadFromFile(const string & filename) {
         istreambuf_iterator<char>()
     );
     file.close();
-    return content;
+    return decode(content);
 }
 
 string FileManager::actionToString(const vector<Action*> &actions) {
@@ -107,6 +123,12 @@ vector<Action*> FileManager::stringToAction(const string & binary) {
         }
         else if(type == ACTION_RIGHT_CLICK) {
             action = new RightClickAction(typeRank, data[0], data[1]);
+        }
+        else if(type == ACTION_MENU_CURVE) {
+            action = new MenuCurveAction(typeRank, data[0]);
+        }
+        else if(type == ACTION_MENU_COLOR_PICK) {
+            action = new MenuColorPickAction(typeRank, RGB(data[0], data[1], data[2]));
         }
         else {
             cerr << "Unknown action type\n";

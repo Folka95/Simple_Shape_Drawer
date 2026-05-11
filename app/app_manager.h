@@ -36,6 +36,10 @@ private:
     void applyLeftClickClippingMode(short x, short y);
     void applyLeftClickNoneClipping(short x, short y);
     void reset();
+
+    void Private_applyLeftClick(short x, short y, bool isUser);
+    void Private_applyRightClick(short x, short y, bool isUser);
+    void Private_applyMenuSelection(short choice, bool isUser);
 public:
     AppManager(HWND _hwnd);
     ~AppManager();
