@@ -2,6 +2,7 @@
 #ifndef POLYGON_H
 #define POLYGON_H
 #include "../shape.h"
+using namespace std;
 
 template< int size >
 class PolygonShape : public Shape {
@@ -13,20 +14,22 @@ public:
     bool isEnoughToDraw() const override;
     void takeAction(int actionID) override;
     Shape* clone() const override;
+    void sortClockWise();
 };
 
 template< int size >
-PolygonShape<size>::PolygonShape() : Shape() {
-    type = SHAPE_POLYGON;
-    description = "";
-    description += "Shape Type : Polygon of ";
-    description += std::to_string(size);
-    description += " points \n";
-    description += "How to draw ?\n";
-    description += "    Use mouse left-click to make";
-    description += std::to_string(size);
-    description += " clicks represents \n";
-    description += "    the points of the polygon\n";
+PolygonShape<size>::PolygonShape() : Shape(
+    SHAPE_POLYGON,
+    "Shape Type : Polygon of "s +
+    std::to_string(size) +
+    " points \n" +
+    "How to draw ?\n" +
+    "    Use mouse left-click to make " +
+    std::to_string(size) +
+    " clicks represents \n" +
+    "    the points of the polygon\n"
+) {
+
 }
 
 template< int size >
@@ -42,7 +45,7 @@ int PolygonShape<size>::getSize() const {
 template< int size >
 bool PolygonShape<size>::isInside(const Point &point) const {
     // TODO
-    return true;
+    return false;
 }
 
 template< int size >

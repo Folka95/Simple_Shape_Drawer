@@ -1,12 +1,13 @@
 #include "circle.h"
+using namespace std;
 
-Circle::Circle() : Shape() {
-    type = SHAPE_CIRCLE;
-    description = "";
-    description += "Shape Type : Circle\n";
-    description += "How to draw ?\n";
-    description += "    Use mouse left-click to make 2 clicks represents \n";
-    description += "    the center and a point on the circumference of the circle\n";
+Circle::Circle() : Shape(SHAPE_CIRCLE,
+    "Shape Type : Circle\n"s +
+    "How to draw ?\n" +
+    "    Use mouse left-click to make 2 clicks represents \n" +
+    "    the center and a point on the circumference of the circle\n"
+    ) {
+
 }
 
 void Circle::initialize() {
@@ -32,6 +33,7 @@ Shape* Circle::clone() const {
     newCircle->points = this->points;
     newCircle->borderColor = this->borderColor;
     newCircle->fillColor = this->fillColor;
+    newCircle->initialize();
     return newCircle;
 }
 

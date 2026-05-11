@@ -1,12 +1,13 @@
 #include "line.h"
+using namespace std;
 
-Line::Line() : Shape() {
-    type = SHAPE_LINE;
-    description = "";
-    description += "Shape Type : Line\n";
-    description += "How to draw ?\n";
-    description += "    Use mouse left-click to make 2 clicks represents \n";
-    description += "    the end points of the line";
+Line::Line() : Shape(
+    SHAPE_LINE,
+    "Shape Type : Line\n"s +
+    "How to draw ?\n" +
+    "    Use mouse left-click to make 2 clicks represents \n" +
+    "    the end points of the line"
+) {
 }
 
 void Line::initialize() {

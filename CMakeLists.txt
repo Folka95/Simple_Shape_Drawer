@@ -31,16 +31,16 @@ add_executable(Simple_Shape_Drawer main.cpp
         core/shapes/curve.h
         core/shapes/rectangle.cpp
         core/shapes/rectangle.h
-        algorithms/circle/circle_iterative_polar_drawing_algorithm.cpp
-        algorithms/circle/circle_iterative_polar_drawing_algorithm.h
-        algorithms/circle/Circle_Polar_drawing_algorithm.cpp
-        algorithms/circle/Circle_Polar_drawing_algorithm.h
-        algorithms/line/line_dda_drawing_algorithm.cpp
-        algorithms/line/line_dda_drawing_algorithm.h
-        algorithms/line/line_parametric_drawing_algorithm.cpp
-        algorithms/line/line_parametric_drawing_algorithm.h
-        algorithms/line/line_midpoint_drawing_algorithm.cpp
-        algorithms/line/line_midpoint_drawing_algorithm.h
+        algorithms/drawing/circle/circle_iterative_polar_drawing_algorithm.cpp
+        algorithms/drawing/circle/circle_iterative_polar_drawing_algorithm.h
+        algorithms/drawing/circle/Circle_Polar_drawing_algorithm.cpp
+        algorithms/drawing/circle/Circle_Polar_drawing_algorithm.h
+        algorithms/drawing/line/line_dda_drawing_algorithm.cpp
+        algorithms/drawing/line/line_dda_drawing_algorithm.h
+        algorithms/drawing/line/line_parametric_drawing_algorithm.cpp
+        algorithms/drawing/line/line_parametric_drawing_algorithm.h
+        algorithms/drawing/line/line_midpoint_drawing_algorithm.cpp
+        algorithms/drawing/line/line_midpoint_drawing_algorithm.h
         algorithms/filling/iterive_flood_fill_filling_algorithm.cpp
         algorithms/filling/iterive_flood_fill_filling_algorithm.h
         algorithms/clipping/circle/circle_line_clipping_algorithm.cpp
@@ -48,22 +48,22 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/clipping/circle/circle_point_clipping_algorithm.cpp
         algorithms/clipping/circle/circle_point_clipping_algorithm.h
         core/shapes/polygon.h
-        algorithms/ellipse/ellipse_direct_drawing_algorithm.cpp
-        algorithms/ellipse/ellipse_direct_drawing_algorithm.h
-        algorithms/ellipse/ellipse_Polar_drawing_algorithm.cpp
-        algorithms/ellipse/ellipse_Polar_drawing_algorithm.h
-        algorithms/ellipse/ellipse_midpoint_drawing_algorithm.cpp
-        algorithms/ellipse/ellipse_midpoint_drawing_algorithm.h
+        algorithms/drawing/ellipse/ellipse_direct_drawing_algorithm.cpp
+        algorithms/drawing/ellipse/ellipse_direct_drawing_algorithm.h
+        algorithms/drawing/ellipse/ellipse_Polar_drawing_algorithm.cpp
+        algorithms/drawing/ellipse/ellipse_Polar_drawing_algorithm.h
+        algorithms/drawing/ellipse/ellipse_midpoint_drawing_algorithm.cpp
+        algorithms/drawing/ellipse/ellipse_midpoint_drawing_algorithm.h
         algorithms/filling/flood_fill_filling_algorithm.h
         algorithms/filling/flood_fill_filling_algorithm.cpp
-        algorithms/Circle/circle_direct_drawing_algorithm.h
-        algorithms/Circle/circle_direct_drawing_algorithm.cpp
-        algorithms/Circle/circle_midpoint_drawing_algorithm.h
-        algorithms/Circle/circle_midpoint_drawing_algorithm.cpp
-        algorithms/Circle/circle_midpoint_fast_drawing_algorithm.h
-        algorithms/Circle/circle_midpoint_fast_drawing_algorithm.cpp
-        algorithms/curve/curve_spline_drawing_algorithm.h
-        algorithms/curve/curve_spline_drawing_algorithm.cpp
+        algorithms/drawing/circle/circle_direct_drawing_algorithm.h
+        algorithms/drawing/circle/circle_direct_drawing_algorithm.cpp
+        algorithms/drawing/circle/circle_midpoint_drawing_algorithm.h
+        algorithms/drawing/circle/circle_midpoint_drawing_algorithm.cpp
+        algorithms/drawing/circle/circle_midpoint_fast_drawing_algorithm.h
+        algorithms/drawing/circle/circle_midpoint_fast_drawing_algorithm.cpp
+        algorithms/drawing/curve/curve_spline_drawing_algorithm.h
+        algorithms/drawing/curve/curve_spline_drawing_algorithm.cpp
         io/action.h
         algorithms/clipping/rectangle/rectangle_point_clipping_algorithm.h
         algorithms/clipping/rectangle/rectangle_line_clipping_algorithm.h
@@ -71,8 +71,18 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/clipping/rectangle/rectangle_point_clipping_algorithm.cpp
         algorithms/clipping/rectangle/rectangle_line_clipping_algorithm.cpp
         algorithms/clipping/rectangle/rectangle_polygon_clipping_algorithm.cpp
-        algorithms/rectangle/rectangle_drawing_algorithm.cpp
-        algorithms/rectangle/rectangle_drawing_algorithm.h
+        algorithms/drawing/rectangle/rectangle_drawing_algorithm.cpp
+        algorithms/drawing/rectangle/rectangle_drawing_algorithm.h
         rendering/mouse_cursor_manager.cpp
         rendering/mouse_cursor_manager.h
+        core/shapes/happy_smile_face.cpp
+        core/shapes/happy_smile_face.h
+        algorithms/drawing/smile_face/happy_smile_face_drawing_algorithm.cpp
+        algorithms/drawing/smile_face/happy_smile_face_drawing_algorithm.h
+        algorithms/drawing/smile_face/sad_smile_face_drawing_algorithm.cpp
+        algorithms/drawing/smile_face/sad_smile_face_drawing_algorithm.h
+        core/shapes/sad_smile_face.cpp
+        core/shapes/sad_smile_face.h
+        algorithms/drawing/polygon/polygon_drawing_algorithm.cpp
+        algorithms/drawing/polygon/polygon_drawing_algorithm.h
 )

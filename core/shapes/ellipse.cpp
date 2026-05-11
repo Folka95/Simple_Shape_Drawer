@@ -1,14 +1,15 @@
 #include "ellipse.h"
+using namespace std;
 
-EllipseShape::EllipseShape() : Shape() {
-    type = SHAPE_ELLIPSE;
-    description = "";
-    description += "Shape Type : Ellipse\n";
-    description += "How to draw ?\n";
-    description += "    Use mouse left-click to make 3 clicks represents \n";
-    description += "    the center and two points on the circumference of the ellipse\n";
-    description += "    The first point determines the center of the ellipse\n";
-    description += "    The second point determines the radius along the x-axis, and the third point determines the radius along the y-axis\n";
+EllipseShape::EllipseShape() : Shape(
+    SHAPE_ELLIPSE,
+    "Shape Type : Ellipse\n"s +
+    "How to draw ?\n" +
+    "    Use mouse left-click to make 3 clicks represents \n" +
+    "    the center and two points on the circumference of the ellipse\n" +
+    "    The first point determines the center of the ellipse\n" +
+    "    The second point determines the radius along the x-axis, and the third point determines the radius along the y-axis\n"
+) {
 }
 
 void EllipseShape::initialize() {

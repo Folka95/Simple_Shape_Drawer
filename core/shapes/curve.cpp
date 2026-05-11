@@ -1,12 +1,13 @@
 #include "curve.h"
+using namespace std;
 
-CurveShape::CurveShape() : Shape() {
-    type = SHAPE_CURVE;
-    description = "";
-    description += "Shape Type : Curve\n";
-    description += "How to draw ?\n";
-    description += "    Use mouse left-click to make 4 clicks represents \n";
-    description += "    the start point, two control points, and the end point of the curve\n";
+CurveShape::CurveShape() : Shape(
+    SHAPE_CURVE,
+    "Shape Type : Curve\n"s +
+    "How to draw ?\n" +
+    "    Use mouse left-click to make 4 clicks represents \n" +
+    "    the start point, two control points, and the end point of the curve\n"
+) {
     fixedLimit = -1;
 }
 
@@ -40,4 +41,5 @@ void CurveShape::takeAction(int actionID) {
         return;
     }
     fixedLimit = this->points.size();
+    this->initialize();
 }

@@ -3,7 +3,7 @@
 //
 #include "rectangle_line_clipping_algorithm.h"
 #include "../../../core/shapes/line.h"
-#include "../../line/line_midpoint_drawing_algorithm.h"
+#include "../../drawing/line/line_midpoint_drawing_algorithm.h"
 
 union OutCode {
     unsigned All: 4;

@@ -1,9 +1,11 @@
 #include "shape.h"
 
-Shape::Shape() {
+Shape::Shape(ShapeType type, std::string description) {
     this->points.clear();
     this->borderColor = RGB(255, 255, 255);
     this->fillColor = RGB(255, 255, 255);
+    this->type = type;
+    this->description = description;
 }
 
 bool Shape::addPoint(const Point &point) {

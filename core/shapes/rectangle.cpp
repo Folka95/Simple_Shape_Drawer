@@ -1,12 +1,14 @@
 #include "rectangle.h"
+using namespace std;
 
-Rectangle::Rectangle() {
-    type = SHAPE_RECTANGLE;
-    description = "Rectangle\n";
-    description += "How to draw ?\n";
-    description += "    2 Points\n";
-    description += "    1st point: Top Left\n";
-    description += "    2nd point: Bottom Right\n";
+Rectangle::Rectangle() : Shape(
+    SHAPE_RECTANGLE,
+    "Rectangle\n"s +
+    "How to draw ?\n" +
+    "    2 Points\n" +
+    "    1st point: Top Left\n" +
+    "    2nd point: Bottom Right\n"
+) {
 }
 
 void Rectangle::initialize() {

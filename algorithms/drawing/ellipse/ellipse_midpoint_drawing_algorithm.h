@@ -1,7 +1,7 @@
 #pragma once
 #ifndef ELLIPSE_MIDPOINT_DRAWING_ALGORITHM_H
 #define ELLIPSE_MIDPOINT_DRAWING_ALGORITHM_H
-#include "../drawing_algorithm.h"
+#include "../../drawing_algorithm.h"
 
 
 class Ellipse_MidPoint_DrawingAlgorithm : public DrawingAlgorithm {

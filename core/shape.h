@@ -17,13 +17,15 @@ enum ShapeType {
     SHAPE_ELLIPSE,
     SHAPE_CURVE,
     SHAPE_RECTANGLE,
-    SHAPE_SQUARE
+    SHAPE_SQUARE,
+    SHAPE_HAPPY_SMILE_FACE,
+    SHAPE_SAD_SMILE_FACE
 };
 
 class Shape {
 private:
 protected:
-    Shape();
+    Shape(ShapeType type, std::string description);
     std::string description;
     ShapeType type;
 public:

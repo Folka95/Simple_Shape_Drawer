@@ -8,26 +8,30 @@
 #include "../core/shapes/rectangle.h"
 #include "../core/shapes/ellipse.h"
 #include "../core/shapes/curve.h"
-#include "../algorithms/line/line_dda_drawing_algorithm.h"
-#include "../algorithms/line/line_parametric_drawing_algorithm.h"
-#include "../algorithms/line/line_midpoint_drawing_algorithm.h"
-#include "../algorithms/circle/circle_polar_drawing_algorithm.h"
-#include "../algorithms/circle/circle_iterative_polar_drawing_algorithm.h"
-#include "../algorithms/circle/circle_direct_drawing_algorithm.h"
-#include "../algorithms/circle/circle_midpoint_drawing_algorithm.h"
-#include "../algorithms/circle/circle_midpoint_fast_drawing_algorithm.h"
-#include "../algorithms/ellipse/ellipse_direct_drawing_algorithm.h"
-#include "../algorithms/ellipse/ellipse_Polar_drawing_algorithm.h"
-#include "../algorithms/ellipse/ellipse_midpoint_drawing_algorithm.h"
-#include "../algorithms/curve/curve_spline_drawing_algorithm.h"
+#include "../algorithms/drawing/line/line_dda_drawing_algorithm.h"
+#include "../algorithms/drawing/line/line_parametric_drawing_algorithm.h"
+#include "../algorithms/drawing/line/line_midpoint_drawing_algorithm.h"
+#include "../algorithms/drawing/circle/circle_polar_drawing_algorithm.h"
+#include "../algorithms/drawing/circle/circle_iterative_polar_drawing_algorithm.h"
+#include "../algorithms/drawing/circle/circle_direct_drawing_algorithm.h"
+#include "../algorithms/drawing/circle/circle_midpoint_drawing_algorithm.h"
+#include "../algorithms/drawing/circle/circle_midpoint_fast_drawing_algorithm.h"
+#include "../algorithms/drawing/ellipse/ellipse_direct_drawing_algorithm.h"
+#include "../algorithms/drawing/ellipse/ellipse_Polar_drawing_algorithm.h"
+#include "../algorithms/drawing/ellipse/ellipse_midpoint_drawing_algorithm.h"
+#include "../algorithms/drawing/curve/curve_spline_drawing_algorithm.h"
 #include "../algorithms/clipping/circle/circle_line_clipping_algorithm.h"
 #include "../algorithms/clipping/circle/circle_point_clipping_algorithm.h"
 #include "../algorithms/clipping/rectangle/rectangle_line_clipping_algorithm.h"
 #include "../algorithms/clipping/rectangle/rectangle_point_clipping_algorithm.h"
-#include "../algorithms/rectangle/rectangle_drawing_algorithm.h"
+#include "../algorithms/drawing/rectangle/rectangle_drawing_algorithm.h"
+#include "../algorithms/drawing/smile_face/happy_smile_face_drawing_algorithm.h"
+#include "../algorithms/drawing/smile_face/sad_smile_face_drawing_algorithm.h"
 #include "../algorithms/filling/iterive_flood_fill_filling_algorithm.h"
 #include "../algorithms/filling/flood_fill_filling_algorithm.h"
+#include "../core/shapes/happy_smile_face.h"
 #include "../core/shapes/polygon.h"
+#include "../core/shapes/sad_smile_face.h"
 
 
 enum Menu {
@@ -451,7 +455,7 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
              appManager->setShape(new PolygonShape<1>());
              appManager->setClippingAlgorithm(
                      new Rectangle_Point_ClippingAlgorithm(),
-                     new Rectangle_drawing_algorithm(),
+                     new Rectangle_DrawingAlgorithm(),
                      new class Rectangle()
                      );
 
@@ -463,7 +467,7 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
             appManager->setShape(new Line());
             appManager->setClippingAlgorithm(
                     new Rectangle_Line_ClippingAlgorithm(),
-                    new Rectangle_drawing_algorithm(),
+                    new Rectangle_DrawingAlgorithm(),
                     new class Rectangle()
             );
              break;
@@ -508,13 +512,17 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
 
 inline void selectSmileMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
-        // case SMILE_HAPPY_FACE:
-        //     appManager->setShape();
-        //     break;
-        //
-        // case SMILE_SAD_FACE:
-        //     appManager->setShape();
-        //     break;
+        case SMILE_HAPPY_FACE:
+            appManager->removeClippingAlgorithm();
+            appManager->setShape(new HappySmileFace());
+            appManager->setDrawingAlgorithm(new HappySmileFace_DrawingAlgorithm());
+            break;
+
+        case SMILE_SAD_FACE:
+            appManager->removeClippingAlgorithm();
+            appManager->setShape(new SadSmileFace());
+            appManager->setDrawingAlgorithm(new SadSmileFace_DrawingAlgorithm());
+            break;
         default:
             std::cerr << "selectSmileMenu: Unknown Smile Menu value: " << value << '\n';
             break;

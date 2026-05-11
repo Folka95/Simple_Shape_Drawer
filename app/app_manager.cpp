@@ -1,5 +1,8 @@
+#pragma once
 #include "app_manager.h"
 #include <bits/stdc++.h>
+
+#include "../algorithms/drawing/polygon/polygon_drawing_algorithm.h"
 #include "../io/action.h"
 #include "../io/file_manager.h"
 #include "../rendering/menu_handler.h"
@@ -15,6 +18,8 @@ AppManager::AppManager(HWND _hwnd) {
     this->clippingDrawingAlgorithm = nullptr;
     borderColor = RGB(255, 255, 255);
     fillColor = RGB(255, 255, 255);
+    shapeHistory.push_back(new PolygonShape<1>());
+    this->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
 }
 
 AppManager::~AppManager() {
@@ -25,6 +30,8 @@ AppManager::~AppManager() {
     delete this->clippingRegion;
     shapeHistory.clear();
     actionHistory.clear();
+    shapeHistory.push_back(new PolygonShape<1>());
+    this->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
 }
 
 void AppManager::reset() {
@@ -36,6 +43,8 @@ void AppManager::reset() {
     actionHistory.clear();
     sw->setBackgroundColor(RGB(0, 0, 0));
     sw->clearScreen();
+    shapeHistory.push_back(new PolygonShape<1>());
+    this->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
 }
 
 void AppManager::setShape(Shape *shape) {
