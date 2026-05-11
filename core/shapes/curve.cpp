@@ -20,6 +20,9 @@ bool CurveShape::isInside(const Point &point) const {
 }
 
 bool CurveShape::isEnoughToDraw() const {
+    if(fixedLimit == -1) {
+        return false;
+    }
     if(this->points.size() > fixedLimit) {
         std::cerr << "Curve::isEnoughToDraw: points size does not match that fixed limit (" << fixedLimit << ")" << std::endl;
         return false;

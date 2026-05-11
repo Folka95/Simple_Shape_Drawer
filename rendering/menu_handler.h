@@ -402,7 +402,7 @@ inline void selectCurvesMenu(short value, AppManager *appManager) {
         case CURVE_CARDINAL_SPLINE: {
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            int Cvalue = pickRange(appManager->getScreenOwner(), 0, 100, 50, "Sharpness Percent %");
+            int Cvalue = pickRange(appManager->getScreenOwner(), 0, 100, 50, "Smoothness Percent %");
             appManager->setShape(new CurveShape());
             appManager->setDrawingAlgorithm(new Curve_Spline_DrawingAlgorithm(Cvalue));
             break;
@@ -477,16 +477,40 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
                     new class Rectangle()
             );
              break;
-        case CLIP_RECT_POLYGON:
+        case CLIP_RECT_POLYGON: {
             appManager->removeDrawingAlgorithm();
             appManager->removeFillingAlgorithm();
-            // const int sz = pickRange(appManager->getScreenOwner(), 3, 10, 5, "Polygon Size");
-            appManager->setShape(new PolygonShape<5>());
+            const int sz = pickRange(appManager->getScreenOwner(), 3, 10, 5, "Polygon Size");
+            if(sz == 3) {
+                appManager->setShape(new PolygonShape<3>());
+            }
+            else if(sz == 4) {
+                appManager->setShape(new PolygonShape<4>());
+            }
+            else if(sz == 5) {
+                appManager->setShape(new PolygonShape<5>());
+            }
+            else if(sz == 6) {
+                appManager->setShape(new PolygonShape<6>());
+            }
+            else if(sz == 7) {
+                appManager->setShape(new PolygonShape<7>());
+            }
+            else if(sz == 8) {
+                appManager->setShape(new PolygonShape<8>());
+            }
+            else if(sz == 9) {
+                appManager->setShape(new PolygonShape<9>());
+            }
+            else if(sz == 10) {
+                appManager->setShape(new PolygonShape<10>());
+            }
             appManager->setClippingAlgorithm(
                 new Rectangle_Polygon_ClippingAlgorithm(),
                 new Rectangle_DrawingAlgorithm(),
                 new class Rectangle());
             break;
+        }
 
         case CLIP_SQUARE_POINT:
             appManager->removeDrawingAlgorithm();
