@@ -23,14 +23,17 @@ void ScreenWriter::setBackgroundColor(COLORREF color) {
 }
 
 void ScreenWriter::changeBackgroundColor(COLORREF color) {
+    this->activate();
     setBackgroundColor(color);
     for(int i = 0; i < this->getWidth(); i++) {
         for(int j = 0; j < this->getHeight(); j++) {
             if(!isUserDrawn[i][j]) {
-                screen[i][j] = backgroundColor;
+                this->setPixel(i, j, backgroundColor);
+                isUserDrawn[i][j] = false;
             }
         }
     }
+    this->deactivate();
     this->setScreen(screen, false);
 }
 
@@ -61,12 +64,14 @@ COLORREF ScreenWriter::getPixel(int x, int y) {
 }
 
 void ScreenWriter::clearScreen() {
+    this->activate();
     for(int y = 0; y < getHeight(); y++) {
         for(int x = 0; x < getWidth(); x++) {
-            screen[x][y] = backgroundColor;
+            setPixel(x, y, backgroundColor);
             this->isUserDrawn[x][y] = false;
         }
     }
+    this->deactivate();
     this->setScreen(screen, true);
 }
 
@@ -154,27 +159,6 @@ void ScreenWriter::setScreen(const vector<vector<COLORREF>>& screen, bool setUse
     bmi.bmiHeader.biCompression = BI_RGB;
 
     this->activate();
-
-    const int STEP = 20;
-
-    for (int drawnWidth = STEP; drawnWidth <= width; drawnWidth += STEP) {
-
-        int currentWidth = min(drawnWidth, width);
-
-        StretchDIBits(
-            this->hdc,
-            0, 0,
-            currentWidth, height,
-            0, 0,
-            currentWidth, height,
-            pixels.data(),
-            &bmi,
-            DIB_RGB_COLORS,
-            SRCCOPY
-        );
-
-        this_thread::sleep_for(chrono::milliseconds(10));
-    }
 
     // Ensure final frame fully drawn
     StretchDIBits(

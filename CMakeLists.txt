@@ -65,4 +65,6 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/curve/curve_spline_drawing_algorithm.h
         algorithms/curve/curve_spline_drawing_algorithm.cpp
         io/action.h
+        rendering/mouse_cursor_manager.cpp
+        rendering/mouse_cursor_manager.h
 )
