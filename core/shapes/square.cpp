@@ -15,8 +15,8 @@ void Square::initialize() {
         return;
     }
     if (points.size() == 2) {
-        double dx = points[0].dx(points[1]);
-        double dy = points[0].dy(points[1]);
+        double dx = abs(points[0].dx(points[1]));
+        double dy = abs(points[0].dy(points[1]));
         sideLength = 2 * max(dx, dy);
         topLeft = Point(points[0].x - sideLength / 2, points[0].y + sideLength / 2);
         topRight = Point(points[0].x + sideLength / 2, points[0].y + sideLength / 2);

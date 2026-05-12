@@ -16,8 +16,9 @@ void RectangleShape::initialize() {
         return;
     }
     if (points.size() == 2) {
-        topLeft = this->points[0];
-        bottomRight = this->points[1];
+
+        topLeft = Point(min(points[0].x, points[1].x), min(points[0].y, points[1].y));
+        bottomRight = Point(max(points[0].x, points[1].x), max(points[0].y, points[1].y));
         topRight = Point(bottomRight.x, topLeft.y);
         bottomLeft = Point(topLeft.x, bottomRight.y);
         width = points[1].x - points[0].x;

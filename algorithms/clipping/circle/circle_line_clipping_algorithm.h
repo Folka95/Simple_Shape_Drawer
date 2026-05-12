@@ -7,6 +7,7 @@
 
 class Circle_Line_ClippingAlgorithm : public ClippingAlgorithm {
 private:
+    void drawLine(const Point &p1, const Point &p2, ScreenWriter *sw) const;
     void runAlgorithm(Line* line, Circle* circle, ScreenWriter *sw) const;
 public:
     Circle_Line_ClippingAlgorithm();

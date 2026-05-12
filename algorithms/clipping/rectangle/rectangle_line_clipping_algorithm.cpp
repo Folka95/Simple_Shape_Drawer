@@ -1,6 +1,4 @@
-//
-// Created by frasa on 5/11/2026.
-//
+
 #include "rectangle_line_clipping_algorithm.h"
 #include "../../../core/shapes/line.h"
 #include "../../drawing/line/line_midpoint_drawing_algorithm.h"
@@ -43,7 +41,7 @@ void Rectangle_Line_ClippingAlgorithm::drawLine(const Point &p1, const Point &p2
 Rectangle_Line_ClippingAlgorithm::Rectangle_Line_ClippingAlgorithm() : ClippingAlgorithm() {}
 
 void Rectangle_Line_ClippingAlgorithm::runAlgorithm(Line* line, RectangleShape* rectangle, ScreenWriter *sw) const {
-    int xleft = rectangle->points[0].x, ytop = rectangle->points[0].y, xright = rectangle->points[1].x, ybottom = rectangle->points[1].y;
+    int xleft = rectangle->getTopLeft().x, ytop = rectangle->getTopLeft().y, xright = rectangle->getBottomRight().x, ybottom = rectangle->getBottomRight().y;
 
     double x1 = line->points[0].x, y1 = line->points[0].y, x2 = line->points[1].x, y2 = line->points[1].y;
 

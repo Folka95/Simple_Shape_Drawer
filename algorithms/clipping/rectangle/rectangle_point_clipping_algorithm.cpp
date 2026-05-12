@@ -1,6 +1,4 @@
-//
-// Created by frasa on 5/11/2026.
-//
+
 
 #include "rectangle_point_clipping_algorithm.h"
 
@@ -30,4 +28,4 @@ void Rectangle_Point_ClippingAlgorithm::clip(const Shape &inputShape, const Shap
     Shape* polygon = inputShape.clone();
     RectangleShape* rectangle = dynamic_cast<RectangleShape*>(inputRegion.clone());
     this->runAlgorithm(polygon, rectangle, sw);
-}
+}

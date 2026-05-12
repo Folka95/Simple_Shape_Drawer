@@ -4,6 +4,7 @@
 
 #include "../../clipping_algorithm.h"
 #include "../../../core/shapes/rectangle.h"
+#include "../../../core/shapes/square.h"
 #include "../../../core/shapes/line.h"
 
 class Rectangle_Line_ClippingAlgorithm : public ClippingAlgorithm {
