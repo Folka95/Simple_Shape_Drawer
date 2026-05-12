@@ -5,9 +5,6 @@
 
 using namespace std;
 
-const int SCREEN_WIDTH = GetSystemMetrics(SM_CXSCREEN);
-const int SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
-
 AppManager *appManager;
 
 void menuSelected(short value) {

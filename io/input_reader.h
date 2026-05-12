@@ -6,6 +6,9 @@
 #include <string>
 #pragma comment(lib, "comctl32.lib")
 
+const int SCREEN_WIDTH = GetSystemMetrics(SM_CXSCREEN);
+const int SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
+
 inline int pickRange(HWND hwndOwner, int L, int R, int initial, const std::string& name) {
 
     struct Data {
@@ -56,7 +59,7 @@ inline int pickRange(HWND hwndOwner, int L, int R, int initial, const std::strin
 
             data->slider = CreateWindowEx(
                 0, TRACKBAR_CLASS, "",
-                WS_CHILD | WS_VISIBLE | TBS_AUTOTICKS,
+                WS_CHILD | WS_VISIBLE,
                 20, 60, 250, 40,
                 hwnd, (HMENU)1, NULL, NULL
             );
@@ -115,12 +118,18 @@ inline int pickRange(HWND hwndOwner, int L, int R, int initial, const std::strin
 
     RegisterClass(&wc);
 
+    int rangeWSize = SCREEN_WIDTH*0.166666667;
+    int rangeHSize = SCREEN_HEIGHT*0.166666667;
+
+    int posx = (SCREEN_WIDTH - 320)/2;
+    int posy = (SCREEN_HEIGHT - 180)/2;
+
     HWND hwnd = CreateWindowEx(
         0,
         CLASS_NAME,
         "Pick Value",
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
-        CW_USEDEFAULT, CW_USEDEFAULT, 320, 180,
+        posx,posy ,rangeWSize , rangeHSize,
         hwndOwner, NULL, GetModuleHandle(NULL), &data
     );
 
@@ -138,17 +147,16 @@ inline int pickRange(HWND hwndOwner, int L, int R, int initial, const std::strin
 inline COLORREF pickColor(HWND hwndOwner) {
     CHOOSECOLOR cc = {};
     static COLORREF customColors[16] = {0};
-
+    static COLORREF lastUsedColor = RGB(255, 255, 255); 
     cc.lStructSize = sizeof(cc);
     cc.hwndOwner = hwndOwner;
     cc.lpCustColors = customColors;
     cc.Flags = CC_FULLOPEN | CC_RGBINIT;
-    cc.rgbResult = RGB(255, 255, 255); // optional initial color
-
+    cc.rgbResult = lastUsedColor; 
     if (ChooseColor(&cc)) {
+        lastUsedColor = cc.rgbResult;
         return cc.rgbResult;
     }
-    return RGB(0, 0, 0);
+    return lastUsedColor; 
 }
-
 #endif //INPUT_READER_H
