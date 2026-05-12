@@ -16,7 +16,7 @@ void Square::initialize() {
     }
     if (points.size() == 2) {
         double dx = points[0].dx(points[1]);
-        double dy = points[0].dx(points[1]);
+        double dy = points[0].dy(points[1]);
         sideLength = 2 * max(dx, dy);
         topLeft = Point(points[0].x - sideLength / 2, points[0].y + sideLength / 2);
         topRight = Point(points[0].x + sideLength / 2, points[0].y + sideLength / 2);
@@ -29,13 +29,10 @@ bool Square::isInside(const Point &point) const {
     if (points.size() < 2) {
         return false;
     }
-    if(point.x < bottomRight.x || topLeft.x < point.x) {
-        return false;
-    }
-    if(point.y < bottomRight.y || topLeft.y < point.y) {
-        return false;
-    }
-    return true;
+    return  point.x >= topLeft.x &&
+            point.x <= topRight.x &&
+            point.y <= topLeft.y &&
+            point.y >= bottomLeft.y;
 }
 
 bool Square::isEnoughToDraw() const {
