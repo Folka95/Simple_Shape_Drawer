@@ -31,6 +31,7 @@
 #include "../algorithms/drawing/smile_face/happy_smile_face_drawing_algorithm.h"
 #include "../algorithms/drawing/smile_face/sad_smile_face_drawing_algorithm.h"
 #include "../algorithms/drawing/square/square_drawing_algorithm.h"
+#include "../algorithms/filling/quarter_circle_with_line_filling_algorithm.h"
 #include "../algorithms/filling/iterive_flood_fill_filling_algorithm.h"
 #include "../algorithms/filling/flood_fill_filling_algorithm.h"
 #include "../core/shapes/happy_smile_face.h"
@@ -415,10 +416,11 @@ inline void selectCurvesMenu(short value, AppManager *appManager) {
 
 inline void selectFillingMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
-        // case FILL_CIRCLE_LINES:
-        //     appManager->setFillingAlgorithm(new FillCircleLines_FillingAlgorithm());
-        //     break;
-        //
+        case FILL_CIRCLE_LINES:
+            appManager->removeClippingAlgorithm();
+            appManager->setFillingAlgorithm(new QuarterCircleWithLine_FillingAlgorithm());
+            break;
+        
         // case FILL_CIRCLE_CIRCLES:
         //     appManager->setFillingAlgorithm(new FillCircleCircles_FillingAlgorithm());
         //     break;

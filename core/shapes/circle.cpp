@@ -12,6 +12,7 @@ Circle::Circle() : Shape(SHAPE_CIRCLE,
 
 void Circle::initialize() {
     this->radius = points[0].euclideanDistance(points[1]);
+    center = points[0];
 }
 
 bool Circle::isInside(const Point &point) const {
@@ -39,4 +40,34 @@ Shape* Circle::clone() const {
 
 void Circle::takeAction(int actionID) {
 
+}
+
+double Circle::getRadius() const {
+    return this->radius;
+}
+
+Point Circle::getCenter() const {
+    return this->center;
+}
+
+int Circle::scanQuarter(const Point &point) const {
+    double dx = points[0].dx(point);
+    double dy = points[0].dy(point);
+
+    // edge case
+    if (dx == 0 || dy == 0) {
+        return 0;
+    }
+
+    if (dx > 0 && dy > 0) {
+        return 1;
+    } else if (dx < 0 && dy > 0) {
+        return 2;
+    } else if (dx < 0 && dy < 0) {
+        return 3;
+    } else if (dx > 0 && dy < 0) {
+        return 4;
+    }
+    // unexpected behavior
+    return 5;
 }

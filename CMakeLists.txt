@@ -93,4 +93,6 @@ add_executable(Simple_Shape_Drawer main.cpp
         core/shapes/square.h
         algorithms/drawing/square/square_drawing_algorithm.cpp
         algorithms/drawing/square/square_drawing_algorithm.h
+        algorithms/filling/quarter_circle_with_line_filling_algorithm.h
+        algorithms/filling/quarter_circle_with_line_filling_algorithm.cpp
 )
