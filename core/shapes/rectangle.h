@@ -7,6 +7,7 @@ class RectangleShape : public Shape  {
 private:
     double width;
     double height;
+    Point topLeft, topRight, bottomLeft, bottomRight;
 public:
     RectangleShape();
     void initialize() override;
@@ -14,6 +15,12 @@ public:
     bool isEnoughToDraw() const override;
     void takeAction(int actionID) override;
     Shape* clone() const override;
+    Point getTopLeft() const ;
+    Point getTopRight() const ;
+    Point getBottomLeft() const ;
+    Point getBottomRight() const ;
+    double getWidth() const ;
+    double getHeight() const ;
 };
 
 

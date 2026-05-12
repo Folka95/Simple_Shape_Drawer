@@ -63,6 +63,7 @@ Shape* EllipseShape::clone() const {
     newEllipse->points = this->points;
     newEllipse->borderColor = this->borderColor;
     newEllipse->fillColor = this->fillColor;
+    newEllipse->initialize();
     return newEllipse;
 }
 

@@ -14,16 +14,10 @@ void Square_DrawingAlgorithm::drawLine(const Point& p1,const Point& p2, ScreenWr
 
 
 void Square_DrawingAlgorithm::runAlgorithm(Square* square, ScreenWriter *sw) const {
-    // TODO
-    Point topLeft;
-    Point bottomRight;
-    Point topRight;
-    Point bottomLeft;
-
-    drawLine(topLeft, topRight, sw);
-    drawLine(topRight, bottomRight, sw);
-    drawLine(bottomRight, bottomLeft, sw);
-    drawLine(topLeft, bottomLeft, sw);
+    drawLine(square->getTopLeft(), square->getTopRight(), sw);
+    drawLine(square->getTopRight(), square->getBottomRight(), sw);
+    drawLine(square->getBottomRight(), square->getBottomLeft(), sw);
+    drawLine(square->getTopLeft(), square->getBottomLeft(), sw);
 }
 
 void Square_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *sw) const {

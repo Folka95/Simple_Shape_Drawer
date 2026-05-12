@@ -6,8 +6,7 @@ Square::Square() : Shape (
     "Shape Type : Square\n"s +
     "How to draw ?\n" +
     "    Use mouse left-click to make 2 clicks represents \n" +
-    "    the center of the square and a corner point\n"
-    // TODO
+    "    the center of the square and a point on any side\n"
 ) {
 }
 
@@ -16,8 +15,13 @@ void Square::initialize() {
         return;
     }
     if (points.size() == 2) {
-        // TODO
-        sideLength = 0;
+        double dx = points[0].dx(points[1]);
+        double dy = points[0].dx(points[1]);
+        sideLength = 2 * max(dx, dy);
+        topLeft = Point(points[0].x - sideLength / 2, points[0].y + sideLength / 2);
+        topRight = Point(points[0].x + sideLength / 2, points[0].y + sideLength / 2);
+        bottomLeft = Point(points[0].x - sideLength / 2, points[0].y - sideLength / 2);
+        bottomRight = Point(points[0].x + sideLength / 2, points[0].y - sideLength / 2);
     }
 }
 
@@ -25,8 +29,13 @@ bool Square::isInside(const Point &point) const {
     if (points.size() < 2) {
         return false;
     }
-    // TODO
-    return false;
+    if(point.x < bottomRight.x || topLeft.x < point.x) {
+        return false;
+    }
+    if(point.y < bottomRight.y || topLeft.y < point.y) {
+        return false;
+    }
+    return true;
 }
 
 bool Square::isEnoughToDraw() const {
@@ -42,9 +51,30 @@ Shape* Square::clone() const {
     newSquare->points = this->points;
     newSquare->borderColor = this->borderColor;
     newSquare->fillColor = this->fillColor;
+    newSquare->initialize();
     return newSquare;
 }
 
 void Square::takeAction(int actionID) {
 
+}
+
+Point Square::getTopLeft() const {
+    return topLeft;
+}
+
+Point Square::getTopRight() const {
+    return topRight;
+}
+
+Point Square::getBottomLeft() const {
+    return bottomLeft;
+}
+
+Point Square::getBottomRight() const {
+    return bottomRight;
+}
+
+double Square::getSideLength() const {
+    return sideLength;
 }

@@ -63,6 +63,7 @@ Shape* PolygonShape<size>::clone() const {
     newPolygon->points = this->points;
     newPolygon->borderColor = this->borderColor;
     newPolygon->fillColor = this->fillColor;
+    newPolygon->initialize();
     return newPolygon;
 }
 

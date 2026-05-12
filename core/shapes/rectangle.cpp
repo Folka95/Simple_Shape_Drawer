@@ -16,6 +16,10 @@ void RectangleShape::initialize() {
         return;
     }
     if (points.size() == 2) {
+        topLeft = this->points[0];
+        bottomRight = this->points[1];
+        topRight = Point(bottomRight.x, topLeft.y);
+        bottomLeft = Point(topLeft.x, bottomRight.y);
         width = points[1].x - points[0].x;
         height = points[1].y - points[0].y;
     }
@@ -42,9 +46,34 @@ Shape* RectangleShape::clone() const {
     newRectangle->points = this->points;
     newRectangle->borderColor = this->borderColor;
     newRectangle->fillColor = this->fillColor;
+    newRectangle->initialize();
     return newRectangle;
 }
 
 void RectangleShape::takeAction(int actionID) {
 
+}
+
+Point RectangleShape::getTopLeft() const {
+    return topLeft;
+}
+
+Point RectangleShape::getTopRight() const {
+    return topRight;
+}
+
+Point RectangleShape::getBottomLeft() const {
+    return bottomLeft;
+}
+
+Point RectangleShape::getBottomRight() const {
+    return bottomRight;
+}
+
+double RectangleShape::getWidth() const {
+    return width;
+}
+
+double RectangleShape::getHeight() const {
+    return height;
 }

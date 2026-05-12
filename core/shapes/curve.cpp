@@ -35,6 +35,7 @@ Shape* CurveShape::clone() const {
     tmp->points = this->points;
     tmp->borderColor = this->borderColor;
     tmp->fillColor = this->fillColor;
+    tmp->initialize();
     return tmp;
 }
 

@@ -35,6 +35,7 @@ Shape* HappySmileFace::clone() const {
     newFace->borderColor = this->borderColor;
     newFace->fillColor = this->fillColor;
     newFace->initialize();
+    newFace->initialize();
     return newFace;
 }
 

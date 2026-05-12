@@ -23,7 +23,6 @@ void Curve_Spline_DrawingAlgorithm::drawCurveHermite(Point t0, Point t1, Point p
 
 void Curve_Spline_DrawingAlgorithm::runAlgorithm(CurveShape* curve, ScreenWriter *sw) const {
 	double c1 = Cvalue;
-
 	Point T0;
 	T0.x = c1 * (curve->points[2].x - curve->points[0].x);
 	T0.y = c1 * (curve->points[2].y - curve->points[0].y);

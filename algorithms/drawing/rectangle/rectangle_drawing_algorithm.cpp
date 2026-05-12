@@ -14,14 +14,10 @@ void Rectangle_DrawingAlgorithm::drawLine(const Point& p1,const Point& p2, Scree
 
 
 void Rectangle_DrawingAlgorithm::runAlgorithm(RectangleShape* rectangle, ScreenWriter *sw) const {
-    Point topLeft(rectangle->points[0]);
-    Point bottomRight(rectangle->points[1]);
-    Point topRight(bottomRight.x, topLeft.y);
-    Point bottomLeft(topLeft.x, bottomRight.y);
-    drawLine(topLeft, topRight, sw);
-    drawLine(topRight, bottomRight, sw);
-    drawLine(bottomRight, bottomLeft, sw);
-    drawLine(topLeft, bottomLeft, sw);
+    drawLine(rectangle->getTopLeft(), rectangle->getTopRight(), sw);
+    drawLine(rectangle->getTopRight(), rectangle->getBottomRight(), sw);
+    drawLine(rectangle->getBottomRight(), rectangle->getBottomLeft(), sw);
+    drawLine(rectangle->getTopLeft(), rectangle->getBottomLeft(), sw);
 }
 
 void Rectangle_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *sw) const {
