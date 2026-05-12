@@ -13,17 +13,9 @@ void Rectangle_DrawingAlgorithm::drawLine(const Point& p1,const Point& p2, Scree
 }
 
 
-void Rectangle_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const {
-    if (shape.getType() != SHAPE_RECTANGLE){
-        std::cerr << "Rectangle_DrawingAlgorithm::draw : shape to draw must be Rectangle" << std::endl;
-        return;
-    }
-    if(!shape.isEnoughToDraw()){
-        std::cerr << "Rectangle_DrawingAlgorithm::draw : shape is not enough to draw" << std::endl;
-        return;
-    }
-    Point topLeft(shape.points[0]);
-    Point bottomRight(shape.points[1]);
+void Rectangle_DrawingAlgorithm::runAlgorithm(RectangleShape* rectangle, ScreenWriter *sw) const {
+    Point topLeft(rectangle->points[0]);
+    Point bottomRight(rectangle->points[1]);
     Point topRight(bottomRight.x, topLeft.y);
     Point bottomLeft(topLeft.x, bottomRight.y);
     drawLine(topLeft, topRight, sw);
@@ -31,6 +23,20 @@ void Rectangle_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) cons
     drawLine(bottomRight, bottomLeft, sw);
     drawLine(topLeft, bottomLeft, sw);
 }
+
+void Rectangle_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *sw) const {
+    if (inputShape.getType() != SHAPE_RECTANGLE){
+        std::cerr << "Rectangle_DrawingAlgorithm::draw : shape to draw must be Rectangle" << std::endl;
+        return;
+    }
+    if(!inputShape.isEnoughToDraw()){
+        std::cerr << "Rectangle_DrawingAlgorithm::draw : shape is not enough to draw" << std::endl;
+        return;
+    }
+    RectangleShape* rectangle = dynamic_cast<RectangleShape*>(inputShape.clone());
+    this->runAlgorithm(rectangle, sw);
+}
+
 
 
 

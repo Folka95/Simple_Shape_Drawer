@@ -17,17 +17,13 @@ void Circle_MidPoint_Fast_DrawingAlgorithm::Draw8Points(ScreenWriter *sw, int xc
     sw->setPixel(xc-y, yc-x, color);
 }
 
-void Circle_MidPoint_Fast_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const {
-    if(shape.getType() != SHAPE_CIRCLE) {
-        std::cerr << "Circle_MidPoint_Fast_DrawingAlgorithm::draw : shape to draw must be Circle" << std::endl;
-        return;
-    }
-    Point p0(shape.points[0]);
-    Point p1(shape.points[1]);
+void Circle_MidPoint_Fast_DrawingAlgorithm::runAlgorithm(Circle* circle, ScreenWriter *sw) const {
+    Point p0(circle->points[0]);
+    Point p1(circle->points[1]);
     double radius = sqrt(pow(p1.x - p0.x, 2) + pow(p1.y - p0.y, 2));
     
     if(radius < 1.0) {
-        std::cerr << "Circle_MidPoint_Fast_DrawingAlgorithm::draw : radius must be greater than 0" << std::endl;
+        std::cerr << "Circle_MidPoint_Fast_DrawingAlgorithm::runAlgorithm : radius must be greater than 0" << std::endl;
         return;
     }
     
@@ -35,7 +31,7 @@ void Circle_MidPoint_Fast_DrawingAlgorithm::draw(const Shape &shape, ScreenWrite
     int d=1-radius;
     int c1=3, c2=5-2*radius;
     sw->activate();
-    Draw8Points(sw, shape.points[0].x, shape.points[0].y, x, y, shape.borderColor);
+    Draw8Points(sw, circle->points[0].x, circle->points[0].y, x, y, circle->borderColor);
     while(x<y) {
         if(d<0) {
             d+=c1;
@@ -48,7 +44,16 @@ void Circle_MidPoint_Fast_DrawingAlgorithm::draw(const Shape &shape, ScreenWrite
         }
         c1+=2;
         x++;
-        Draw8Points(sw, shape.points[0].x, shape.points[0].y, x, y, shape.borderColor);
+        Draw8Points(sw, circle->points[0].x, circle->points[0].y, x, y, circle->borderColor);
     }
     sw->deactivate();
 }
+
+void Circle_MidPoint_Fast_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *sw) const {
+    if(inputShape.getType() != SHAPE_CIRCLE) {
+        std::cerr << "Circle_MidPoint_Fast_DrawingAlgorithm::draw : shape to draw must be Circle" << std::endl;
+        return;
+    }
+    Circle* circle = dynamic_cast<Circle*>(inputShape.clone());
+    this->runAlgorithm(circle, sw);
+}

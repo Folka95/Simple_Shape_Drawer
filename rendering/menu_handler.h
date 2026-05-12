@@ -462,7 +462,7 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
              appManager->setClippingAlgorithm(
                      new Rectangle_Point_ClippingAlgorithm(),
                      new Rectangle_DrawingAlgorithm(),
-                     new class Rectangle()
+                     new RectangleShape()
                      );
 
              break;
@@ -474,7 +474,7 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
             appManager->setClippingAlgorithm(
                     new Rectangle_Line_ClippingAlgorithm(),
                     new Rectangle_DrawingAlgorithm(),
-                    new class Rectangle()
+                    new RectangleShape()
             );
              break;
         case CLIP_RECT_POLYGON: {
@@ -508,7 +508,7 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
             appManager->setClippingAlgorithm(
                 new Rectangle_Polygon_ClippingAlgorithm(),
                 new Rectangle_DrawingAlgorithm(),
-                new class Rectangle());
+                new RectangleShape());
             break;
         }
 

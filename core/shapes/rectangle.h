@@ -3,12 +3,12 @@
 #include "../shape.h"
 
 
-class Rectangle : public Shape  {
+class RectangleShape : public Shape  {
 private:
     double width;
     double height;
 public:
-    Rectangle();
+    RectangleShape();
     void initialize() override;
     bool isInside(const Point &point) const override;
     bool isEnoughToDraw() const override;

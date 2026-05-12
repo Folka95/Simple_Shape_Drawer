@@ -5,15 +5,9 @@ Line_Midpoint_DrawingAlgorithm::Line_Midpoint_DrawingAlgorithm() : DrawingAlgori
 
 }
 
-void Line_Midpoint_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const {
-
-    if(shape.getType() != SHAPE_LINE) {
-        std::cerr << "Line_Midpoint_DrawingAlgorithm::draw : shape to draw must be Line" << std::endl;
-        return;
-    }
-
-    Point p0(shape.points[0]);
-    Point p1(shape.points[1]);
+void Line_Midpoint_DrawingAlgorithm::runAlgorithm(Line* line, ScreenWriter *sw) const {
+    Point p0(line->points[0]);
+    Point p1(line->points[1]);
 
     int x0 = p0.x;
     int y0 = p0.y;
@@ -32,7 +26,7 @@ void Line_Midpoint_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) 
     int y = y0;
 
     sw->activate();
-    sw->setPixel(x, y, shape.borderColor);
+    sw->setPixel(x, y, line->borderColor);
     // if the line is more horizontal than vertical
     if(dx >= dy) {
         int d = 2 * dy - dx;
@@ -44,7 +38,7 @@ void Line_Midpoint_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) 
                 d += 2 * dy;
             }
             x += sx;
-            sw->setPixel(x, y, shape.borderColor);
+            sw->setPixel(x, y, line->borderColor);
         }
     } else {
         int d = 2 * dx - dy;
@@ -56,8 +50,17 @@ void Line_Midpoint_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) 
                 d += 2 * dx;
             }
             y += sy;
-            sw->setPixel(x, y, shape.borderColor);
+            sw->setPixel(x, y, line->borderColor);
         }
     }
     sw->deactivate();
 }
+
+void Line_Midpoint_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *sw) const {
+    if(inputShape.getType() != SHAPE_LINE) {
+        std::cerr << "Line_Midpoint_DrawingAlgorithm::draw : shape to draw must be Line" << std::endl;
+        return;
+    }
+    Line* line = dynamic_cast<Line*>(inputShape.clone());
+    this->runAlgorithm(line, sw);
+}

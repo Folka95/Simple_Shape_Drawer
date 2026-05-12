@@ -4,18 +4,24 @@ Circle_Point_ClippingAlgorithm::Circle_Point_ClippingAlgorithm() : ClippingAlgor
 
 }
 
-void Circle_Point_ClippingAlgorithm::clip(const Shape &shape, const Shape &region, ScreenWriter *sw) const {
-    if(shape.getType() != SHAPE_POLYGON) {
-        std::cerr << "lineClippingAlgorithm::clip : shape to draw must be Line" << std::endl;
-        return;
-    }
-    if(region.getType() != SHAPE_CIRCLE) {
-        std::cerr << "lineClippingAlgorithm::clip : region must be Circle" << std::endl;
-        return;
-    }
+void Circle_Point_ClippingAlgorithm::runAlgorithm(Shape* polygon, Circle* circle, ScreenWriter *sw) const {
     sw->activate();
-    if(region.isInside(shape.points[0])) {
-        sw->setPixel(shape.points[0].x, shape.points[0].y, shape.borderColor);
+    if(circle->isInside(polygon->points[0])) {
+        sw->setPixel(polygon->points[0].x, polygon->points[0].y, polygon->borderColor);
     }
     sw->deactivate();
 }
+
+void Circle_Point_ClippingAlgorithm::clip(const Shape &inputShape, const Shape &inputRegion, ScreenWriter *sw) const {
+    if(inputShape.getType() != SHAPE_POLYGON) {
+        std::cerr << "Circle_Point_ClippingAlgorithm::clip : shape to draw must be Polygon" << std::endl;
+        return;
+    }
+    if(inputRegion.getType() != SHAPE_CIRCLE) {
+        std::cerr << "Circle_Point_ClippingAlgorithm::clip : region must be Circle" << std::endl;
+        return;
+    }
+    Shape* polygon = inputShape.clone();
+    Circle* circle = dynamic_cast<Circle*>(inputRegion.clone());
+    this->runAlgorithm(polygon, circle, sw);
+}

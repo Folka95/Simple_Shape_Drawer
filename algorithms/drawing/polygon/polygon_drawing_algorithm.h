@@ -10,6 +10,7 @@
 class Polygon_DrawingAlgorithm : public DrawingAlgorithm  {
 private:
     void drawLine(const Point& p1,const Point& p2, ScreenWriter *sw) const;
+    void runAlgorithm(Shape* polygon, ScreenWriter *sw) const;
 public:
     Polygon_DrawingAlgorithm();
     void draw(const Shape &shape, ScreenWriter *sw) const;

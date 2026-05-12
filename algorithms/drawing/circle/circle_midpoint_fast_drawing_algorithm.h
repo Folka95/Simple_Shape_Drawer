@@ -2,11 +2,13 @@
 #ifndef CIRCLE_MIDPOINT_FAST_DRAWING_ALGORITHM_H
 #define CIRCLE_MIDPOINT_FAST_DRAWING_ALGORITHM_H
 #include "../../drawing_algorithm.h"
+#include "../../../core/shapes/circle.h"
 
 
 class Circle_MidPoint_Fast_DrawingAlgorithm : public DrawingAlgorithm {
 private:
     void Draw8Points(ScreenWriter *sw, int xc, int yc, int x, int y, COLORREF color) const;
+    void runAlgorithm(Circle* circle, ScreenWriter *sw) const;
 public:
     Circle_MidPoint_Fast_DrawingAlgorithm();
     void draw(const Shape &shape, ScreenWriter *sw) const;

@@ -6,22 +6,28 @@
 
 Rectangle_Point_ClippingAlgorithm::Rectangle_Point_ClippingAlgorithm():ClippingAlgorithm() {}
 
-void Rectangle_Point_ClippingAlgorithm::clip(const Shape &shape, const Shape &region, ScreenWriter *sw) const {
-    if (shape.getType() != SHAPE_POLYGON){
-        std::cerr << "rectanglePointClippingAlgorithm::clip : shape to draw must be Line" << std::endl;
-        return;
-    }
-    if (shape.getSize() != 1){
-        std::cerr << "Rectangle_Point_ClippingAlgorithm::clip : shape to draw must be Line" << std::endl;
-        return;
-    }
-    if (region.getType() != SHAPE_RECTANGLE){
-        std::cerr << "rectanglePointClippingAlgorithm::clip : Region must be a Rectangle" << std::endl;
-        return;
-    }
+void Rectangle_Point_ClippingAlgorithm::runAlgorithm(Shape* polygon, RectangleShape* rectangle, ScreenWriter *sw) const {
     sw->activate();
-    if (region.isInside(shape.points[0])){
-        sw->setPixel(shape.points[0].x, shape.points[0].y, shape.borderColor);
+    if (rectangle->isInside(polygon->points[0])){
+        sw->setPixel(polygon->points[0].x, polygon->points[0].y, polygon->borderColor);
     }
     sw->deactivate();
 }
+
+void Rectangle_Point_ClippingAlgorithm::clip(const Shape &inputShape, const Shape &inputRegion, ScreenWriter *sw) const {
+    if (inputShape.getType() != SHAPE_POLYGON){
+        std::cerr << "Rectangle_Point_ClippingAlgorithm::clip : shape to draw must be Polygon" << std::endl;
+        return;
+    }
+    if (inputShape.getSize() != 1){
+        std::cerr << "Rectangle_Point_ClippingAlgorithm::clip : shape to draw must be Polygon of 1 point" << std::endl;
+        return;
+    }
+    if (inputRegion.getType() != SHAPE_RECTANGLE){
+        std::cerr << "Rectangle_Point_ClippingAlgorithm::clip : Region must be a Rectangle" << std::endl;
+        return;
+    }
+    Shape* polygon = inputShape.clone();
+    RectangleShape* rectangle = dynamic_cast<RectangleShape*>(inputRegion.clone());
+    this->runAlgorithm(polygon, rectangle, sw);
+}

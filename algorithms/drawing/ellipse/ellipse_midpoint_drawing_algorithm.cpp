@@ -13,13 +13,11 @@ void Ellipse_MidPoint_DrawingAlgorithm::Draw4Points(ScreenWriter *sw, int xc, in
     sw->setPixel(xc - x, yc - y, color);
 }
 
-void Ellipse_MidPoint_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const {
-    if(shape.getType() != SHAPE_ELLIPSE) return;
-
-    Point p0 = shape.points[0];
+void Ellipse_MidPoint_DrawingAlgorithm::runAlgorithm(EllipseShape* ellipse, ScreenWriter *sw) const {
+    Point p0 = ellipse->points[0];
     // Use your recently protected radii logic
-    double a = abs(shape.points[1].x - p0.x); 
-    double b = abs(shape.points[2].y - p0.y);
+    double a = abs(ellipse->points[1].x - p0.x); 
+    double b = abs(ellipse->points[2].y - p0.y);
 
     if(a < 1.0 || b < 1.0) return;
 
@@ -40,7 +38,7 @@ void Ellipse_MidPoint_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *s
     long long dy = twoA2 * y;
 
     while (dx < dy) {
-        Draw4Points(sw, p0.x, p0.y, x, y, shape.borderColor);
+        Draw4Points(sw, p0.x, p0.y, x, y, ellipse->borderColor);
         if (d1 < 0) {
             x++;
             dx += twoB2;
@@ -59,7 +57,7 @@ void Ellipse_MidPoint_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *s
     double d2 = (b2 * (x + 0.5) * (x + 0.5)) + (a2 * (y - 1) * (y - 1)) - (a2 * b2);
 
     while (y >= 0) {
-        Draw4Points(sw, p0.x, p0.y, x, y, shape.borderColor);
+        Draw4Points(sw, p0.x, p0.y, x, y, ellipse->borderColor);
         if (d2 > 0) {
             y--;
             dy -= twoA2;
@@ -75,3 +73,9 @@ void Ellipse_MidPoint_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *s
 
     sw->deactivate();
 }
+
+void Ellipse_MidPoint_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *sw) const {
+    if(inputShape.getType() != SHAPE_ELLIPSE) return;
+    EllipseShape* ellipse = dynamic_cast<EllipseShape*>(inputShape.clone());
+    this->runAlgorithm(ellipse, sw);
+}

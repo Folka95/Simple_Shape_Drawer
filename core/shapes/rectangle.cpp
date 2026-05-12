@@ -1,7 +1,7 @@
 #include "rectangle.h"
 using namespace std;
 
-Rectangle::Rectangle() : Shape(
+RectangleShape::RectangleShape() : Shape(
     SHAPE_RECTANGLE,
     "Rectangle\n"s +
     "How to draw ?\n" +
@@ -11,7 +11,7 @@ Rectangle::Rectangle() : Shape(
 ) {
 }
 
-void Rectangle::initialize() {
+void RectangleShape::initialize() {
     if (points.size() > 2) {
         return;
     }
@@ -21,7 +21,7 @@ void Rectangle::initialize() {
     }
 }
 
-bool Rectangle::isInside(const Point &point) const {
+bool RectangleShape::isInside(const Point &point) const {
     if (points.size() < 2) {
         return false;
     }
@@ -29,22 +29,22 @@ bool Rectangle::isInside(const Point &point) const {
             point.y >= points[0].y && point.y <= points[1].y;
 }
 
-bool Rectangle::isEnoughToDraw() const {
+bool RectangleShape::isEnoughToDraw() const {
     if(this->points.size() > 2) {
-        std::cerr << "Rectangle::isEnoughToDraw: points size exceed the limit (2)" << std::endl;
+        std::cerr << "RectangleShape::isEnoughToDraw: points size exceed the limit (2)" << std::endl;
         return false;
     }
     return this->points.size() == 2;
 }
 
-Shape* Rectangle::clone() const {
-    Rectangle* newRectangle = new Rectangle();
+Shape* RectangleShape::clone() const {
+    RectangleShape* newRectangle = new RectangleShape();
     newRectangle->points = this->points;
     newRectangle->borderColor = this->borderColor;
     newRectangle->fillColor = this->fillColor;
     return newRectangle;
 }
 
-void Rectangle::takeAction(int actionID) {
+void RectangleShape::takeAction(int actionID) {
 
 }

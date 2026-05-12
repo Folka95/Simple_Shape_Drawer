@@ -15,21 +15,27 @@ void Polygon_DrawingAlgorithm::drawLine(const Point& p1,const Point& p2, ScreenW
 }
 
 
-void Polygon_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const {
-    if (shape.getType() != SHAPE_POLYGON){
-        std::cerr << "Polygon_DrawingAlgorithm::draw : shape to draw must be Rectangle" << std::endl;
+void Polygon_DrawingAlgorithm::runAlgorithm(Shape* polygon, ScreenWriter *sw) const {
+    sort(polygon->points.begin(), polygon->points.end());
+    for(int i = 0; i < polygon->points.size(); i++) {
+        drawLine(polygon->points[i], polygon->points[(i + 1) % polygon->points.size()], sw);
+    }
+}
+
+
+void Polygon_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *sw) const {
+    if (inputShape.getType() != SHAPE_POLYGON){
+        std::cerr << "Polygon_DrawingAlgorithm::draw : shape to draw must be Polygon" << std::endl;
         return;
     }
-    if (shape.getSize() == 0){
+    if (inputShape.getSize() == 0){
         std::cerr << "Polygon_DrawingAlgorithm::draw : polygon has zero points" << std::endl;
         return;
     }
-    Shape *tmp = shape.clone();
-    sort(tmp->points.begin(), tmp->points.end());
-    for(int i = 0; i < tmp->points.size(); i++) {
-        drawLine(tmp->points[i], tmp->points[(i + 1) % tmp->points.size()], sw);
-    }
+    Shape *tmp = inputShape.clone();
+    this->runAlgorithm(tmp, sw);
 }
+
 
 
 

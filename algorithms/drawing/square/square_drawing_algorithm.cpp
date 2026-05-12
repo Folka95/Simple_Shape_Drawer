@@ -13,15 +13,7 @@ void Square_DrawingAlgorithm::drawLine(const Point& p1,const Point& p2, ScreenWr
 }
 
 
-void Square_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const {
-    if (shape.getType() != SHAPE_SQUARE){
-        std::cerr << "Square_DrawingAlgorithm::draw : shape to draw must be Square" << std::endl;
-        return;
-    }
-    if(!shape.isEnoughToDraw()){
-        std::cerr << "Square_DrawingAlgorithm::draw : shape is not enough to draw" << std::endl;
-        return;
-    }
+void Square_DrawingAlgorithm::runAlgorithm(Square* square, ScreenWriter *sw) const {
     // TODO
     Point topLeft;
     Point bottomRight;
@@ -33,6 +25,20 @@ void Square_DrawingAlgorithm::draw(const Shape &shape, ScreenWriter *sw) const {
     drawLine(bottomRight, bottomLeft, sw);
     drawLine(topLeft, bottomLeft, sw);
 }
+
+void Square_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *sw) const {
+    if (inputShape.getType() != SHAPE_SQUARE){
+        std::cerr << "Square_DrawingAlgorithm::draw : shape to draw must be Square" << std::endl;
+        return;
+    }
+    if(!inputShape.isEnoughToDraw()){
+        std::cerr << "Square_DrawingAlgorithm::draw : shape is not enough to draw" << std::endl;
+        return;
+    }
+    Square* square = dynamic_cast<Square*>(inputShape.clone());
+    this->runAlgorithm(square, sw);
+}
+
 
 
 

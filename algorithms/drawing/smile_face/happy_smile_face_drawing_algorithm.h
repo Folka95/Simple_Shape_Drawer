@@ -1,3 +1,4 @@
+#pragma once
 #ifndef HAPPY_SMILE_FACE_DRAWING_ALGORITHM_H
 #define HAPPY_SMILE_FACE_DRAWING_ALGORITHM_H
 #include "../../drawing_algorithm.h"
@@ -5,9 +6,10 @@
 
 class HappySmileFace_DrawingAlgorithm: public DrawingAlgorithm{
 private:
-    void drawCircle(const Shape &face, const Point& center, double radius, ScreenWriter *sw) const ;
-    void drawNose(const Shape &face, double radius, ScreenWriter *sw) const ;
-    void drawMouth(const Shape &face, double radius, ScreenWriter *sw) const ;
+    void drawCircle(HappySmileFace* face, const Point& center, double radius, ScreenWriter *sw) const ;
+    void drawNose(HappySmileFace* face, double radius, ScreenWriter *sw) const ;
+    void drawMouth(HappySmileFace* face, double radius, ScreenWriter *sw) const ;
+    void runAlgorithm(HappySmileFace* face, ScreenWriter *sw) const;
 public:
     HappySmileFace_DrawingAlgorithm();
     void draw(const Shape &shape, ScreenWriter *sw) const;

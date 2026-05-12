@@ -42,19 +42,10 @@ void Rectangle_Line_ClippingAlgorithm::drawLine(const Point &p1, const Point &p2
 
 Rectangle_Line_ClippingAlgorithm::Rectangle_Line_ClippingAlgorithm() : ClippingAlgorithm() {}
 
-void Rectangle_Line_ClippingAlgorithm::clip(const Shape &shape, const Shape &region, ScreenWriter *sw) const {
-    if (shape.getType() != SHAPE_LINE) {
-        std::cerr << "rectangleLineClippingAlgorithm::clip : shape to draw must be Line" << std::endl;
-        return;
-    }
+void Rectangle_Line_ClippingAlgorithm::runAlgorithm(Line* line, RectangleShape* rectangle, ScreenWriter *sw) const {
+    int xleft = rectangle->points[0].x, ytop = rectangle->points[0].y, xright = rectangle->points[1].x, ybottom = rectangle->points[1].y;
 
-    if (region.getType() != SHAPE_RECTANGLE) {
-        std::cerr << "rectangleLineClippingAlgorithm::clip : Region must be a Rectangle" << std::endl;
-        return;
-    }
-    int xleft = region.points[0].x, ytop = region.points[0].y, xright = region.points[1].x, ybottom = region.points[1].y;
-
-    double x1 = shape.points[0].x, y1 = shape.points[0].y, x2 = shape.points[1].x, y2 = shape.points[1].y;
+    double x1 = line->points[0].x, y1 = line->points[0].y, x2 = line->points[1].x, y2 = line->points[1].y;
 
     OutCode out1 = GetOutCode(x1, y1, xleft, ytop, xright, ybottom);
     OutCode out2 = GetOutCode(x2, y2, xleft, ytop, xright, ybottom);
@@ -84,6 +75,20 @@ void Rectangle_Line_ClippingAlgorithm::clip(const Shape &shape, const Shape &reg
         Point p2(x2, y2);
         drawLine(p1, p2, sw);
     }
-
-
 }
+
+void Rectangle_Line_ClippingAlgorithm::clip(const Shape &inputShape, const Shape &inputRegion, ScreenWriter *sw) const {
+    if (inputShape.getType() != SHAPE_LINE) {
+        std::cerr << "Rectangle_Line_ClippingAlgorithm::clip : shape to draw must be Line" << std::endl;
+        return;
+    }
+
+    if (inputRegion.getType() != SHAPE_RECTANGLE) {
+        std::cerr << "Rectangle_Line_ClippingAlgorithm::clip : Region must be a Rectangle" << std::endl;
+        return;
+    }
+    Line* line = dynamic_cast<Line*>(inputShape.clone());
+    RectangleShape* rectangle = dynamic_cast<RectangleShape*>(inputRegion.clone());
+    this->runAlgorithm(line, rectangle, sw);
+}
+

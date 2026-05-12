@@ -1,4 +1,3 @@
-#pragma once
 #include "app_manager.h"
 #include <bits/stdc++.h>
 

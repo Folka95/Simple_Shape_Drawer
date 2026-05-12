@@ -4,15 +4,21 @@ Circle_Line_ClippingAlgorithm::Circle_Line_ClippingAlgorithm() : ClippingAlgorit
 
 }
 
-void Circle_Line_ClippingAlgorithm::clip(const Shape &shape, const Shape &region, ScreenWriter *sw) const {
-    if(shape.getType() != SHAPE_LINE) {
-        std::cerr << "lineClippingAlgorithm::clip : shape to draw must be Line" << std::endl;
-        return;
-    }
-    if(region.getType() != SHAPE_CIRCLE) {
-        std::cerr << "lineClippingAlgorithm::clip : region must be Circle" << std::endl;
-        return;
-    }
+void Circle_Line_ClippingAlgorithm::runAlgorithm(Line* line, Circle* circle, ScreenWriter *sw) const {
     // TODO
-    std::cerr << "lineClippingAlgorithm::clip : Still TODO" << std::endl;
+    std::cerr << "Circle_Line_ClippingAlgorithm::runAlgorithm : Still TODO" << std::endl;
 }
+
+void Circle_Line_ClippingAlgorithm::clip(const Shape &inputShape, const Shape &inputRegion, ScreenWriter *sw) const {
+    if(inputShape.getType() != SHAPE_LINE) {
+        std::cerr << "Circle_Line_ClippingAlgorithm::clip : shape to draw must be Line" << std::endl;
+        return;
+    }
+    if(inputRegion.getType() != SHAPE_CIRCLE) {
+        std::cerr << "Circle_Line_ClippingAlgorithm::clip : region must be Circle" << std::endl;
+        return;
+    }
+    Line* line = dynamic_cast<Line*>(inputShape.clone());
+    Circle* circle = dynamic_cast<Circle*>(inputRegion.clone());
+    this->runAlgorithm(line, circle, sw);
+}
