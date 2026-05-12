@@ -24,6 +24,7 @@ void RectangleShape::initialize() {
         width = points[1].x - points[0].x;
         height = points[1].y - points[0].y;
     }
+    this->area = width * height;
 }
 
 bool RectangleShape::isInside(const Point &point) const {
@@ -51,10 +52,6 @@ Shape* RectangleShape::clone() const {
     return newRectangle;
 }
 
-void RectangleShape::takeAction(int actionID) {
-
-}
-
 Point RectangleShape::getTopLeft() const {
     return topLeft;
 }
@@ -75,6 +72,13 @@ double RectangleShape::getWidth() const {
     return width;
 }
 
-double RectangleShape::getHeight() const {
-    return height;
+std::vector< Point > RectangleShape::getSidePoints() const {
+    std::vector< Point > tmp = {topLeft, topRight, bottomLeft, bottomRight};
+    Point c = this->centroid(tmp);
+    std::sort(tmp.begin(), tmp.end(), [&](const Point& a, const Point& b) {
+        double angleA = atan2(a.y - c.y, a.x - c.x);
+        double angleB = atan2(b.y - c.y, b.x - c.x);
+        return angleA < angleB;
+    });
+    return tmp;
 }

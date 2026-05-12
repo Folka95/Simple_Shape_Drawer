@@ -12,7 +12,8 @@ Circle::Circle() : Shape(SHAPE_CIRCLE,
 
 void Circle::initialize() {
     this->radius = points[0].euclideanDistance(points[1]);
-    center = points[0];
+    this->center = points[0];
+    this->area = M_PI * this->radius * this->radius;
 }
 
 bool Circle::isInside(const Point &point) const {
@@ -38,8 +39,9 @@ Shape* Circle::clone() const {
     return newCircle;
 }
 
-void Circle::takeAction(int actionID) {
 
+std::vector< Point > Circle::getSidePoints() const {
+    return {};
 }
 
 double Circle::getRadius() const {

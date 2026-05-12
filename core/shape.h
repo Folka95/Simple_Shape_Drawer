@@ -8,6 +8,7 @@
 #include <windows.h>
 #include <cmath>
 #include <iostream>
+#include "algorithm"
 
 enum ShapeType {
     SHAPE_NONE,
@@ -25,9 +26,11 @@ enum ShapeType {
 class Shape {
 private:
 protected:
+    double area;
     Shape(ShapeType type, std::string description);
     std::string description;
     ShapeType type;
+    Point centroid(const std::vector< Point > &givenPoints) const;
 public:
     std::vector<Point> points;
     COLORREF borderColor;
@@ -37,11 +40,13 @@ public:
     std::string getDescription() const ;
     ShapeType getType() const ;
     int getSize() const ;
-    virtual void takeAction(int actionID) = 0;
+    virtual void takeAction(int actionID);
     virtual void initialize() = 0 ;
     virtual bool isInside(const Point &point) const = 0 ;
     virtual bool isEnoughToDraw() const = 0 ;
     virtual Shape* clone() const = 0;
+    virtual std::vector< Point > getSidePoints() const = 0;
+    double getArea() const ;
 };
 
 #endif

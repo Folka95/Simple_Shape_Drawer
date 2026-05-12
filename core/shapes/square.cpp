@@ -23,6 +23,7 @@ void Square::initialize() {
         bottomLeft = Point(points[0].x - sideLength / 2, points[0].y - sideLength / 2);
         bottomRight = Point(points[0].x + sideLength / 2, points[0].y - sideLength / 2);
     }
+    this->area = sideLength * sideLength;
 }
 
 bool Square::isInside(const Point &point) const {
@@ -52,10 +53,6 @@ Shape* Square::clone() const {
     return newSquare;
 }
 
-void Square::takeAction(int actionID) {
-
-}
-
 Point Square::getTopLeft() const {
     return topLeft;
 }
@@ -74,4 +71,16 @@ Point Square::getBottomRight() const {
 
 double Square::getSideLength() const {
     return sideLength;
+}
+
+
+std::vector< Point > Square::getSidePoints() const {
+    std::vector< Point > tmp = {topLeft, topRight, bottomLeft, bottomRight};
+    Point c = this->centroid(tmp);
+    std::sort(tmp.begin(), tmp.end(), [&](const Point& a, const Point& b) {
+        double angleA = atan2(a.y - c.y, a.x - c.x);
+        double angleB = atan2(b.y - c.y, b.x - c.x);
+        return angleA < angleB;
+    });
+    return tmp;
 }

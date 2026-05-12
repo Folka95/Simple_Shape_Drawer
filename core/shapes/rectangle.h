@@ -13,7 +13,6 @@ public:
     void initialize() override;
     bool isInside(const Point &point) const override;
     bool isEnoughToDraw() const override;
-    void takeAction(int actionID) override;
     Shape* clone() const override;
     Point getTopLeft() const ;
     Point getTopRight() const ;
@@ -21,6 +20,7 @@ public:
     Point getBottomRight() const ;
     double getWidth() const ;
     double getHeight() const ;
+    std::vector< Point > getSidePoints() const override;
 };
 
 

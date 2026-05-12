@@ -39,6 +39,13 @@ Shape* Line::clone() const {
     return tmp;
 }
 
-void Line::takeAction(int actionID) {
-
+std::vector< Point > Line::getSidePoints() const {
+    std::vector< Point > tmp = this->points;
+    Point c = this->centroid(tmp);
+    std::sort(tmp.begin(), tmp.end(), [&](const Point& a, const Point& b) {
+        double angleA = atan2(a.y - c.y, a.x - c.x);
+        double angleB = atan2(b.y - c.y, b.x - c.x);
+        return angleA < angleB;
+    });
+    return tmp;
 }

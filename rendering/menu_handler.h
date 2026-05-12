@@ -27,13 +27,14 @@
 #include "../algorithms/clipping/rectangle/rectangle_polygon_clipping_algorithm.h"
 #include "../algorithms/clipping/square/square_line_clipping_algorithm.h"
 #include "../algorithms/clipping/square/square_point_clipping_algorithm.h"
+#include "../algorithms/drawing/polygon/polygon_drawing_algorithm.h"
 #include "../algorithms/drawing/rectangle/rectangle_drawing_algorithm.h"
 #include "../algorithms/drawing/smile_face/happy_smile_face_drawing_algorithm.h"
 #include "../algorithms/drawing/smile_face/sad_smile_face_drawing_algorithm.h"
 #include "../algorithms/drawing/square/square_drawing_algorithm.h"
-#include "../algorithms/filling/quarter_circle_with_line_filling_algorithm.h"
-#include "../algorithms/filling/iterive_flood_fill_filling_algorithm.h"
-#include "../algorithms/filling/flood_fill_filling_algorithm.h"
+#include "../algorithms/filling/circle/quarter_circle_with_line_filling_algorithm.h"
+#include "../algorithms/filling/floodfill/iterive_flood_fill_filling_algorithm.h"
+#include "../algorithms/filling/floodfill/flood_fill_filling_algorithm.h"
 #include "../core/shapes/happy_smile_face.h"
 #include "../core/shapes/polygon.h"
 #include "../core/shapes/sad_smile_face.h"
@@ -49,7 +50,8 @@ enum Menu {
     CURVE_MENU,
     FILL_MENU,
     CLIP_MENU,
-    SMILE_MENU
+    SMILE_MENU,
+    OTHER_MENU
 };
 
 enum FileMenu {
@@ -118,8 +120,13 @@ enum SmileMenu {
     SMILE_SAD_FACE
 };
 
-const int MAX_ENUM_SIZE = 20;
+enum OtherMenu {
+    OTHER_SQUARE,
+    OTHER_RECTANGLE,
+    OTHER_POLYGON
+};
 
+const int MAX_ENUM_SIZE = 20;
 
 inline short enumEncoder(short menu, short submenu) {
     return menu * MAX_ENUM_SIZE + submenu;
@@ -237,16 +244,31 @@ inline HMENU createSmileFaceMenu() {
     return hSubMenu;
 }
 
+inline HMENU createOtherShapeMenu() {
+    HMENU hSubMenu = CreatePopupMenu();
+    AppendMenu(hSubMenu, MF_STRING, enumEncoder(OTHER_MENU, OTHER_SQUARE), "Square");
+    AppendMenu(hSubMenu, MF_STRING, enumEncoder(OTHER_MENU, OTHER_RECTANGLE), "Rectangle");
+    AppendMenu(hSubMenu, MF_STRING, enumEncoder(OTHER_MENU, OTHER_POLYGON), "Polygon");
+    return hSubMenu;
+}
+
 inline void createAppMenu(HMENU hMenu) {
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createFileMenu(), "File");
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createPreferencesMenu(), "Preferences");
+
+    AppendMenu(hMenu, MF_POPUP | MF_DISABLED, 0, "|");
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createLineMenu(), "Line");
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createCircleMenu(), "Circle");
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createEllipseMenu(), "Ellipse");
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createCurvesMenu(), "Curves");
-    AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createFillingMenu(), "Filling");
-    AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createClippingMenu(), "Clipping");
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createSmileFaceMenu(), "Smile Face");
+    AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createOtherShapeMenu(), "Other Shapes");
+
+    AppendMenu(hMenu, MF_POPUP | MF_DISABLED, 0, "|");
+    AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createFillingMenu(), "Filling");
+
+    AppendMenu(hMenu, MF_POPUP | MF_DISABLED, 0, "|");
+    AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createClippingMenu(), "Clipping");
 }
 
 inline void selectFileMenu(short value, AppManager *appManager) {
@@ -280,15 +302,15 @@ inline void selectPreferencesMenu(short value, AppManager *appManager) {
             break;
 
         case PREFERENCES_BACKGROUND_COLOR:
-            appManager->setBackgroundColor(pickColor(appManager->getScreenOwner()));
+            appManager->setBackgroundColor(InputReader::userPickColor(appManager->getScreenOwner()));
             break;
 
         case PREFERENCES_BORDER_COLOR:
-            appManager->setBoarderColor(pickColor(appManager->getScreenOwner()));
+            appManager->setBoarderColor(InputReader::userPickColor(appManager->getScreenOwner()));
             break;
 
         case PREFERENCES_FILL_COLOR:
-            appManager->setFillColor(pickColor(appManager->getScreenOwner()));
+            appManager->setFillColor(InputReader::userPickColor(appManager->getScreenOwner()));
             break;
 
         default:
@@ -403,7 +425,7 @@ inline void selectCurvesMenu(short value, AppManager *appManager) {
         case CURVE_CARDINAL_SPLINE: {
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            int Cvalue = pickRange(appManager->getScreenOwner(), 0, 100, 50, "Smoothness Percent %");
+            int Cvalue = InputReader::userPickRange(appManager->getScreenOwner(), 0, 100, 50, "Smoothness Percent %");
             appManager->setShape(new CurveShape());
             appManager->setDrawingAlgorithm(new Curve_Spline_DrawingAlgorithm(Cvalue));
             break;
@@ -455,6 +477,8 @@ inline void selectFillingMenu(short value, AppManager *appManager) {
     }
 }
 
+
+
 inline void selectClippingMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
          case CLIP_RECT_POINT:
@@ -468,7 +492,6 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
                      );
 
              break;
-        //
          case CLIP_RECT_LINE:
              appManager->removeDrawingAlgorithm();
             appManager->removeFillingAlgorithm();
@@ -482,31 +505,7 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
         case CLIP_RECT_POLYGON: {
             appManager->removeDrawingAlgorithm();
             appManager->removeFillingAlgorithm();
-            const int sz = pickRange(appManager->getScreenOwner(), 3, 10, 5, "Polygon Size");
-            if(sz == 3) {
-                appManager->setShape(new PolygonShape<3>());
-            }
-            else if(sz == 4) {
-                appManager->setShape(new PolygonShape<4>());
-            }
-            else if(sz == 5) {
-                appManager->setShape(new PolygonShape<5>());
-            }
-            else if(sz == 6) {
-                appManager->setShape(new PolygonShape<6>());
-            }
-            else if(sz == 7) {
-                appManager->setShape(new PolygonShape<7>());
-            }
-            else if(sz == 8) {
-                appManager->setShape(new PolygonShape<8>());
-            }
-            else if(sz == 9) {
-                appManager->setShape(new PolygonShape<9>());
-            }
-            else if(sz == 10) {
-                appManager->setShape(new PolygonShape<10>());
-            }
+            appManager->setShape(InputReader::userReadPolygon(appManager));
             appManager->setClippingAlgorithm(
                 new Rectangle_Polygon_ClippingAlgorithm(),
                 new Rectangle_DrawingAlgorithm(),
@@ -564,14 +563,41 @@ inline void selectSmileMenu(short value, AppManager *appManager) {
     switch (subMenuDecoder(value)) {
         case SMILE_HAPPY_FACE:
             appManager->removeClippingAlgorithm();
-            appManager->setShape(new HappySmileFace());
-            appManager->setDrawingAlgorithm(new HappySmileFace_DrawingAlgorithm());
-            break;
+        appManager->setShape(new HappySmileFace());
+        appManager->setDrawingAlgorithm(new HappySmileFace_DrawingAlgorithm());
+        break;
 
         case SMILE_SAD_FACE:
             appManager->removeClippingAlgorithm();
-            appManager->setShape(new SadSmileFace());
-            appManager->setDrawingAlgorithm(new SadSmileFace_DrawingAlgorithm());
+        appManager->setShape(new SadSmileFace());
+        appManager->setDrawingAlgorithm(new SadSmileFace_DrawingAlgorithm());
+        break;
+        default:
+            std::cerr << "selectSmileMenu: Unknown Smile Menu value: " << value << '\n';
+        break;
+    }
+}
+
+inline void selectOtherMenu(short value, AppManager *appManager) {
+    switch (subMenuDecoder(value)) {
+        case OTHER_SQUARE:
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new Square());
+            appManager->setDrawingAlgorithm(new Square_DrawingAlgorithm());
+            break;
+
+        case OTHER_RECTANGLE:
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(new RectangleShape());
+            appManager->setDrawingAlgorithm(new Rectangle_DrawingAlgorithm());
+            break;
+        case OTHER_POLYGON:
+            appManager->removeClippingAlgorithm();
+            appManager->removeFillingAlgorithm();
+            appManager->setShape(InputReader::userReadPolygon(appManager));
+            appManager->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
             break;
         default:
             std::cerr << "selectSmileMenu: Unknown Smile Menu value: " << value << '\n';
@@ -615,6 +641,10 @@ inline void selectMainMenu(short value, AppManager *appManager) {
 
         case SMILE_MENU:
             selectSmileMenu(value, appManager);
+            break;
+
+        case OTHER_MENU:
+            selectOtherMenu(value, appManager);
             break;
 
         default:

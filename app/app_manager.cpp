@@ -118,7 +118,11 @@ void AppManager::Private_applyRightClick(short x, short y, bool isUser) {
         return;
     }
     int actionRank = 1;
-    for(Shape* shape : shapeHistory) {
+    vector< Shape* > tmpShapes = shapeHistory;
+    stable_sort(tmpShapes.begin(), tmpShapes.end(), [&](const Shape *a, const Shape *b) {
+       return a->getArea() < b->getArea();
+    });
+    for(Shape* shape : tmpShapes) {
         if(shape->isEnoughToDraw() && shape->isInside(Point(x, y))) {
             shape->fillColor = fillColor;
             fillingAlgorithm->fill(*shape, *clippingRegion, Point(x, y), sw);

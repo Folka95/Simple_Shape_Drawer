@@ -1,4 +1,6 @@
 #include "ellipse.h"
+
+#include "polygon.h"
 using namespace std;
 
 EllipseShape::EllipseShape() : Shape(
@@ -35,6 +37,8 @@ void EllipseShape::initialize() {
     points[2].x = points[0].x;
     // (Optional) We set its Y to the center + radius2 to keep it visually "snapped"
     points[2].y = points[0].y + this->radius2;
+
+    this->area = M_PI * this->radius1 * this->radius2;
 }
 
 bool EllipseShape::isInside(const Point &point) const {
@@ -67,6 +71,6 @@ Shape* EllipseShape::clone() const {
     return newEllipse;
 }
 
-void EllipseShape::takeAction(int actionID) {
-
+std::vector< Point > EllipseShape::getSidePoints() const {
+    return {};
 }

@@ -13,6 +13,7 @@ HappySmileFace::HappySmileFace() : Shape (
 
 void HappySmileFace::initialize() {
     this->radius = points[0].euclideanDistance(points[1]);
+    this->area = M_PI * this->radius * this->radius;
 }
 
 bool HappySmileFace::isInside(const Point &point) const {
@@ -39,6 +40,6 @@ Shape* HappySmileFace::clone() const {
     return newFace;
 }
 
-void HappySmileFace::takeAction(int actionID) {
-
+std::vector< Point > HappySmileFace::getSidePoints() const {
+    return {};
 }

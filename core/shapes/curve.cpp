@@ -47,3 +47,7 @@ void CurveShape::takeAction(int actionID) {
     fixedLimit = this->points.size();
     this->initialize();
 }
+
+std::vector< Point > CurveShape::getSidePoints() const {
+    return {};
+}

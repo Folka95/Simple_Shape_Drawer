@@ -16,9 +16,9 @@ void Polygon_DrawingAlgorithm::drawLine(const Point& p1,const Point& p2, ScreenW
 
 
 void Polygon_DrawingAlgorithm::runAlgorithm(Shape* polygon, ScreenWriter *sw) const {
-    sort(polygon->points.begin(), polygon->points.end());
+    vector< Point > points = polygon->getSidePoints();
     for(int i = 0; i < polygon->points.size(); i++) {
-        drawLine(polygon->points[i], polygon->points[(i + 1) % polygon->points.size()], sw);
+        drawLine(points[i], points[(i + 1) % points.size()], sw);
     }
 }
 
@@ -32,8 +32,7 @@ void Polygon_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *sw) c
         std::cerr << "Polygon_DrawingAlgorithm::draw : polygon has zero points" << std::endl;
         return;
     }
-    Shape *tmp = inputShape.clone();
-    this->runAlgorithm(tmp, sw);
+    this->runAlgorithm(inputShape.clone(), sw);
 }
 
 

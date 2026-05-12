@@ -12,11 +12,11 @@ public:
     void initialize() override;
     bool isInside(const Point &point) const override;
     bool isEnoughToDraw() const override;
-    void takeAction(int actionID) override;
-    int scanQuarter(const Point &point) const;
-    double getRadius() const;
-    Point getCenter() const;
     Shape* clone() const override;
+    std::vector< Point > getSidePoints() const ;
+    double getRadius() const ;
+    Point getCenter() const ;
+    int scanQuarter(const Point &point) const;
 };
 
 

@@ -1,8 +1,8 @@
 #pragma once
 #ifndef QUARTERCIRCLE_WITHLINE_FILLING_ALGORITHM_H
 #define QUARTERCIRCLE_WITHLINE_FILLING_ALGORITHM_H
-#include "../filling_algorithm.h"
-#include "../../core/shapes/circle.h"
+#include "../../filling_algorithm.h"
+#include "../../../core/shapes/circle.h"
 
 
 class QuarterCircleWithLine_FillingAlgorithm : public FillingAlgorithm {

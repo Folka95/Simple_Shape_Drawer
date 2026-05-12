@@ -12,9 +12,9 @@ public:
     void initialize() override;
     bool isInside(const Point &point) const override;
     bool isEnoughToDraw() const override;
-    void takeAction(int actionID) override;
+    void takeAction(int actionID) override ;
     Shape* clone() const override;
-    void sortClockWise();
+    std::vector< Point > getSidePoints() const override ;
 };
 
 template< int size >
@@ -34,7 +34,7 @@ PolygonShape<size>::PolygonShape() : Shape(
 
 template< int size >
 void PolygonShape<size>::initialize() {
-
+    this->area = 0;
 }
 
 template< int size >
@@ -51,7 +51,7 @@ bool PolygonShape<size>::isInside(const Point &point) const {
 template< int size >
 bool PolygonShape<size>::isEnoughToDraw() const {
     if(this->points.size() > size) {
-        std::cerr << "Circle::isEnoughToDraw: points size exceed the limit (" << size << ")" << std::endl;
+        std::cerr << "PolygonShape::isEnoughToDraw: points size exceed the limit (" << size << ")" << std::endl;
         return false;
     }
     return this->points.size() == size;
@@ -70,6 +70,18 @@ Shape* PolygonShape<size>::clone() const {
 template< int size >
 void PolygonShape<size>::takeAction(int actionID) {
 
+}
+
+template< int size >
+std::vector< Point > PolygonShape<size>::getSidePoints() const {
+    std::vector< Point > tmp = this->points;
+    Point c = this->centroid(tmp);
+    std::sort(tmp.begin(), tmp.end(), [&](const Point& a, const Point& b) {
+        double angleA = atan2(a.y - c.y, a.x - c.x);
+        double angleB = atan2(b.y - c.y, b.x - c.x);
+        return angleA < angleB;
+    });
+    return tmp;
 }
 
 #endif

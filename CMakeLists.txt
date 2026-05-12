@@ -20,7 +20,6 @@ add_executable(Simple_Shape_Drawer main.cpp
         app/app_manager.h
         algorithms/clipping_algorithm.h
         algorithms/clipping_algorithm.h
-        io/input_reader.h
         core/shapes/line.cpp
         core/shapes/line.h
         core/shapes/circle.cpp
@@ -41,8 +40,8 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/drawing/line/line_parametric_drawing_algorithm.h
         algorithms/drawing/line/line_midpoint_drawing_algorithm.cpp
         algorithms/drawing/line/line_midpoint_drawing_algorithm.h
-        algorithms/filling/iterive_flood_fill_filling_algorithm.cpp
-        algorithms/filling/iterive_flood_fill_filling_algorithm.h
+        algorithms/filling/floodfill/iterive_flood_fill_filling_algorithm.cpp
+        algorithms/filling/floodfill/iterive_flood_fill_filling_algorithm.h
         algorithms/clipping/circle/circle_line_clipping_algorithm.cpp
         algorithms/clipping/circle/circle_line_clipping_algorithm.h
         algorithms/clipping/circle/circle_point_clipping_algorithm.cpp
@@ -54,8 +53,8 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/drawing/ellipse/ellipse_Polar_drawing_algorithm.h
         algorithms/drawing/ellipse/ellipse_midpoint_drawing_algorithm.cpp
         algorithms/drawing/ellipse/ellipse_midpoint_drawing_algorithm.h
-        algorithms/filling/flood_fill_filling_algorithm.h
-        algorithms/filling/flood_fill_filling_algorithm.cpp
+        algorithms/filling/floodfill/flood_fill_filling_algorithm.h
+        algorithms/filling/floodfill/flood_fill_filling_algorithm.cpp
         algorithms/drawing/circle/circle_direct_drawing_algorithm.h
         algorithms/drawing/circle/circle_direct_drawing_algorithm.cpp
         algorithms/drawing/circle/circle_midpoint_drawing_algorithm.h
@@ -93,6 +92,9 @@ add_executable(Simple_Shape_Drawer main.cpp
         core/shapes/square.h
         algorithms/drawing/square/square_drawing_algorithm.cpp
         algorithms/drawing/square/square_drawing_algorithm.h
-        algorithms/filling/quarter_circle_with_line_filling_algorithm.h
-        algorithms/filling/quarter_circle_with_line_filling_algorithm.cpp
+        io/input_reader.cpp
+        io/input_reader.h
+        io/input_reader.cpp
+        io/input_reader.h
+        algorithms/filling/circle/quarter_circle_with_line_filling_algorithm.cpp
 )

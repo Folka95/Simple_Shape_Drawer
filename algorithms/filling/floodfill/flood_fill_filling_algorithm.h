@@ -1,7 +1,7 @@
 #pragma once
 #ifndef FLOODFILL_FILLING_ALGORITHM_H
 #define FLOODFILL_FILLING_ALGORITHM_H
-#include "../filling_algorithm.h"
+#include "../../filling_algorithm.h"
 
 
 class FloodFill_FillingAlgorithm : public FillingAlgorithm {
