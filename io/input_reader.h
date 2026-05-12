@@ -14,9 +14,11 @@ const int SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 
 class InputReader {
 public:
-    static int userPickRange(HWND hwndOwner, int L, int R, int initial, const std::string& name);
-    static Shape* userReadPolygon(AppManager *appManager);
-    static COLORREF userPickColor(HWND hwndOwner);
+    static std::string userSaveFileDialog(HWND owner, const std::string& defaultFileName, const std::string& extension, const std::string& description);
+    static std::string userGetFileDialog(HWND owner, const std::vector<std::string>& extensions, const char* description);
+    static int userPickRange(HWND hwndOwner, int L, int R, int initial, const std::string& name, const vector< short > &memoriezedData);
+    static pair< Shape* , short > userReadPolygon(AppManager *appManager, const vector< short > &memoriezedData);
+    static COLORREF userPickColor(HWND hwndOwner, const vector< short > &memoriezedData);
 };
 
 

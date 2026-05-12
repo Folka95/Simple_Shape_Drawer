@@ -6,10 +6,9 @@
 #include "../line/line_midpoint_drawing_algorithm.h"
 #include "../../../core/shapes/line.h"
 
-
 class Polygon_DrawingAlgorithm : public DrawingAlgorithm  {
 private:
-    void drawLine(const Point& p1,const Point& p2, ScreenWriter *sw) const;
+    void drawLine(const Point& p1,const Point& p2, COLORREF color, ScreenWriter *sw) const;
     void runAlgorithm(Shape* polygon, ScreenWriter *sw) const;
 public:
     Polygon_DrawingAlgorithm();

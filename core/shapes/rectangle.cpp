@@ -16,7 +16,6 @@ void RectangleShape::initialize() {
         return;
     }
     if (points.size() == 2) {
-
         topLeft = Point(min(points[0].x, points[1].x), min(points[0].y, points[1].y));
         bottomRight = Point(max(points[0].x, points[1].x), max(points[0].y, points[1].y));
         topRight = Point(bottomRight.x, topLeft.y);
@@ -31,8 +30,8 @@ bool RectangleShape::isInside(const Point &point) const {
     if (points.size() < 2) {
         return false;
     }
-    return  point.x >= points[0].x && point.x <= points[1].x &&
-            point.y >= points[0].y && point.y <= points[1].y;
+    return  point.x >= topLeft.x && point.x <= bottomRight.x &&
+            point.y >= topLeft.y && point.y <= bottomRight.y;
 }
 
 bool RectangleShape::isEnoughToDraw() const {

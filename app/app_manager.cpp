@@ -34,26 +34,31 @@ AppManager::~AppManager() {
 }
 
 void AppManager::reset() {
-    delete this->drawingAlgorithm;
-    delete this->fillingAlgorithm;
-    delete this->clippingAlgorithm;
-    delete this->clippingRegion;
-    shapeHistory.clear();
-    actionHistory.clear();
+    this->removeClippingAlgorithm();
+    this->removeDrawingAlgorithm();
+    this->removeFillingAlgorithm();
     sw->setBackgroundColor(RGB(0, 0, 0));
     sw->clearScreen();
+    shapeHistory.clear();
+    actionHistory.clear();
     shapeHistory.push_back(new PolygonShape<1>());
     this->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
 }
 
-void AppManager::setShape(Shape *shape) {
+void AppManager::Private_setShape(Shape *shape, bool isUser) {
     if(!shapeHistory.empty() && !shapeHistory.back()->isEnoughToDraw()) {
         shapeHistory.pop_back();
     }
     shapeHistory.push_back(shape);
-    cout << mediumSeparator << endl;
-    cout << shape->getDescription() << endl;
-    cout << mediumSeparator << endl;
+    if(isUser) {
+        cout << mediumSeparator << endl;
+        cout << shape->getDescription() << endl;
+        cout << mediumSeparator << endl;
+    }
+}
+
+void AppManager::setShape(Shape *shape) {
+    Private_setShape(shape, true);
 }
 
 void AppManager::setBoarderColor(COLORREF color) {
@@ -90,51 +95,35 @@ void AppManager::setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm, Draw
 }
 
 void AppManager::removeDrawingAlgorithm() {
-    delete this->drawingAlgorithm;
+    if(this->drawingAlgorithm != nullptr) {
+        delete this->drawingAlgorithm;
+    }
     this->drawingAlgorithm = nullptr;
 }
 
 void AppManager::removeFillingAlgorithm() {
-    delete this->fillingAlgorithm;
+    if(this->fillingAlgorithm != nullptr) {
+        delete this->fillingAlgorithm;
+    }
     this->fillingAlgorithm = nullptr;
 }
 
 void AppManager::removeClippingAlgorithm() {
-    delete this->clippingAlgorithm;
-    delete this->clippingRegion;
-    delete this->clippingDrawingAlgorithm;
+    if(this->clippingAlgorithm != nullptr) {
+        delete this->clippingAlgorithm;
+    }
+    if(this->clippingRegion != nullptr) {
+        delete this->clippingRegion;
+    }
+    if(this->clippingDrawingAlgorithm != nullptr) {
+        delete this->clippingDrawingAlgorithm;
+    }
     this->clippingAlgorithm = nullptr;
     this->clippingRegion = nullptr;
     this->clippingDrawingAlgorithm = nullptr;
 }
 
-void AppManager::Private_applyRightClick(short x, short y, bool isUser) {
-    if(shapeHistory.empty()) {
-        cerr << "AppManager::applyLeftClick: shapeHistory is empty" << endl;
-        return;
-    }
-    if(fillingAlgorithm == nullptr) {
-        cerr << "AppManager::applyRightClick: fillingAlgorithm is null" << endl;
-        return;
-    }
-    int actionRank = 1;
-    vector< Shape* > tmpShapes = shapeHistory;
-    stable_sort(tmpShapes.begin(), tmpShapes.end(), [&](const Shape *a, const Shape *b) {
-       return a->getArea() < b->getArea();
-    });
-    for(Shape* shape : tmpShapes) {
-        if(shape->isEnoughToDraw() && shape->isInside(Point(x, y))) {
-            shape->fillColor = fillColor;
-            fillingAlgorithm->fill(*shape, *clippingRegion, Point(x, y), sw);
-            actionRank = 3;
-            break;
-        }
-    }
-    actionHistory.push_back(new RightClickAction(actionRank, x, y));
-    if(isUser) {
-        this->sw->updateScreen();
-    }
-}
+
 
 void AppManager::Private_applyRightClickCurve(short x, short y, bool isUser) {
     if(clippingRegion != nullptr) {
@@ -166,13 +155,40 @@ void AppManager::Private_applyRightClickCurve(short x, short y, bool isUser) {
     }
 }
 
+void AppManager::Private_applyRightClick(short x, short y, bool isUser) {
+    if(shapeHistory.empty()) {
+        cerr << "AppManager::Private_applyRightClick: shapeHistory is empty" << endl;
+        return;
+    }
+    if(shapeHistory.back()->getType() == SHAPE_CURVE) {
+        Private_applyRightClickCurve(x, y, isUser);
+        return;
+    }
+    if(fillingAlgorithm == nullptr) {
+        cerr << "AppManager::Private_applyRightClick: fillingAlgorithm is null" << endl;
+        return;
+    }
+    int actionRank = 1;
+    vector< Shape* > tmpShapes = shapeHistory;
+    stable_sort(tmpShapes.begin(), tmpShapes.end(), [&](const Shape *a, const Shape *b) {
+       return a->getArea() < b->getArea();
+    });
+    for(Shape* shape : tmpShapes) {
+        if(shape->isEnoughToDraw() && shape->isInside(Point(x, y))) {
+            shape->fillColor = fillColor;
+            fillingAlgorithm->fill(*shape, *clippingRegion, Point(x, y), sw);
+            actionRank = 3;
+            break;
+        }
+    }
+    actionHistory.push_back(new RightClickAction(actionRank, x, y));
+    if(isUser) {
+        this->sw->updateScreen();
+    }
+}
+
 void AppManager::applyRightClick(short x, short y) {
-    if(this->shapeHistory.back()->getType() == SHAPE_CURVE) {
-        Private_applyRightClickCurve(x, y, true);
-    }
-    else {
-        Private_applyRightClick(x, y, true);
-    }
+    Private_applyRightClick(x, y, true);
 }
 
 void AppManager::applyLeftClickClippingMode(short x, short y) {
@@ -261,51 +277,61 @@ void AppManager::applyLeftClick(short x, short y) {
 }
 
 
-void AppManager::Private_applyMenuSelection(short choice, bool isUser) {
-    selectMainMenu(choice, this);
-    if(subMenuDecoder(choice) != FileMenu::FILE_LOAD) {
-        actionHistory.push_back(new MenuSelectAction(2, choice));
+void AppManager::Private_applyMenuSelection(short choice, vector< short > data, bool isUser) {
+    vector< short > result = selectMainMenu(choice, this, data);
+    if(mainMenuDecoder(choice) == FILE_MENU && subMenuDecoder(choice) == FILE_LOAD) {
+        return;
     }
+    if(mainMenuDecoder(choice) == FILE_MENU && subMenuDecoder(choice) == FILE_HARD_SAVE) {
+        return;
+    }
+    if(mainMenuDecoder(choice) == FILE_MENU && subMenuDecoder(choice) == FILE_SOFT_SAVE) {
+        return;
+    }
+    vector< short > tmp = result;
+    tmp.insert(tmp.begin(), choice);
+    actionHistory.push_back(new MenuSelectAction(2, tmp));
     if(isUser) {
         this->sw->updateScreen();
     }
 }
 
 void AppManager::applyMenuSelection(short choice) {
-    Private_applyMenuSelection(choice, true);
+    Private_applyMenuSelection(choice, {}, true);
 }
 
 void AppManager::clearScreen() {
     sw->clearScreen();
+    Shape *current = shapeHistory.back()->clone();
     this->shapeHistory.clear();
+    shapeHistory.push_back(current);
 }
 
-void AppManager::hardSaveScreen() {
+void AppManager::hardSaveScreen(string filepath) {
     vector< Action* > tmp;
     for(Action *action : actionHistory) {
         tmp.push_back(action->clone());
     }
-    if(!tmp.empty() && tmp.back()->getRank() < 3) {
+    if(!tmp.empty() && tmp.back()->getRank() < 2) {
         tmp.pop_back();
     }
-    FileManager::saveActions(tmp, "out.hsv");
+    FileManager::saveActions(tmp, filepath);
 }
 
-void AppManager::softSaveScreen() {
+void AppManager::softSaveScreen(string filepath) {
     vector< vector< COLORREF > > screen = sw->getScreen();
-    FileManager::saveScreen(screen, "out.ssv");
+    FileManager::saveScreen(screen, filepath);
 }
 
-void AppManager::loadScreen() {
+void AppManager::loadScreen(string filepath) {
     actionHistory.clear();
     shapeHistory.clear();
-    string filename ="out.ssv";
-    if(filename.substr(filename.size() - 4, 4) == ".ssv") {
-        vector< vector< COLORREF > > screen = FileManager::loadScreen(filename);
+    if(filepath.substr(filepath.size() - 4, 4) == ".ssv") {
+        vector< vector< COLORREF > > screen = FileManager::loadScreen(filepath);
         sw->setScreen(screen, true);
     }
-    else {
-        vector< Action* > actions = FileManager::loadActions(filename);
+    else if(filepath.substr(filepath.size() - 4, 4) == ".hsv"){
+        vector< Action* > actions = FileManager::loadActions(filepath);
         this->reset();
         for(Action *action : actions) {
             if(action->getActionType() == ACTION_LEFT_CLICK) {
@@ -315,13 +341,21 @@ void AppManager::loadScreen() {
                 this->Private_applyRightClick(action->getData()[0], action->getData()[1], false);
             }
             else if(action->getActionType() == ACTION_MENU_SELECT) {
-                this->Private_applyMenuSelection(action->getData()[0], false);
+                vector< short > tmp;
+                for(int i = 1; i < action->getData().size(); i++) {
+                    tmp.push_back(action->getData()[i]);
+                }
+                this->Private_applyMenuSelection(action->getData()[0], tmp, false);
             }
             else {
                 cerr << "AppManager::loadScreen: unknown action type" << endl;
             }
         }
         this->sw->updateScreen();
+    }
+    else {
+        cerr << "AppManager::loadScreen: invalid file extension" << endl;
+        return;
     }
 }
 
@@ -330,15 +364,8 @@ void AppManager::changeMouse() {
     static const LPCTSTR cursors[] = {
         IDC_ARROW,
         IDC_HAND,
-        IDC_WAIT,
         IDC_CROSS,
-        IDC_IBEAM,
-        IDC_SIZEALL,
-        IDC_NO,
-        IDC_SIZEWE,
-        IDC_SIZENS,
-        IDC_SIZENWSE,
-        IDC_SIZENESW
+        IDC_SIZEALL
     };
 
     static bool seeded = false;

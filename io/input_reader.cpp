@@ -1,5 +1,110 @@
 #include "input_reader.h"
-inline int InputReader::userPickRange(HWND hwndOwner, int L, int R, int initial, const std::string& name) {
+
+std::string InputReader::userGetFileDialog(
+    HWND owner,
+    const std::vector<std::string>& extensions,
+    const char* description
+    ) {
+    char fileName[MAX_PATH] = "";
+
+    char filter[1024] = "";
+
+    // Example:
+    // "My Files (*.txt;*.png)\0*.txt;*.png\0"
+
+    std::string patterns;
+
+    for (int i = 0; i < extensions.size(); i++) {
+        if (i)
+            patterns += ";";
+
+        patterns += "*." + extensions[i];
+    }
+
+    sprintf(
+        filter,
+        "%s (%s)%c%s%c",
+        description,
+        patterns.c_str(),
+        '\0',
+        patterns.c_str(),
+        '\0'
+    );
+
+    OPENFILENAME ofn = {};
+
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = owner;
+    ofn.lpstrFile = fileName;
+    ofn.nMaxFile = MAX_PATH;
+
+    ofn.lpstrFilter = filter;
+
+    ofn.Flags =
+        OFN_PATHMUSTEXIST |
+        OFN_FILEMUSTEXIST;
+
+    if (GetOpenFileName(&ofn)) {
+        return fileName;
+    }
+
+    return "";
+}
+
+std::string InputReader::userSaveFileDialog(
+    HWND owner,
+    const std::string& defaultFileName,
+    const std::string& extension,
+    const std::string& description) {
+    char fileName[MAX_PATH];
+
+    strcpy(fileName, defaultFileName.c_str());
+
+    char filter[256];
+
+    // Example:
+    // "Text Files (*.txt)\0*.txt\0"
+    sprintf(
+        filter,
+        "%s (*.%s)%c*.%s%c",
+        description.c_str(),
+        extension.c_str(),
+        '\0',
+        extension.c_str(),
+        '\0'
+    );
+
+    OPENFILENAME ofn = {};
+
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = owner;
+
+    ofn.lpstrFile = fileName;
+    ofn.nMaxFile = MAX_PATH;
+
+    ofn.lpstrFilter = filter;
+
+    ofn.lpstrDefExt = extension.c_str();
+
+    ofn.Flags =
+        OFN_PATHMUSTEXIST |
+        OFN_OVERWRITEPROMPT;
+
+    if (GetSaveFileName(&ofn)) {
+        return fileName;
+    }
+
+    return "";
+}
+
+int InputReader::userPickRange(HWND hwndOwner, int L, int R, int initial, const std::string& name, const vector< short > &memoriezedData) {
+    if(memoriezedData.size() == 1) {
+        return memoriezedData[0];
+    }
+    if(memoriezedData.size() != 0) {
+        cerr << "InputReader::userPickRange: invalid data size" << endl;
+    }
+
     struct Data {
         int L, R, value;
         HWND slider;
@@ -133,57 +238,74 @@ inline int InputReader::userPickRange(HWND hwndOwner, int L, int R, int initial,
     return data.value;
 }
 
-Shape *InputReader::userReadPolygon(AppManager *appManager) {
-    const int sz = userPickRange(appManager->getScreenOwner(), 3, 15, 5, "Polygon Size");
+pair< Shape* , short > InputReader::userReadPolygon(
+    AppManager *appManager,
+    const vector< short > &memoriezedData
+) {
+    const int sz = userPickRange(
+        appManager->getScreenOwner(),
+        3,
+        15,
+        5,
+        "Polygon Size",
+        memoriezedData
+    );
+
     switch (sz) {
         case 3:
-            return new PolygonShape<3>();
+            return {new PolygonShape<3>(), 3};
 
         case 4:
-            return new PolygonShape<4>();
+            return {new PolygonShape<4>(), 4};
 
         case 5:
-            return new PolygonShape<5>();
+            return {new PolygonShape<5>(), 5};
 
         case 6:
-            return new PolygonShape<6>();
+            return {new PolygonShape<6>(), 6};
 
         case 7:
-            return new PolygonShape<7>();
+            return {new PolygonShape<7>(), 7};
 
         case 8:
-            return new PolygonShape<8>();
+            return {new PolygonShape<8>(), 8};
 
         case 9:
-            return new PolygonShape<9>();
+            return {new PolygonShape<9>(), 9};
 
         case 10:
-            return new PolygonShape<10>();
+            return {new PolygonShape<10>(), 10};
 
         case 11:
-            return new PolygonShape<11>();
+            return {new PolygonShape<11>(), 11};
 
         case 12:
-            return new PolygonShape<12>();
+            return {new PolygonShape<12>(), 12};
 
         case 13:
-            return new PolygonShape<13>();
+            return {new PolygonShape<13>(), 13};
 
         case 14:
-            return new PolygonShape<14>();
+            return {new PolygonShape<14>(), 14};
 
         case 15:
-            return new PolygonShape<15>();
+            return {new PolygonShape<15>(), 15};
 
         default:
-            return nullptr;
+            return {nullptr, 0};
     }
 }
 
-COLORREF InputReader::userPickColor(HWND hwndOwner) {
+COLORREF InputReader::userPickColor(HWND hwndOwner, const vector< short > &memoriezedData) {
+    if(memoriezedData.size() == 3) {
+        return RGB(memoriezedData[0], memoriezedData[1], memoriezedData[2]);
+    }
+    if(memoriezedData.size() != 0) {
+        cerr << "InputReader::userPickColor: invalid data size" << endl;
+    }
     CHOOSECOLOR cc = {};
-    static COLORREF customColors[16] = {0};
-    static COLORREF lastUsedColor = RGB(255, 255, 255);
+    COLORREF customColors[16] = {0};
+    COLORREF lastUsedColor = RGB(255, 255, 255);
     cc.lStructSize = sizeof(cc);
     cc.hwndOwner = hwndOwner;
     cc.lpCustColors = customColors;

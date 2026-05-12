@@ -96,7 +96,7 @@ add_executable(Simple_Shape_Drawer main.cpp
         io/input_reader.h
         io/input_reader.cpp
         io/input_reader.h
-        algorithms/filling/circle/quarter_circle_with_line_filling_algorithm.cpp
-        algorithms/filling/circle/quarter_circle_with_circle_filling_algorithm.cpp
-        algorithms/filling/circle/quarter_circle_with_circle_filling_algorithm.h
+        algorithms/filling/circle/circle_quarter_with_line_filling_algorithm.cpp
+        algorithms/filling/circle/circle_quarter_with_circle_filling_algorithm.cpp
+        algorithms/filling/circle/circle_quarter_with_circle_filling_algorithm.h
 )

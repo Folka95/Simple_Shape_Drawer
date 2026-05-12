@@ -43,7 +43,8 @@ private:
     void Private_applyLeftClick(short x, short y, bool isUser);
     void Private_applyRightClick(short x, short y, bool isUser);
     void Private_applyRightClickCurve(short x, short y, bool isUser);
-    void Private_applyMenuSelection(short choice, bool isUser);
+    void Private_applyMenuSelection(short choice, vector< short > data, bool isUser);
+    void Private_setShape(Shape *shape, bool isUser);
 public:
     AppManager(HWND _hwnd);
     ~AppManager();
@@ -69,9 +70,9 @@ public:
     void applyMouseCursor();
 
     void clearScreen();
-    void softSaveScreen();
-    void hardSaveScreen();
-    void loadScreen();
+    void softSaveScreen(string filepath);
+    void hardSaveScreen(string filepath);
+    void loadScreen(string filepath);
 
     HWND getScreenOwner();
 };

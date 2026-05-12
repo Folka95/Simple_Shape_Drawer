@@ -32,15 +32,14 @@
 #include "../algorithms/drawing/smile_face/happy_smile_face_drawing_algorithm.h"
 #include "../algorithms/drawing/smile_face/sad_smile_face_drawing_algorithm.h"
 #include "../algorithms/drawing/square/square_drawing_algorithm.h"
-#include "../algorithms/filling/circle/quarter_circle_with_circle_filling_algorithm.h"
-#include "../algorithms/filling/circle/quarter_circle_with_line_filling_algorithm.h"
+#include "../algorithms/filling/circle/circle_quarter_with_circle_filling_algorithm.h"
+#include "../algorithms/filling/circle/circle_quarter_with_line_filling_algorithm.h"
 #include "../algorithms/filling/floodfill/iterive_flood_fill_filling_algorithm.h"
 #include "../algorithms/filling/floodfill/flood_fill_filling_algorithm.h"
 #include "../core/shapes/happy_smile_face.h"
 #include "../core/shapes/polygon.h"
 #include "../core/shapes/sad_smile_face.h"
 #include "../core/shapes/square.h"
-
 
 enum Menu {
     FILE_MENU,
@@ -144,8 +143,12 @@ inline short subMenuDecoder(short value) {
 inline HMENU createFileMenu() {
     HMENU hSubMenu = CreatePopupMenu();
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_CLEAR), "Clear Screen");
+    AppendMenu(hSubMenu, MF_SEPARATOR, 0, NULL);
+
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_SOFT_SAVE), "Soft Save Screen");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_HARD_SAVE), "Hard Save Screen");
+    AppendMenu(hSubMenu, MF_SEPARATOR, 0, NULL);
+
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_LOAD), "Load Screen");
     return hSubMenu;
 }
@@ -155,6 +158,7 @@ inline HMENU createPreferencesMenu() {
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_BACKGROUND_COLOR), "Change background color");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_BORDER_COLOR), "Change border color");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_FILL_COLOR), "Change filling color");
+    AppendMenu(hSubMenu, MF_SEPARATOR, 0, NULL);
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_MOUSE_SHAPE), "Change mouse randomly");
     return hSubMenu;
 }
@@ -170,8 +174,12 @@ inline HMENU createLineMenu() {
 inline HMENU createCircleMenu() {
     HMENU hSubMenu = CreatePopupMenu();
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(CIRCLE_MENU, CIRCLE_DIRECT), "Direct");
+    AppendMenu(hSubMenu, MF_SEPARATOR, 0, NULL);
+
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(CIRCLE_MENU, CIRCLE_POLAR), "Polar");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(CIRCLE_MENU, CIRCLE_ITERATIVE_POLAR), "Iterative Polar");
+    AppendMenu(hSubMenu, MF_SEPARATOR, 0, NULL);
+
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(CIRCLE_MENU, CIRCLE_MIDPOINT), "Midpoint");
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(CIRCLE_MENU, CIRCLE_MODIFIED_MIDPOINT), "Modified Midpoint");
     return hSubMenu;
@@ -272,215 +280,231 @@ inline void createAppMenu(HMENU hMenu) {
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createClippingMenu(), "Clipping");
 }
 
-inline void selectFileMenu(short value, AppManager *appManager) {
+inline vector< short > selectFileMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (subMenuDecoder(value)) {
         case FILE_CLEAR:
             appManager->clearScreen();
-            break;
+            return {};
 
-        case FILE_SOFT_SAVE:
-            appManager->softSaveScreen();
-            break;
+        case FILE_SOFT_SAVE:{
+            string filepath = InputReader::userSaveFileDialog(appManager->getScreenOwner(), "image", "ssv", "Save File");
+            appManager->softSaveScreen(filepath);
+            return {};
+        }
 
-        case FILE_HARD_SAVE:
-            appManager->hardSaveScreen();
-            break;
-
-        case FILE_LOAD:
-            appManager->loadScreen();
-            break;
-
+        case FILE_HARD_SAVE: {
+            string filepath = InputReader::userSaveFileDialog(appManager->getScreenOwner(), "image", "hsv", "Save File");
+            appManager->hardSaveScreen(filepath);
+            return {};
+        }
+        case FILE_LOAD: {
+            string filepath = InputReader::userGetFileDialog(appManager->getScreenOwner(), {"ssv", "hsv"}, "Save File");
+            appManager->loadScreen(filepath);
+            return {};
+        }
         default:
             std::cerr << "selectFileMenu: Unknown File Menu value: " << value << '\n';
-            break;
+            return {};
     }
+    return {};
 }
 
-inline void selectPreferencesMenu(short value, AppManager *appManager) {
+inline vector< short > selectPreferencesMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (subMenuDecoder(value)) {
         case PREFERENCES_MOUSE_SHAPE:
             appManager->changeMouse();
-            break;
+            return {};
 
-        case PREFERENCES_BACKGROUND_COLOR:
-            appManager->setBackgroundColor(InputReader::userPickColor(appManager->getScreenOwner()));
-            break;
+        case PREFERENCES_BACKGROUND_COLOR: {
+            COLORREF color = InputReader::userPickColor(appManager->getScreenOwner(), memoriezedData);
+            appManager->setBackgroundColor(color);
+            return {GetRValue(color), GetGValue(color), GetBValue(color)};
+        }
 
-        case PREFERENCES_BORDER_COLOR:
-            appManager->setBoarderColor(InputReader::userPickColor(appManager->getScreenOwner()));
-            break;
-
-        case PREFERENCES_FILL_COLOR:
-            appManager->setFillColor(InputReader::userPickColor(appManager->getScreenOwner()));
-            break;
-
+        case PREFERENCES_BORDER_COLOR:{
+            COLORREF color = InputReader::userPickColor(appManager->getScreenOwner(), memoriezedData);
+            appManager->setBoarderColor(color);
+            return {GetRValue(color), GetGValue(color), GetBValue(color)};
+        }
+        case PREFERENCES_FILL_COLOR:{
+            COLORREF color = InputReader::userPickColor(appManager->getScreenOwner(), memoriezedData);
+            appManager->setFillColor(color);
+            return {GetRValue(color), GetGValue(color), GetBValue(color)};
+        }
         default:
             std::cerr << "selectPreferencesMenu: Unknown Preferences Menu value: " << value << '\n';
-            break;
+            return {};
     }
+    return {};
 }
 
-inline void selectLineMenu(short value, AppManager *appManager) {
+inline vector< short > selectLineMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (subMenuDecoder(value)) {
         case LINE_DDA:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new Line());
             appManager->setDrawingAlgorithm(new Line_DDA_DrawingAlgorithm());
-            break;
+            return {};
 
         case LINE_MIDPOINT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new Line());
             appManager->setDrawingAlgorithm(new Line_Midpoint_DrawingAlgorithm());
-            break;
+            return {};
 
         case LINE_PARAMETRIC:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new Line());
             appManager->setDrawingAlgorithm(new Line_Parametric_DrawingAlgorithm());
-            break;
+            return {};
 
         default:
             std::cerr << "selectLineMenu: Unknown Line Menu value: " << value << '\n';
-            break;
+            return {};
     }
+    return {};
 }
 
-inline void selectCircleMenu(short value, AppManager *appManager) {
+inline vector< short > selectCircleMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (subMenuDecoder(value)) {
         case CIRCLE_DIRECT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new Circle());
             appManager->setDrawingAlgorithm(new Circle_Direct_DrawingAlgorithm());
-            break;
+            return {};
 
         case CIRCLE_POLAR:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new Circle());
             appManager->setDrawingAlgorithm(new Circle_Polar_DrawingAlgorithm());
-            break;
+            return {};
 
         case CIRCLE_ITERATIVE_POLAR:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new Circle());
             appManager->setDrawingAlgorithm(new Circle_iterativePolar_DrawingAlgorithm());
-            break;
+            return {};
 
         case CIRCLE_MIDPOINT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new Circle());
             appManager->setDrawingAlgorithm(new Circle_MidPoint_DrawingAlgorithm());
-            break;
-    
+            return {};
+
         case CIRCLE_MODIFIED_MIDPOINT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new Circle());
             appManager->setDrawingAlgorithm(new Circle_MidPoint_Fast_DrawingAlgorithm());
-            break;
+            return {};
 
         default:
             std::cerr << "selectCircleMenu: Unknown Circle Menu value: " << value << '\n';
-            break;
+            return {};
     }
+    return {};
 }
 
-inline void selectEllipseMenu(short value, AppManager *appManager) {
+inline vector< short > selectEllipseMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (subMenuDecoder(value)) {
         case ELLIPSE_DIRECT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new EllipseShape());
             appManager->setDrawingAlgorithm(new Ellipse_Direct_DrawingAlgorithm());
-            break;
-        
+            return {};
+
         case ELLIPSE_POLAR:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new EllipseShape());
             appManager->setDrawingAlgorithm(new Ellipse_Polar_DrawingAlgorithm());
-            break;
-        
+            return {};
+
         case ELLIPSE_MIDPOINT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new EllipseShape());
             appManager->setDrawingAlgorithm(new Ellipse_MidPoint_DrawingAlgorithm());
-            break;
+            return {};
 
         default:
             std::cerr << "selectEllipseMenu: Unknown Ellipse Menu value: " << value << '\n';
-            break;
+            return {};
     }
+    return {};
 }
 
-inline void selectCurvesMenu(short value, AppManager *appManager) {
+inline vector< short > selectCurvesMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (subMenuDecoder(value)) {
         case CURVE_CARDINAL_SPLINE: {
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            int Cvalue = InputReader::userPickRange(appManager->getScreenOwner(), 0, 100, 50, "Smoothness Percent %");
+            short Cvalue = (short)InputReader::userPickRange(appManager->getScreenOwner(), 0, 100, 50, "Smoothness Percent %", memoriezedData);
             appManager->setShape(new CurveShape());
             appManager->setDrawingAlgorithm(new Curve_Spline_DrawingAlgorithm(Cvalue));
-            break;
+            return {Cvalue};
         }
         default:
             std::cerr << "selectCurvesMenu: Unknown Curves Menu value: " << value << '\n';
-            break;
+            return {};
     }
+    return {};
 }
 
-inline void selectFillingMenu(short value, AppManager *appManager) {
+inline vector< short > selectFillingMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (subMenuDecoder(value)) {
         case FILL_CIRCLE_LINES:
             appManager->removeClippingAlgorithm();
-            appManager->setFillingAlgorithm(new QuarterCircleWithLine_FillingAlgorithm());
-            break;
-        
+            appManager->setFillingAlgorithm(new Circle_QuarterWithLine_FillingAlgorithm());
+            return {};
+
         case FILL_CIRCLE_CIRCLES:
-            appManager->setFillingAlgorithm(new QuarterCircleWithCircle_FillingAlgorithm());
-            break;
+            appManager->removeClippingAlgorithm();
+            appManager->setFillingAlgorithm(new Circle_QuarterWithCircle_FillingAlgorithm());
+            return {};
 
         // case FILL_SQUARE_HERMITE:
         //     appManager->setFillingAlgorithm(new FillSquareHermite_FillingAlgorithm());
-        //     break;
+        //     return {};
         //
         // case FILL_RECTANGLE_BEZIER:
         //     appManager->setFillingAlgorithm(new FillRectangleBezier_FillingAlgorithm());
-        //     break;
+        //     return {};
         //
         // case FILL_CONVEX:
         //     appManager->setFillingAlgorithm(new Convex_FillingAlgorithm());
-        //     break;
+        //     return {};
         //
         // case FILL_NON_CONVEX:
         //     appManager->setFillingAlgorithm(new NonConvex_FillingAlgorithm());
-        //     break;
+        //     return {};
 
         case FILL_FLOOD_RECURSIVE:
             appManager->setFillingAlgorithm(new FloodFill_FillingAlgorithm());
-            break;
+            return {};
 
         case FILL_FLOOD_NON_RECURSIVE:
             appManager->setFillingAlgorithm(new IterFloodFill_FillingAlgorithm());
-            break;
+            return {};
 
         default:
             std::cerr << "selectFillingMenu: Unknown Filling Menu value: " << value << '\n';
-            break;
+            return {};
     }
+    return {};
 }
 
 
 
-inline void selectClippingMenu(short value, AppManager *appManager) {
+inline vector< short > selectClippingMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (subMenuDecoder(value)) {
          case CLIP_RECT_POINT:
              appManager->removeDrawingAlgorithm();
@@ -492,7 +516,7 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
                      new RectangleShape()
                      );
 
-             break;
+             return {};
          case CLIP_RECT_LINE:
              appManager->removeDrawingAlgorithm();
             appManager->removeFillingAlgorithm();
@@ -502,16 +526,17 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
                     new Rectangle_DrawingAlgorithm(),
                     new RectangleShape()
             );
-             break;
+             return {};
         case CLIP_RECT_POLYGON: {
             appManager->removeDrawingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(InputReader::userReadPolygon(appManager));
+            pair< Shape *, short > res = InputReader::userReadPolygon(appManager, memoriezedData);
+            appManager->setShape(res.first);
             appManager->setClippingAlgorithm(
                 new Rectangle_Polygon_ClippingAlgorithm(),
                 new Rectangle_DrawingAlgorithm(),
                 new RectangleShape());
-            break;
+            return {res.second};
         }
 
         case CLIP_SQUARE_POINT:
@@ -522,7 +547,7 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
                 new Square_Point_ClippingAlgorithm(),
                 new Square_DrawingAlgorithm(),
                 new Square());
-            break;
+            return {};
 
         case CLIP_SQUARE_LINE:
             appManager->removeDrawingAlgorithm();
@@ -532,7 +557,7 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
                 new Square_Line_ClippingAlgorithm(),
                 new Square_DrawingAlgorithm(),
                 new Square());
-            break;
+            return {};
 
         case CLIP_CIRCLE_POINT:
             appManager->removeDrawingAlgorithm();
@@ -542,7 +567,7 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
                 new Circle()
             );
             appManager->setShape(new PolygonShape<1>());
-            break;
+            return {};
 
         case CLIP_CIRCLE_LINE:
             appManager->removeDrawingAlgorithm();
@@ -552,108 +577,101 @@ inline void selectClippingMenu(short value, AppManager *appManager) {
                 new Circle()
             );
             appManager->setShape(new Line());
-            break;
+            return {};
 
         default:
             std::cerr << "selectClippingMenu: Unknown Clipping Menu value: " << value << '\n';
-            break;
+            return {};
     }
+    return {};
 }
 
-inline void selectSmileMenu(short value, AppManager *appManager) {
+inline vector< short > selectSmileMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (subMenuDecoder(value)) {
         case SMILE_HAPPY_FACE:
             appManager->removeClippingAlgorithm();
-        appManager->setShape(new HappySmileFace());
-        appManager->setDrawingAlgorithm(new HappySmileFace_DrawingAlgorithm());
-        break;
+            appManager->setShape(new HappySmileFace());
+            appManager->setDrawingAlgorithm(new HappySmileFace_DrawingAlgorithm());
+            return {};
 
         case SMILE_SAD_FACE:
             appManager->removeClippingAlgorithm();
-        appManager->setShape(new SadSmileFace());
-        appManager->setDrawingAlgorithm(new SadSmileFace_DrawingAlgorithm());
-        break;
+            appManager->setShape(new SadSmileFace());
+            appManager->setDrawingAlgorithm(new SadSmileFace_DrawingAlgorithm());
+            return {};
         default:
             std::cerr << "selectSmileMenu: Unknown Smile Menu value: " << value << '\n';
-        break;
+        return {};
     }
+    return {};
 }
 
-inline void selectOtherMenu(short value, AppManager *appManager) {
+inline vector< short > selectOtherMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (subMenuDecoder(value)) {
         case OTHER_SQUARE:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new Square());
             appManager->setDrawingAlgorithm(new Square_DrawingAlgorithm());
-            break;
+            return {};
 
         case OTHER_RECTANGLE:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             appManager->setShape(new RectangleShape());
             appManager->setDrawingAlgorithm(new Rectangle_DrawingAlgorithm());
-            break;
-        case OTHER_POLYGON:
+            return {};
+        case OTHER_POLYGON: {
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(InputReader::userReadPolygon(appManager));
+            pair< Shape *, short > res = InputReader::userReadPolygon(appManager, memoriezedData);
+            appManager->setShape(res.first);
             appManager->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
-            break;
+            return {res.second};
+        }
         default:
             std::cerr << "selectSmileMenu: Unknown Smile Menu value: " << value << '\n';
-            break;
+            return {};
     }
+    return {};
 }
 
-inline void selectMainMenu(short value, AppManager *appManager) {
+inline vector< short > selectMainMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
     switch (mainMenuDecoder(value)) {
         case FILE_MENU:
-            selectFileMenu(value, appManager);
-            break;
+            return selectFileMenu(value, appManager, memoriezedData);
+
 
         case PREFERENCES_MENU:
-            selectPreferencesMenu(value, appManager);
-            break;
+            return selectPreferencesMenu(value, appManager, memoriezedData);
 
         case LINE_MENU:
-            selectLineMenu(value, appManager);
-            break;
+            return selectLineMenu(value, appManager, memoriezedData);
 
         case CIRCLE_MENU:
-            selectCircleMenu(value, appManager);
-            break;
+            return selectCircleMenu(value, appManager, memoriezedData);
 
         case ELLIPSE_MENU:
-            selectEllipseMenu(value, appManager);
-            break;
+            return selectEllipseMenu(value, appManager, memoriezedData);
 
         case CURVE_MENU:
-            selectCurvesMenu(value, appManager);
-            break;
+            return selectCurvesMenu(value, appManager, memoriezedData);
 
         case FILL_MENU:
-            selectFillingMenu(value, appManager);
-            break;
+            return selectFillingMenu(value, appManager, memoriezedData);
 
         case CLIP_MENU:
-            selectClippingMenu(value, appManager);
-            break;
+            return selectClippingMenu(value, appManager, memoriezedData);
 
         case SMILE_MENU:
-            selectSmileMenu(value, appManager);
-            break;
+            return selectSmileMenu(value, appManager, memoriezedData);
 
         case OTHER_MENU:
-            selectOtherMenu(value, appManager);
-            break;
+            return selectOtherMenu(value, appManager, memoriezedData);
 
         default:
             std::cerr << "selectMainMenu: Unknown Main Menu value: " << value << '\n';
-            break;
+            return {};
     }
-}
-
-inline void selectMenu(short value, AppManager *appManager) {
-    selectMainMenu(value, appManager);
+    return {};
 }

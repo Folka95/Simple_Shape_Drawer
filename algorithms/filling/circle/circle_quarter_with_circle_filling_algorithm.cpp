@@ -1,10 +1,10 @@
-#include "quarter_circle_with_circle_filling_algorithm.h"
+#include "circle_quarter_with_circle_filling_algorithm.h"
 
-QuarterCircleWithCircle_FillingAlgorithm::QuarterCircleWithCircle_FillingAlgorithm() : FillingAlgorithm() {
+Circle_QuarterWithCircle_FillingAlgorithm::Circle_QuarterWithCircle_FillingAlgorithm() : FillingAlgorithm() {
 
 }
 
-void QuarterCircleWithCircle_FillingAlgorithm::drawQuarterCircle(double xc, double yc, double radius, int q, ScreenWriter *sw, COLORREF color) const {
+void Circle_QuarterWithCircle_FillingAlgorithm::drawQuarterCircle(double xc, double yc, double radius, int q, ScreenWriter *sw, COLORREF color) const {
     double step = 1.0 / radius;
 
     double start = 0;
@@ -32,12 +32,12 @@ void QuarterCircleWithCircle_FillingAlgorithm::drawQuarterCircle(double xc, doub
     }
 }
 
-void QuarterCircleWithCircle_FillingAlgorithm::fill_helper(const Circle &circle, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
+void Circle_QuarterWithCircle_FillingAlgorithm::fill_helper(const Circle &circle, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
 
     int q = circle.scanQuarter(startPoint);
 
     if (q == 0 || q == 5) {
-        std::cerr << "QuarterCircleWithCircle_FillingAlgorithm::fill_helper : Please Choose a valid quarter" << std::endl;
+        std::cerr << "Circle_QuarterWithCircle_FillingAlgorithm::fill_helper : Please Choose a valid quarter" << std::endl;
         return;
     }
 
@@ -49,9 +49,9 @@ void QuarterCircleWithCircle_FillingAlgorithm::fill_helper(const Circle &circle,
     }
 }
 
-void QuarterCircleWithCircle_FillingAlgorithm::fill(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
+void Circle_QuarterWithCircle_FillingAlgorithm::fill(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
     if (shape.getType() != SHAPE_CIRCLE) {
-        std::cerr << "QuarterCircleWithCircle_FillingAlgorithm::fill : Region must be a Circle" << std::endl;
+        std::cerr << "Circle_QuarterWithCircle_FillingAlgorithm::fill : Region must be a Circle" << std::endl;
         return;
     }
     const Circle* circle = dynamic_cast<const Circle*>(&shape);
