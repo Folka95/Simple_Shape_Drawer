@@ -1,5 +1,4 @@
-- mouse cursor
-- save type
-- Filling Square with Hermit Curve[Vertical]
+- save type (no matter hard save is req)
+- Filling Square with Hermit Curve[Vertical] 
 - Filling Rectangle with Bezier Curve[horizontal]
-- filling circle with convex and concave??
+- filling circle with convex and concave?? (all)

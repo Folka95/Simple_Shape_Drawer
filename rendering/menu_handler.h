@@ -32,6 +32,7 @@
 #include "../algorithms/drawing/smile_face/happy_smile_face_drawing_algorithm.h"
 #include "../algorithms/drawing/smile_face/sad_smile_face_drawing_algorithm.h"
 #include "../algorithms/drawing/square/square_drawing_algorithm.h"
+#include "../algorithms/filling/circle/quarter_circle_with_circle_filling_algorithm.h"
 #include "../algorithms/filling/circle/quarter_circle_with_line_filling_algorithm.h"
 #include "../algorithms/filling/floodfill/iterive_flood_fill_filling_algorithm.h"
 #include "../algorithms/filling/floodfill/flood_fill_filling_algorithm.h"
@@ -443,10 +444,10 @@ inline void selectFillingMenu(short value, AppManager *appManager) {
             appManager->setFillingAlgorithm(new QuarterCircleWithLine_FillingAlgorithm());
             break;
         
-        // case FILL_CIRCLE_CIRCLES:
-        //     appManager->setFillingAlgorithm(new FillCircleCircles_FillingAlgorithm());
-        //     break;
-        //
+        case FILL_CIRCLE_CIRCLES:
+            appManager->setFillingAlgorithm(new QuarterCircleWithCircle_FillingAlgorithm());
+            break;
+
         // case FILL_SQUARE_HERMITE:
         //     appManager->setFillingAlgorithm(new FillSquareHermite_FillingAlgorithm());
         //     break;

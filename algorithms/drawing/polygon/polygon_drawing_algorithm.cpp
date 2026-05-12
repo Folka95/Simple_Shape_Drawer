@@ -1,4 +1,3 @@
-#pragma once
 #include "polygon_drawing_algorithm.h"
 #include "../line/line_midpoint_drawing_algorithm.h"
 #include "../../../core/shapes/line.h"
