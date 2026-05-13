@@ -1,10 +1,11 @@
 #include "shape.h"
 
-Shape::Shape(ShapeType type, std::string description) {
+Shape::Shape(ShapeType type, std::string name, std::string description) {
     this->points.clear();
     this->borderColor = RGB(255, 255, 255);
     this->fillColor = RGB(255, 255, 255);
     this->type = type;
+    this->name = name;
     this->description = description;
     this->area = 0;
 }
@@ -29,6 +30,10 @@ void Shape::clear() {
 
 std::string Shape::getDescription() const {
     return this->description;
+}
+
+std::string Shape::getName() const {
+    return this->name;
 }
 
 int Shape::getSize() const {

@@ -1,7 +1,7 @@
 #include "circle_midpoint_fast_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
-Circle_MidPoint_Fast_DrawingAlgorithm::Circle_MidPoint_Fast_DrawingAlgorithm() : DrawingAlgorithm() {
+Circle_MidPoint_Fast_DrawingAlgorithm::Circle_MidPoint_Fast_DrawingAlgorithm() : DrawingAlgorithm("Circle_MidPoint_Fast_DrawingAlgorithm") {
     
 }
 
@@ -56,4 +56,4 @@ void Circle_MidPoint_Fast_DrawingAlgorithm::draw(const Shape &inputShape, Screen
     }
     Circle* circle = dynamic_cast<Circle*>(inputShape.clone());
     this->runAlgorithm(circle, sw);
-}
+}

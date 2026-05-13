@@ -1,7 +1,7 @@
 #include "line_dda_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
-Line_DDA_DrawingAlgorithm::Line_DDA_DrawingAlgorithm() : DrawingAlgorithm() {
+Line_DDA_DrawingAlgorithm::Line_DDA_DrawingAlgorithm() : DrawingAlgorithm("Line_DDA_DrawingAlgorithm") {
 
 }
 
@@ -45,4 +45,4 @@ void Line_DDA_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *sw) 
     }
     Line* line = dynamic_cast<Line*>(inputShape.clone());
     this->runAlgorithm(line, sw);
-}
+}

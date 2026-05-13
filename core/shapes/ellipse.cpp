@@ -3,8 +3,7 @@
 #include "polygon.h"
 using namespace std;
 
-EllipseShape::EllipseShape() : Shape(
-    SHAPE_ELLIPSE,
+EllipseShape::EllipseShape() : Shape(SHAPE_ELLIPSE, "EllipseShape",
     "Shape Type : Ellipse\n"s +
     "How to draw ?\n" +
     "    Use mouse left-click to make 3 clicks represents \n" +
@@ -72,5 +71,15 @@ Shape* EllipseShape::clone() const {
 }
 
 std::vector< Point > EllipseShape::getSidePoints() const {
-    return {};
+    std::vector< Point > res;
+    double rx = this->radius1;
+    double ry = this->radius2;
+    if (rx <= 0 || ry <= 0) return res;
+    double step = 1.0 / max(rx, ry);
+    for (double radian = 0; radian < 2 * M_PI; radian += step) {
+        double x = (this->points[0].x + rx * cos(radian));
+        double y = (this->points[0].y + ry * sin(radian));
+        res.push_back(Point(x, y));
+    }
+    return res;
 }

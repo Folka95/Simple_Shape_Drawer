@@ -1,7 +1,7 @@
 #include "ellipse_midpoint_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
-Ellipse_MidPoint_DrawingAlgorithm::Ellipse_MidPoint_DrawingAlgorithm() : DrawingAlgorithm() {
+Ellipse_MidPoint_DrawingAlgorithm::Ellipse_MidPoint_DrawingAlgorithm() : DrawingAlgorithm("Ellipse_MidPoint_DrawingAlgorithm") {
     
 }
 
@@ -78,4 +78,4 @@ void Ellipse_MidPoint_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWrit
     if(inputShape.getType() != SHAPE_ELLIPSE) return;
     EllipseShape* ellipse = dynamic_cast<EllipseShape*>(inputShape.clone());
     this->runAlgorithm(ellipse, sw);
-}
+}

@@ -27,7 +27,8 @@ class Shape {
 private:
 protected:
     double area;
-    Shape(ShapeType type, std::string description);
+    Shape(ShapeType type, std::string name, std::string description);
+    std::string name;
     std::string description;
     ShapeType type;
     Point centroid(const std::vector< Point > &givenPoints) const;
@@ -38,6 +39,7 @@ public:
     bool addPoint(const Point &point);
     void clear();
     std::string getDescription() const ;
+    std::string getName() const ;
     ShapeType getType() const ;
     int getSize() const ;
     virtual void takeAction(int actionID);

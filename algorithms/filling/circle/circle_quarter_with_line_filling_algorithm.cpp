@@ -1,10 +1,10 @@
 #include "circle_quarter_with_line_filling_algorithm.h"
 
-Circle_QuarterWithLine_FillingAlgorithm::Circle_QuarterWithLine_FillingAlgorithm() : FillingAlgorithm() {
+Circle_QuarterWithLine_FillingAlgorithm::Circle_QuarterWithLine_FillingAlgorithm() : FillingAlgorithm("Circle_QuarterWithLine_FillingAlgorithm") {
 
 }
 
-void Circle_QuarterWithLine_FillingAlgorithm::drawMidpointLine(int x1, int y1, int x2, int y2, ScreenWriter *sw, COLORREF color) const {
+void Circle_QuarterWithLine_FillingAlgorithm::drawMidpointLine(int x1, int y1, int x2, int y2, ScreenWriter *sw, COLORREF color, const Shape &clippingRegion) const {
     int dx = abs(x2 - x1);
     int dy = abs(y2 - y1);
     int sx = (x1 < x2) ? 1 : -1;
@@ -13,7 +13,9 @@ void Circle_QuarterWithLine_FillingAlgorithm::drawMidpointLine(int x1, int y1, i
     int x = x1;
     int y = y1;
 
-    sw->setPixel(x, y, color);
+    if (&clippingRegion == nullptr || clippingRegion.isInside(Point(x, y))) {
+        sw->setPixel(x, y, color);
+    }
 
     if (dx >= dy) {
         int d = 2 * dy - dx;
@@ -25,7 +27,9 @@ void Circle_QuarterWithLine_FillingAlgorithm::drawMidpointLine(int x1, int y1, i
                 d += 2 * dy;
             }
             x += sx;
-            sw->setPixel(x, y, color);
+            if (&clippingRegion == nullptr || clippingRegion.isInside(Point(x, y))) {
+                sw->setPixel(x, y, color);
+            }
         }
     } else {
         int d = 2 * dx - dy;
@@ -37,7 +41,9 @@ void Circle_QuarterWithLine_FillingAlgorithm::drawMidpointLine(int x1, int y1, i
                 d += 2 * dx;
             }
             y += sy;
-            sw->setPixel(x, y, color);
+            if (&clippingRegion == nullptr || clippingRegion.isInside(Point(x, y))) {
+                sw->setPixel(x, y, color);
+            }
         }
     }
 }
@@ -58,17 +64,17 @@ void Circle_QuarterWithLine_FillingAlgorithm::fill_helper(const Circle &circle, 
 
     while (x <= y) {
         if (q == 1) { // Top-Right
-            drawMidpointLine(center.x, center.y + y, center.x + x, center.y + y, sw, circle.fillColor);
-            drawMidpointLine(center.x, center.y + x, center.x + y, center.y + x, sw, circle.fillColor);
+            drawMidpointLine(center.x, center.y + y, center.x + x, center.y + y, sw, circle.fillColor, clippingRegion);
+            drawMidpointLine(center.x, center.y + x, center.x + y, center.y + x, sw, circle.fillColor, clippingRegion);
         } else if (q == 2) { // Top-Left
-            drawMidpointLine(center.x, center.y + y, center.x - x, center.y + y, sw, circle.fillColor);
-            drawMidpointLine(center.x, center.y + x, center.x - y, center.y + x, sw, circle.fillColor);
+            drawMidpointLine(center.x, center.y + y, center.x - x, center.y + y, sw, circle.fillColor, clippingRegion);
+            drawMidpointLine(center.x, center.y + x, center.x - y, center.y + x, sw, circle.fillColor, clippingRegion);
         } else if (q == 3) { // Bottom-Left
-            drawMidpointLine(center.x, center.y - y, center.x - x, center.y - y, sw, circle.fillColor);
-            drawMidpointLine(center.x, center.y - x, center.x - y, center.y - x, sw, circle.fillColor);
+            drawMidpointLine(center.x, center.y - y, center.x - x, center.y - y, sw, circle.fillColor, clippingRegion);
+            drawMidpointLine(center.x, center.y - x, center.x - y, center.y - x, sw, circle.fillColor, clippingRegion);
         } else if (q == 4) { // Bottom-Right
-            drawMidpointLine(center.x, center.y - y, center.x + x, center.y - y, sw, circle.fillColor);
-            drawMidpointLine(center.x, center.y - x, center.x + y, center.y - x, sw, circle.fillColor);
+            drawMidpointLine(center.x, center.y - y, center.x + x, center.y - y, sw, circle.fillColor, clippingRegion);
+            drawMidpointLine(center.x, center.y - x, center.x + y, center.y - x, sw, circle.fillColor, clippingRegion);
         }
 
         if (d < 0) {

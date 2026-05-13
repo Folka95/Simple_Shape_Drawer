@@ -80,6 +80,8 @@ public:
     void changeMouse();
     void applyMouseCursor();
 
+    void printState();
+
     bool toggleFeature();
     bool isFeatureEnabled();
 

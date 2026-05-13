@@ -1,10 +1,10 @@
 #include "circle_quarter_with_circle_filling_algorithm.h"
 
-Circle_QuarterWithCircle_FillingAlgorithm::Circle_QuarterWithCircle_FillingAlgorithm() : FillingAlgorithm() {
+Circle_QuarterWithCircle_FillingAlgorithm::Circle_QuarterWithCircle_FillingAlgorithm() : FillingAlgorithm("Circle_QuarterWithCircle_FillingAlgorithm") {
 
 }
 
-void Circle_QuarterWithCircle_FillingAlgorithm::drawQuarterCircle(double xc, double yc, double radius, int q, ScreenWriter *sw, COLORREF color) const {
+void Circle_QuarterWithCircle_FillingAlgorithm::drawQuarterCircle(double xc, double yc, double radius, int q, ScreenWriter *sw, COLORREF color, const Shape &clippingRegion) const {
     double step = 1.0 / radius;
 
     double start = 0;
@@ -28,7 +28,9 @@ void Circle_QuarterWithCircle_FillingAlgorithm::drawQuarterCircle(double xc, dou
     for (double radian = start; radian < end; radian += step) {
         double x = (xc + radius * cos(radian));
         double y = (yc + radius * sin(radian));
-        sw->setPixel(round(x), round(y), color);
+        if (&clippingRegion == nullptr || clippingRegion.isInside(Point(x, y))) {
+            sw->setPixel(round(x), round(y), color);
+        }
     }
 }
 
@@ -45,7 +47,7 @@ void Circle_QuarterWithCircle_FillingAlgorithm::fill_helper(const Circle &circle
     double radius = circle.getRadius();
 
     for (double r = 0; r < radius; r+= 0.3) {
-        drawQuarterCircle(center.x , center.y, r, q, sw, circle.fillColor);
+        drawQuarterCircle(center.x , center.y, r, q, sw, circle.fillColor, clippingRegion);
     }
 }
 

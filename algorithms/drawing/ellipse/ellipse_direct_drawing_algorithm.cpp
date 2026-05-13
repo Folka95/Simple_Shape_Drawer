@@ -1,7 +1,7 @@
 #include "ellipse_direct_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
-Ellipse_Direct_DrawingAlgorithm::Ellipse_Direct_DrawingAlgorithm() : DrawingAlgorithm() {
+Ellipse_Direct_DrawingAlgorithm::Ellipse_Direct_DrawingAlgorithm() : DrawingAlgorithm("Ellipse_Direct_DrawingAlgorithm") {
 
 }
 
@@ -50,4 +50,4 @@ void Ellipse_Direct_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter
     }
     EllipseShape* ellipse = dynamic_cast<EllipseShape*>(inputShape.clone());
     this->runAlgorithm(ellipse, sw);
-}
+}

@@ -1,7 +1,7 @@
 #include "circle.h"
 using namespace std;
 
-Circle::Circle() : Shape(SHAPE_CIRCLE,
+Circle::Circle() : Shape(SHAPE_CIRCLE, "Circle",
     "Shape Type : Circle\n"s +
     "How to draw ?\n" +
     "    Use mouse left-click to make 2 clicks represents \n" +
@@ -41,7 +41,15 @@ Shape* Circle::clone() const {
 
 
 std::vector< Point > Circle::getSidePoints() const {
-    return {};
+    std::vector< Point > res;
+    if (this->radius <= 0) return res;
+    double step = 1.0 / this->radius;
+    for (double radian = 0; radian < 2 * M_PI; radian += step) {
+        double x = (this->center.x + this->radius * cos(radian));
+        double y = (this->center.y + this->radius * sin(radian));
+        res.push_back(Point(x, y));
+    }
+    return res;
 }
 
 double Circle::getRadius() const {

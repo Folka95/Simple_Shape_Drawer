@@ -1,7 +1,7 @@
 #include "curve_spline_drawing_algorithm.h"
 
 
-Curve_Spline_DrawingAlgorithm::Curve_Spline_DrawingAlgorithm(int Cvalue) : DrawingAlgorithm() {
+Curve_Spline_DrawingAlgorithm::Curve_Spline_DrawingAlgorithm(int Cvalue) : DrawingAlgorithm("Curve_Spline_DrawingAlgorithm") {
 	this->Cvalue = Cvalue / 100.0;
 }
 

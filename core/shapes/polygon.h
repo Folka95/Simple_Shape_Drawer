@@ -20,6 +20,7 @@ public:
 template< int size >
 PolygonShape<size>::PolygonShape() : Shape(
     SHAPE_POLYGON,
+    "PolygonShape",
     "Shape Type : Polygon of "s +
     std::to_string(size) +
     " points \n" +

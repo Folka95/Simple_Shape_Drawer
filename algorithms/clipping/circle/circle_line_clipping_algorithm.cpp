@@ -13,7 +13,7 @@ void Circle_Line_ClippingAlgorithm::drawLine(const Point &p1, const Point &p2, S
     line_midpoint_drawing_algorithm->draw(*line, sw);
 }
 
-Circle_Line_ClippingAlgorithm::Circle_Line_ClippingAlgorithm() : ClippingAlgorithm() {
+Circle_Line_ClippingAlgorithm::Circle_Line_ClippingAlgorithm() : ClippingAlgorithm("Circle_Line_ClippingAlgorithm") {
 }
 
 void Circle_Line_ClippingAlgorithm::runAlgorithm(Line *line, Circle *circle, ScreenWriter *sw) const {

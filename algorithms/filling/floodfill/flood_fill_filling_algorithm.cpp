@@ -1,10 +1,13 @@
 #include "flood_fill_filling_algorithm.h"
 
-FloodFill_FillingAlgorithm::FloodFill_FillingAlgorithm() : FillingAlgorithm() {
+FloodFill_FillingAlgorithm::FloodFill_FillingAlgorithm() : FillingAlgorithm("FloodFill_FillingAlgorithm") {
 
 }
 
 void FloodFill_FillingAlgorithm::fill(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
+    if (!clippingRegion.isInside(startPoint)) {
+        return;
+    }
     sw->activate();
     COLORREF fillableColor = sw->getPixel(startPoint.x, startPoint.y);
     fill_helper(shape, clippingRegion, startPoint, fillableColor,sw);
@@ -13,7 +16,7 @@ void FloodFill_FillingAlgorithm::fill(const Shape &shape, const Shape &clippingR
 
 void FloodFill_FillingAlgorithm::fill_helper(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, COLORREF fillableColor , ScreenWriter *sw) const {
     COLORREF currentColor = sw->getPixel(startPoint.x, startPoint.y);
-    if( shape.isInside(startPoint) && !sw->outOfBounds(startPoint.x, startPoint.y) && currentColor == fillableColor && currentColor != shape.fillColor) {
+    if( shape.isInside(startPoint) && !sw->outOfBounds(startPoint.x, startPoint.y) && currentColor == fillableColor && currentColor != shape.fillColor && (&clippingRegion == nullptr || clippingRegion.isInside(startPoint))) {
         sw->setPixel(startPoint.x, startPoint.y, shape.fillColor);
         Point right(startPoint.x + 1, startPoint.y);
         if (!sw->outOfBounds(right.x, right.y) && shape.isInside(right)) {

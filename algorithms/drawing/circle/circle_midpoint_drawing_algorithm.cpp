@@ -1,7 +1,7 @@
 #include "circle_midpoint_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
-Circle_MidPoint_DrawingAlgorithm::Circle_MidPoint_DrawingAlgorithm() : DrawingAlgorithm() {
+Circle_MidPoint_DrawingAlgorithm::Circle_MidPoint_DrawingAlgorithm() : DrawingAlgorithm("Circle_MidPoint_DrawingAlgorithm") {
     
 }
 
@@ -52,4 +52,4 @@ void Circle_MidPoint_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWrite
     }
     Circle* circle = dynamic_cast<Circle*>(inputShape.clone());
     this->runAlgorithm(circle, sw);
-}
+}

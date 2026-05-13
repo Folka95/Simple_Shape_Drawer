@@ -1,8 +1,7 @@
 #include "square.h"
 using namespace std;
 
-Square::Square() : Shape (
-    SHAPE_SQUARE,
+Square::Square() : Shape(SHAPE_SQUARE, "Square",
     "Shape Type : Square\n"s +
     "How to draw ?\n" +
     "    Use mouse left-click to make 2 clicks represents \n" +

@@ -18,6 +18,7 @@ public:
     ScreenWriter(HWND hwnd);
     ~ScreenWriter();
     void setBackgroundColor(COLORREF color);
+    COLORREF getBackgroundColor() const;
     void changeBackgroundColor(COLORREF color);
     void setPixel(int x, int y, COLORREF color);
     COLORREF getPixel(int x, int y);

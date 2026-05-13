@@ -508,12 +508,10 @@ inline vector< short > selectFillingMenu(short value, AppManager *appManager, co
             return {};
         
         case FILL_CONVEX:
-            appManager->removeClippingAlgorithm();
             appManager->setFillingAlgorithm(new ConvexFillingAlgorithm());
             return {};
         
         case FILL_NON_CONVEX:
-            appManager->removeClippingAlgorithm();
             appManager->setFillingAlgorithm(new NonConvexFillingAlgorithm());
             return {};
 

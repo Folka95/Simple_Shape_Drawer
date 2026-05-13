@@ -1,8 +1,7 @@
 #include "rectangle.h"
 using namespace std;
 
-RectangleShape::RectangleShape() : Shape(
-    SHAPE_RECTANGLE,
+RectangleShape::RectangleShape() : Shape(SHAPE_RECTANGLE, "RectangleShape",
     "Rectangle\n"s +
     "How to draw ?\n" +
     "    2 Points\n" +

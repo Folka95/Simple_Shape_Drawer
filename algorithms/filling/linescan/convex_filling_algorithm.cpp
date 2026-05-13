@@ -33,11 +33,14 @@ namespace {
     }
 }
 
-ConvexFillingAlgorithm::ConvexFillingAlgorithm() : FillingAlgorithm() {
+ConvexFillingAlgorithm::ConvexFillingAlgorithm() : FillingAlgorithm("ConvexFillingAlgorithm") {
 
 }
 
 void ConvexFillingAlgorithm::fill(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
+    if (&clippingRegion != nullptr && !clippingRegion.isInside(startPoint)) {
+        return;
+    }
     sw->activate();
     fill_helper(shape, clippingRegion, startPoint, sw);
     sw->deactivate();
@@ -45,35 +48,11 @@ void ConvexFillingAlgorithm::fill(const Shape &shape, const Shape &clippingRegio
 
 void ConvexFillingAlgorithm::fill_helper(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
     std::vector<Point> pts = shape.getSidePoints();
-    
-    // Fallback: If the shape doesn't inherently provide boundary points (like Circle/Ellipse)
     if (pts.empty() && !shape.points.empty()) {
-        const double PI = std::acos(-1.0);
-        if ((shape.getType() == SHAPE_CIRCLE || shape.getType() == SHAPE_SAD_SMILE_FACE || shape.getType() == SHAPE_HAPPY_SMILE_FACE) && shape.points.size() >= 2) {
-            double radius = shape.points[0].euclideanDistance(shape.points[1]);
-            Point center = shape.points[0];
-            int num_segments = 360; 
-            for(int i = 0; i < num_segments; i++) {
-                double theta = 2.0 * PI * double(i) / double(num_segments);
-                pts.push_back(Point(center.x + radius * cos(theta), center.y + radius * sin(theta)));
-            }
-        } else if (shape.getType() == SHAPE_ELLIPSE && shape.points.size() >= 3) {
-            Point center = shape.points[0];
-            double dx1 = std::abs(shape.points[1].x - center.x);
-            double dy1 = std::abs(shape.points[1].y - center.y);
-            double dx2 = std::abs(shape.points[2].x - center.x);
-            double dy2 = std::abs(shape.points[2].y - center.y);
-            double radius1 = std::max(dx1, dx2);
-            double radius2 = std::max(dy1, dy2);
-            int num_segments = 360; 
-            for(int i = 0; i < num_segments; i++) {
-                double theta = 2.0 * PI * double(i) / double(num_segments);
-                pts.push_back(Point(center.x + radius1 * cos(theta), center.y + radius2 * sin(theta)));
-            }
-        } else {
-            pts = shape.points;
-        }
+        pts = shape.points;
     }
+    
+    if (pts.size() < 3) return;
 
     // 1. Find min and max Y to construct dynamic table size
     int minY = INT_MAX;
@@ -106,7 +85,9 @@ void ConvexFillingAlgorithm::fill_helper(const Shape &shape, const Shape &clippi
         if(table[i].xmin <= table[i].xmax) {
             int y = i + minY;
             for(int x = table[i].xmin; x <= table[i].xmax; x++) {
-                sw->setPixel(x, y, color);
+                if (&clippingRegion == nullptr || clippingRegion.isInside(Point(x, y))) {
+                    sw->setPixel(x, y, color);
+                }
             }
         }
     }

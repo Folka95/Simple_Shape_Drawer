@@ -1,7 +1,7 @@
 #include "ellipse_polar_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
-Ellipse_Polar_DrawingAlgorithm::Ellipse_Polar_DrawingAlgorithm() : DrawingAlgorithm() {
+Ellipse_Polar_DrawingAlgorithm::Ellipse_Polar_DrawingAlgorithm() : DrawingAlgorithm("Ellipse_Polar_DrawingAlgorithm") {
 
 }
 
@@ -34,4 +34,4 @@ void Ellipse_Polar_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter 
     }
     EllipseShape* ellipse = dynamic_cast<EllipseShape*>(inputShape.clone());
     this->runAlgorithm(ellipse, sw);
-}
+}

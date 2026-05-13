@@ -1,7 +1,7 @@
 #include "line_midpoint_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
-Line_Midpoint_DrawingAlgorithm::Line_Midpoint_DrawingAlgorithm() : DrawingAlgorithm() {
+Line_Midpoint_DrawingAlgorithm::Line_Midpoint_DrawingAlgorithm() : DrawingAlgorithm("Line_Midpoint_DrawingAlgorithm") {
 
 }
 
@@ -63,4 +63,4 @@ void Line_Midpoint_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter 
     }
     Line* line = dynamic_cast<Line*>(inputShape.clone());
     this->runAlgorithm(line, sw);
-}
+}

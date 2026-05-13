@@ -1,8 +1,7 @@
 #include "happy_smile_face.h"
 using namespace std;
 
-HappySmileFace::HappySmileFace() : Shape (
-    SHAPE_HAPPY_SMILE_FACE,
+HappySmileFace::HappySmileFace() : Shape(SHAPE_HAPPY_SMILE_FACE, "HappySmileFace",
     "Shape Type : Happy Smile Face\n"s +
     "How to draw ?\n" +
     "    Use mouse left-click to make 2 clicks represents \n" +
@@ -41,5 +40,13 @@ Shape* HappySmileFace::clone() const {
 }
 
 std::vector< Point > HappySmileFace::getSidePoints() const {
-    return {};
+    std::vector< Point > res;
+    if (this->radius <= 0) return res;
+    double step = 1.0 / this->radius;
+    for (double radian = 0; radian < 2 * M_PI; radian += step) {
+        double x = (this->points[0].x + this->radius * cos(radian));
+        double y = (this->points[0].y + this->radius * sin(radian));
+        res.push_back(Point(x, y));
+    }
+    return res;
 }

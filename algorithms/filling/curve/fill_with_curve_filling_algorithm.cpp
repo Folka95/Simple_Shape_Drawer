@@ -3,9 +3,9 @@
 #include <algorithm>
 #include <iostream>
 
-FillWithCurveFillingAlgorithm::FillWithCurveFillingAlgorithm() : FillingAlgorithm() {}
+FillWithCurveFillingAlgorithm::FillWithCurveFillingAlgorithm() : FillingAlgorithm("FillWithCurveFillingAlgorithm") {}
 
-void FillWithCurveFillingAlgorithm::drawCurveHermite(Shape* shape, Point t0, Point t1, Point p0, Point p3, ScreenWriter* sw) const {
+void FillWithCurveFillingAlgorithm::drawCurveHermite(Shape* shape, Point t0, Point t1, Point p0, Point p3, ScreenWriter* sw, const Shape& clippingRegion) const {
     // Use 2 samples per pixel
     double dist = std::hypot(p3.x - p0.x, p3.y - p0.y);
     int samples = std::max(2, static_cast<int>(dist * 2));
@@ -23,14 +23,16 @@ void FillWithCurveFillingAlgorithm::drawCurveHermite(Shape* shape, Point t0, Poi
         double xt = h0*p0.x + h1*t0.x + h2*p3.x + h3*t1.x;
         double yt = h0*p0.y + h1*t0.y + h2*p3.y + h3*t1.y;
 
-        sw->setPixel(round(xt), round(yt), shape->fillColor);
+        if (&clippingRegion == nullptr || clippingRegion.isInside(Point(xt, yt))) {
+            sw->setPixel(round(xt), round(yt), shape->fillColor);
+        }
     }
 }
 
-void FillWithCurveFillingAlgorithm::drawCurveBezier(Shape* shape, Point c1, Point c2, Point p0, Point p3, ScreenWriter* sw) const {
+void FillWithCurveFillingAlgorithm::drawCurveBezier(Shape* shape, Point c1, Point c2, Point p0, Point p3, ScreenWriter* sw, const Shape& clippingRegion) const {
     Point t0 = (c1 - p0) * 3.0;
     Point t1 = (p3 - c2) * 3.0;
-    drawCurveHermite(shape, t0, t1, p0, p3, sw);
+    drawCurveHermite(shape, t0, t1, p0, p3, sw, clippingRegion);
 }
 
 
@@ -54,7 +56,7 @@ void FillWithCurveFillingAlgorithm::fill_horizontal(const Shape&   shape, const 
         Point c1 = left  + Point(offset, 0.0);
         Point c2 = right - Point(offset, 0.0);
 
-        drawCurveBezier(const_cast<Shape*>(&shape), c1, c2, left, right, sw);
+        drawCurveBezier(const_cast<Shape*>(&shape), c1, c2, left, right, sw, clippingRegion);
     }
 }
 
@@ -78,7 +80,7 @@ void FillWithCurveFillingAlgorithm::fill_vertical(const Shape&  shape, const Sha
         Point t0(0.0, tangentStrength);
         Point t1(0.0, tangentStrength);
 
-        drawCurveHermite(const_cast<Shape*>(&shape), t0, t1, top, bottom, sw);
+        drawCurveHermite(const_cast<Shape*>(&shape), t0, t1, top, bottom, sw, clippingRegion);
     }
 }
 

@@ -38,7 +38,7 @@ void Rectangle_Line_ClippingAlgorithm::drawLine(const Point &p1, const Point &p2
 }
 
 
-Rectangle_Line_ClippingAlgorithm::Rectangle_Line_ClippingAlgorithm() : ClippingAlgorithm() {}
+Rectangle_Line_ClippingAlgorithm::Rectangle_Line_ClippingAlgorithm() : ClippingAlgorithm("Rectangle_Line_ClippingAlgorithm") {}
 
 void Rectangle_Line_ClippingAlgorithm::runAlgorithm(Line* line, RectangleShape* rectangle, ScreenWriter *sw) const {
     int xleft = rectangle->getTopLeft().x, ytop = rectangle->getTopLeft().y, xright = rectangle->getBottomRight().x, ybottom = rectangle->getBottomRight().y;

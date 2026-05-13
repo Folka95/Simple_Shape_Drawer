@@ -2,7 +2,7 @@
 #include "../line/line_midpoint_drawing_algorithm.h"
 #include "../../../core/shapes/line.h"
 
-Square_DrawingAlgorithm::Square_DrawingAlgorithm() : DrawingAlgorithm() {}
+Square_DrawingAlgorithm::Square_DrawingAlgorithm() : DrawingAlgorithm("Square_DrawingAlgorithm") {}
 
 void Square_DrawingAlgorithm::drawLine(const Point& p1,const Point& p2, ScreenWriter *sw) const{
     Line* line = new Line();

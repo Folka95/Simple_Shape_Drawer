@@ -1,7 +1,7 @@
 #include "circle_polar_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
-Circle_Polar_DrawingAlgorithm::Circle_Polar_DrawingAlgorithm() : DrawingAlgorithm() {
+Circle_Polar_DrawingAlgorithm::Circle_Polar_DrawingAlgorithm() : DrawingAlgorithm("Circle_Polar_DrawingAlgorithm") {
 
 }
 
@@ -32,4 +32,4 @@ void Circle_Polar_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *
     }
     Circle* circle = dynamic_cast<Circle*>(inputShape.clone());
     this->runAlgorithm(circle, sw);
-}
+}

@@ -1,7 +1,7 @@
 #include "circle_direct_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
-Circle_Direct_DrawingAlgorithm::Circle_Direct_DrawingAlgorithm() : DrawingAlgorithm() {
+Circle_Direct_DrawingAlgorithm::Circle_Direct_DrawingAlgorithm() : DrawingAlgorithm("Circle_Direct_DrawingAlgorithm") {
 
 }
 
@@ -45,4 +45,4 @@ void Circle_Direct_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter 
     }
     Circle* circle = dynamic_cast<Circle*>(inputShape.clone());
     this->runAlgorithm(circle, sw);
-}
+}

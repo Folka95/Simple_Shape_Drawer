@@ -9,7 +9,7 @@
 #include "../line/line_midpoint_drawing_algorithm.h"
 
 HappySmileFace_DrawingAlgorithm::HappySmileFace_DrawingAlgorithm()
-    : DrawingAlgorithm() {
+    : DrawingAlgorithm("HappySmileFace_DrawingAlgorithm") {
 }
 
 void HappySmileFace_DrawingAlgorithm::drawCircle(HappySmileFace* face, const Point& center, double radius, ScreenWriter *sw) const {
@@ -83,4 +83,4 @@ void HappySmileFace_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter
     }
     HappySmileFace* face = dynamic_cast<HappySmileFace*>(inputShape.clone());
     this->runAlgorithm(face, sw);
-}
+}

@@ -49,12 +49,13 @@ namespace {
     }
 }
 
-NonConvexFillingAlgorithm::NonConvexFillingAlgorithm() : FillingAlgorithm() {
+NonConvexFillingAlgorithm::NonConvexFillingAlgorithm() : FillingAlgorithm("NonConvexFillingAlgorithm") {
 
 }
 
 void NonConvexFillingAlgorithm::fill_helper(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
     std::vector<Point> pts = shape.getSidePoints();
+
     if (pts.empty()) {
         pts = shape.points;
     }
@@ -97,7 +98,9 @@ void NonConvexFillingAlgorithm::fill_helper(const Shape &shape, const Shape &cli
             
             int actualY = y + minY;
             for(int x = x1; x <= x2; x++) {
-                sw->setPixel(x, actualY, color);
+                if (&clippingRegion == nullptr || clippingRegion.isInside(Point(x, actualY))) {
+                    sw->setPixel(x, actualY, color);
+                }
             }
         }
         
@@ -123,6 +126,9 @@ void NonConvexFillingAlgorithm::fill_helper(const Shape &shape, const Shape &cli
 }
 
 void NonConvexFillingAlgorithm::fill(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
+    if (&clippingRegion != nullptr && !clippingRegion.isInside(startPoint)) {
+        return;
+    }
     sw->activate();
     fill_helper(shape, clippingRegion, startPoint, sw);
     sw->deactivate();

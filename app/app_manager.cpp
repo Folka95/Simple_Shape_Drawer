@@ -326,11 +326,28 @@ void AppManager::Private_applyMenuSelection(short choice, vector< short > data, 
             this->clearRedo();
         }
         this->sw->updateScreen();
+        this->printState();
     }
 }
 
 void AppManager::applyMenuSelection(short choice) {
     Private_applyMenuSelection(choice, {}, true);
+}
+
+void AppManager::printState() {
+    cout << "==============================" << endl;
+    cout << "# Shapes :" << endl;
+    cout << "  Shape : " << (shapeHistory.empty() ? "None" : shapeHistory.back()->getName()) << endl;
+    cout << "  Clipping Region Shape: " << (clippingRegion ? clippingRegion->getName() : "None") << endl;
+    cout << "# Algorithms :" << endl;
+    cout << "  Drawing Algorithm : " << (drawingAlgorithm ? drawingAlgorithm->getName() : "None") << endl;
+    cout << "  Filling Algorithm : " << (fillingAlgorithm ? fillingAlgorithm->getName() : "None") << endl;
+    cout << "  Clipping algorithm : " << (clippingAlgorithm ? clippingAlgorithm->getName() : "None") << endl;
+    cout << "# Colors :" << endl;
+    cout << "  Background Color : RGB(" << (int)GetRValue(sw->getBackgroundColor()) << ", " << (int)GetGValue(sw->getBackgroundColor()) << ", " << (int)GetBValue(sw->getBackgroundColor()) << ")" << endl;
+    cout << "  Boarder Color : RGB(" << (int)GetRValue(borderColor) << ", " << (int)GetGValue(borderColor) << ", " << (int)GetBValue(borderColor) << ")" << endl;
+    cout << "  Filling Color : RGB(" << (int)GetRValue(fillColor) << ", " << (int)GetGValue(fillColor) << ", " << (int)GetBValue(fillColor) << ")" << endl;
+    cout << "==============================" << endl;
 }
 
 void AppManager::clearScreen() {

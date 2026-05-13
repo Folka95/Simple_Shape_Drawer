@@ -1,6 +1,6 @@
 #include "square_point_clipping_algorithm.h"
 
-Square_Point_ClippingAlgorithm::Square_Point_ClippingAlgorithm(): ClippingAlgorithm() {
+Square_Point_ClippingAlgorithm::Square_Point_ClippingAlgorithm(): ClippingAlgorithm("Square_Point_ClippingAlgorithm") {
 
 }
 
@@ -31,4 +31,4 @@ void Square_Point_ClippingAlgorithm::clip(const Shape &inputShape, const Shape &
     Shape* polygon = inputShape.clone();
     Square* square = dynamic_cast<Square*>(inputRegion.clone());
     this->runAlgorithm(polygon, square, sw);
-}
+}

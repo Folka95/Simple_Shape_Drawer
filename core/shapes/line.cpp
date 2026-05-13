@@ -1,8 +1,7 @@
 #include "line.h"
 using namespace std;
 
-Line::Line() : Shape(
-    SHAPE_LINE,
+Line::Line() : Shape(SHAPE_LINE, "Line",
     "Shape Type : Line\n"s +
     "How to draw ?\n" +
     "    Use mouse left-click to make 2 clicks represents \n" +

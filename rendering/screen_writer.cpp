@@ -22,6 +22,10 @@ void ScreenWriter::setBackgroundColor(COLORREF color) {
     backgroundColor = color;
 }
 
+COLORREF ScreenWriter::getBackgroundColor() const {
+    return backgroundColor;
+}
+
 void ScreenWriter::changeBackgroundColor(COLORREF color) {
     this->activate();
     setBackgroundColor(color);

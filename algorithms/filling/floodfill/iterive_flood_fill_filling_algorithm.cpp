@@ -1,10 +1,13 @@
 #include "iterive_flood_fill_filling_algorithm.h"
 
-IterFloodFill_FillingAlgorithm::IterFloodFill_FillingAlgorithm() : FillingAlgorithm() {
+IterFloodFill_FillingAlgorithm::IterFloodFill_FillingAlgorithm() : FillingAlgorithm("IterFloodFill_FillingAlgorithm") {
 
 }
 
 void IterFloodFill_FillingAlgorithm::fill(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
+    if (!clippingRegion.isInside(startPoint)) {
+        return;
+    }
     sw->activate();
     std::stack<Point> stack;
     COLORREF fillableColor = sw->getPixel(startPoint.x, startPoint.y);
@@ -19,7 +22,7 @@ void IterFloodFill_FillingAlgorithm::fill(const Shape &shape, const Shape &clipp
 
         COLORREF currentColor = sw->getPixel(current.x, current.y);
 
-        if(shape.isInside(current) && currentColor == fillableColor && currentColor != shape.borderColor && currentColor != shape.fillColor) {
+        if(shape.isInside(current) && currentColor == fillableColor && currentColor != shape.borderColor && currentColor != shape.fillColor && (&clippingRegion == nullptr || clippingRegion.isInside(current))) {
             sw->setPixel(current.x, current.y, shape.fillColor);
             Point right(current.x + 1, current.y);
             if (!sw->outOfBounds(right.x, right.y) && shape.isInside(right)) {

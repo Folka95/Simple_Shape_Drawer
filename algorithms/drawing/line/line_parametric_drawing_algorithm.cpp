@@ -1,7 +1,7 @@
 #include "line_parametric_drawing_algorithm.h"
 #include <bits/stdc++.h>
 
-Line_Parametric_DrawingAlgorithm::Line_Parametric_DrawingAlgorithm() : DrawingAlgorithm() {
+Line_Parametric_DrawingAlgorithm::Line_Parametric_DrawingAlgorithm() : DrawingAlgorithm("Line_Parametric_DrawingAlgorithm") {
 
 }
 
@@ -33,4 +33,4 @@ void Line_Parametric_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWrite
     }
     Line* line = dynamic_cast<Line*>(inputShape.clone());
     this->runAlgorithm(line, sw);
-}
+}

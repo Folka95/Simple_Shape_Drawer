@@ -2,7 +2,7 @@
 
 #include "rectangle_point_clipping_algorithm.h"
 
-Rectangle_Point_ClippingAlgorithm::Rectangle_Point_ClippingAlgorithm():ClippingAlgorithm() {}
+Rectangle_Point_ClippingAlgorithm::Rectangle_Point_ClippingAlgorithm():ClippingAlgorithm("Rectangle_Point_ClippingAlgorithm") {}
 
 void Rectangle_Point_ClippingAlgorithm::runAlgorithm(Shape* polygon, RectangleShape* rectangle, ScreenWriter *sw) const {
     sw->activate();

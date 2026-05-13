@@ -4,7 +4,7 @@
 #include <algorithm>
 
 
-Square_Line_ClippingAlgorithm::Square_Line_ClippingAlgorithm() : ClippingAlgorithm() {}
+Square_Line_ClippingAlgorithm::Square_Line_ClippingAlgorithm() : ClippingAlgorithm("Square_Line_ClippingAlgorithm") {}
 
 union Square_Line_ClippingAlgorithm::OutCode {
     unsigned All: 4;

@@ -1,8 +1,7 @@
 #include "curve.h"
 using namespace std;
 
-CurveShape::CurveShape() : Shape(
-    SHAPE_CURVE,
+CurveShape::CurveShape() : Shape(SHAPE_CURVE, "CurveShape",
     "Shape Type : Curve\n"s +
     "How to draw ?\n" +
     "    Use mouse left-click to make 4 clicks represents \n" +

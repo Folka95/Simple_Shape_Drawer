@@ -3,7 +3,7 @@
 #include "../../../core/shapes/line.h"
 #include <algorithm>
 
-Polygon_DrawingAlgorithm::Polygon_DrawingAlgorithm() : DrawingAlgorithm() {}
+Polygon_DrawingAlgorithm::Polygon_DrawingAlgorithm() : DrawingAlgorithm("Polygon_DrawingAlgorithm") {}
 
 void Polygon_DrawingAlgorithm::drawLine(const Point& p1,const Point& p2, COLORREF color, ScreenWriter *sw) const {
     Line* line = new Line();

@@ -8,7 +8,7 @@
 class Circle_QuarterWithLine_FillingAlgorithm : public FillingAlgorithm {
 private:
     void fill_helper(const Circle &circle, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const;
-    void drawMidpointLine(int x1, int y1, int x2, int y2, ScreenWriter *sw, COLORREF color) const;
+    void drawMidpointLine(int x1, int y1, int x2, int y2, ScreenWriter *sw, COLORREF color, const Shape &clippingRegion) const;
 public:
     Circle_QuarterWithLine_FillingAlgorithm();
     void fill(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const;

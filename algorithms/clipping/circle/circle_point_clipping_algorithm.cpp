@@ -1,6 +1,6 @@
 #include "circle_point_clipping_algorithm.h"
 
-Circle_Point_ClippingAlgorithm::Circle_Point_ClippingAlgorithm() : ClippingAlgorithm() {
+Circle_Point_ClippingAlgorithm::Circle_Point_ClippingAlgorithm() : ClippingAlgorithm("Circle_Point_ClippingAlgorithm") {
 
 }
 
@@ -24,4 +24,4 @@ void Circle_Point_ClippingAlgorithm::clip(const Shape &inputShape, const Shape &
     Shape* polygon = inputShape.clone();
     Circle* circle = dynamic_cast<Circle*>(inputRegion.clone());
     this->runAlgorithm(polygon, circle, sw);
-}
+}

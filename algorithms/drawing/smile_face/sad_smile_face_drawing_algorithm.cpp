@@ -6,7 +6,7 @@
 #include "../line/line_midpoint_drawing_algorithm.h"
 
 SadSmileFace_DrawingAlgorithm::SadSmileFace_DrawingAlgorithm()
-    : DrawingAlgorithm() {
+    : DrawingAlgorithm("SadSmileFace_DrawingAlgorithm") {
 }
 
 void SadSmileFace_DrawingAlgorithm::drawCircle(SadSmileFace* face, const Point& center, double radius, ScreenWriter *sw) const {
@@ -80,4 +80,4 @@ void SadSmileFace_DrawingAlgorithm::draw(const Shape &inputShape, ScreenWriter *
     }
     SadSmileFace* face = dynamic_cast<SadSmileFace*>(inputShape.clone());
     this->runAlgorithm(face, sw);
-}
+}

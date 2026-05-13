@@ -8,7 +8,7 @@
 
 constexpr double kEps = 1e-9;
 
-Rectangle_Polygon_ClippingAlgorithm::Rectangle_Polygon_ClippingAlgorithm() : ClippingAlgorithm() {}
+Rectangle_Polygon_ClippingAlgorithm::Rectangle_Polygon_ClippingAlgorithm() : ClippingAlgorithm("Rectangle_Polygon_ClippingAlgorithm") {}
 
 
 Point Rectangle_Polygon_ClippingAlgorithm::intersectVertical(const Point &a, const Point &b, double xLine) const{
