@@ -9,7 +9,9 @@
 using namespace std;
 AppManager::AppManager(HWND _hwnd) {
     this->hwnd = _hwnd;
+    this->featureEnabled = false;
     this->sw = new ScreenWriter(_hwnd);
+    sw->setAnimation(this->featureEnabled);
     this->drawingAlgorithm = nullptr;
     this->fillingAlgorithm = nullptr;
     this->clippingAlgorithm = nullptr;
@@ -402,6 +404,16 @@ void AppManager::changeMouse() {
 
 void AppManager::applyMouseCursor() {
     mouse.apply();
+}
+
+bool AppManager::toggleFeature() {
+    featureEnabled = !featureEnabled;
+    sw->setAnimation(featureEnabled);
+    return featureEnabled;
+}
+
+bool AppManager::isFeatureEnabled() {
+    return featureEnabled;
 }
 
 HWND AppManager::getScreenOwner() {

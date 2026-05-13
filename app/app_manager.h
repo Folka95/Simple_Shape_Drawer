@@ -40,6 +40,8 @@ private:
     void applyLeftClickNoneClipping(short x, short y);
     void reset();
 
+    bool featureEnabled;
+
     void Private_applyLeftClick(short x, short y, bool isUser);
     void Private_applyRightClick(short x, short y, bool isUser);
     void Private_applyRightClickCurve(short x, short y, bool isUser);
@@ -68,6 +70,9 @@ public:
 
     void changeMouse();
     void applyMouseCursor();
+
+    bool toggleFeature();
+    bool isFeatureEnabled();
 
     void clearScreen();
     void softSaveScreen(string filepath);

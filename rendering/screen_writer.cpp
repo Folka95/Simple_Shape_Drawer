@@ -7,6 +7,7 @@
 
 ScreenWriter::ScreenWriter(HWND hwnd) {
     isActive = false;
+    isAnimation = false;
     this->hwnd = hwnd;
     backgroundColor = RGB(0, 0, 0);
     isUserDrawn = vector< vector< bool > > (this->getWidth(), vector< bool >(this->getHeight(), false));
@@ -45,7 +46,9 @@ void ScreenWriter::setPixel(int x, int y, COLORREF color) {
         // std::cerr << "ScreenWriter::setPixel: coordinates (" << x << ", " << y << ") are out of bounds" << std::endl;
         return;
     }
-    // SetPixel(this->hdc, x, y, color);
+    if (isAnimation) {
+        SetPixel(this->hdc, x, y, color);
+    }
     screen[x][y] = color;
     isUserDrawn[x][y] = true;
 }
@@ -113,6 +116,10 @@ vector< vector< COLORREF > > ScreenWriter::getScreen() {
 
 void ScreenWriter::updateScreen() {
     this->setScreen(screen, false);
+}
+
+void ScreenWriter::setAnimation(bool isAnimated) {
+    this->isAnimation = isAnimated;
 }
 
 void ScreenWriter::setScreen(const vector<vector<COLORREF>>& screen, bool setUserFalse) {

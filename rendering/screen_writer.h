@@ -13,6 +13,7 @@ private:
     bool isActive;
     vector< vector< bool > > isUserDrawn;
     vector< vector< COLORREF > > screen;
+    bool isAnimation;
 public:
     ScreenWriter(HWND hwnd);
     ~ScreenWriter();
@@ -29,6 +30,7 @@ public:
     vector< vector< COLORREF > > getScreen();
     void setScreen(const vector< vector< COLORREF > > &screen, bool setUserFalse);
     void updateScreen();
+    void setAnimation(bool isAnimated);
 };
 
 #endif //SCREEN_WRITER_H
