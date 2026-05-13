@@ -10,6 +10,7 @@
 #include "../io/action.h"
 
 #include <vector>
+#include <stack>
 using namespace std;
 
 #define largeSeparator string(30, '=')
@@ -32,12 +33,14 @@ private:
     vector< Action* > actionHistory;
     vector< Shape * > shapeHistory;
 
+    stack< vector< Action* > > undo, redo;
+
     Shape *clippingRegion;
     COLORREF borderColor;
     COLORREF fillColor;
 
-    void applyLeftClickClippingMode(short x, short y);
-    void applyLeftClickNoneClipping(short x, short y);
+    void applyLeftClickClippingMode(short x, short y, bool isUser);
+    void applyLeftClickNoneClipping(short x, short y, bool isUser);
     void reset();
 
     void Private_applyLeftClick(short x, short y, bool isUser);
@@ -45,6 +48,11 @@ private:
     void Private_applyRightClickCurve(short x, short y, bool isUser);
     void Private_applyMenuSelection(short choice, vector< short > data, bool isUser);
     void Private_setShape(Shape *shape, bool isUser);
+    void Private_applyActions(vector< Action* > actions);
+
+    void clearUndo();
+    void clearRedo();
+    vector< Action* > copyActionVector(vector< Action* > &actions);
 public:
     AppManager(HWND _hwnd);
     ~AppManager();
@@ -73,6 +81,10 @@ public:
     void softSaveScreen(string filepath);
     void hardSaveScreen(string filepath);
     void loadScreen(string filepath);
+
+    void undoStep();
+    void redoStep();
+
 
     HWND getScreenOwner();
 };

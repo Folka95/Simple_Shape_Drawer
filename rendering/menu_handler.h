@@ -61,7 +61,9 @@ enum FileMenu {
     FILE_CLEAR,
     FILE_SOFT_SAVE,
     FILE_HARD_SAVE,
-    FILE_LOAD
+    FILE_LOAD,
+    FILE_UNDO,
+    FILE_REDO
 };
 
 enum PreferencesMenu {
@@ -153,6 +155,10 @@ inline HMENU createFileMenu() {
     AppendMenu(hSubMenu, MF_SEPARATOR, 0, NULL);
 
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_LOAD), "Load Screen");
+    AppendMenu(hSubMenu, MF_SEPARATOR, 0, NULL);
+
+    AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_UNDO), "Undo");
+    AppendMenu(hSubMenu, MF_STRING, enumEncoder(FILE_MENU, FILE_REDO), "Redo");
     return hSubMenu;
 }
 
@@ -305,6 +311,12 @@ inline vector< short > selectFileMenu(short value, AppManager *appManager, const
             appManager->loadScreen(filepath);
             return {};
         }
+        case FILE_UNDO:
+            appManager->undoStep();
+            return {};
+        case FILE_REDO:
+            appManager->redoStep();
+            return {};
         default:
             std::cerr << "selectFileMenu: Unknown File Menu value: " << value << '\n';
             return {};
