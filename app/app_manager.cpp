@@ -33,18 +33,26 @@ AppManager::~AppManager() {
     actionHistory.clear();
     shapeHistory.push_back(new PolygonShape<1>());
     this->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
+    this->clearRedo();
+    this->clearUndo();
 }
+
+
 
 void AppManager::reset() {
     this->removeClippingAlgorithm();
     this->removeDrawingAlgorithm();
     this->removeFillingAlgorithm();
+
     sw->setBackgroundColor(RGB(0, 0, 0));
     sw->clearScreen();
     shapeHistory.clear();
     actionHistory.clear();
     shapeHistory.push_back(new PolygonShape<1>());
     this->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
+    this->clearRedo();
+    this->clearUndo();
+    this->undo.push(this->copyActionVector(this->actionHistory));
 }
 
 void AppManager::Private_setShape(Shape *shape, bool isUser) {
@@ -152,7 +160,9 @@ void AppManager::Private_applyRightClickCurve(short x, short y, bool isUser) {
     shapeHistory.back()->borderColor = borderColor;
     drawingAlgorithm->draw(*shapeHistory.back(), sw);
     actionHistory.push_back(new RightClickAction(3, x, y));
+    this->undo.push(this->copyActionVector(this->actionHistory));
     if(isUser) {
+        this->clearRedo();
         this->sw->updateScreen();
     }
 }
@@ -184,7 +194,13 @@ void AppManager::Private_applyRightClick(short x, short y, bool isUser) {
         }
     }
     actionHistory.push_back(new RightClickAction(actionRank, x, y));
+    if(actionRank == 3) {
+        this->undo.push(this->copyActionVector(this->actionHistory));
+    }
     if(isUser) {
+        if(actionRank == 3) {
+            this->clearRedo();
+        }
         this->sw->updateScreen();
     }
 }
@@ -193,7 +209,7 @@ void AppManager::applyRightClick(short x, short y) {
     Private_applyRightClick(x, y, true);
 }
 
-void AppManager::applyLeftClickClippingMode(short x, short y) {
+void AppManager::applyLeftClickClippingMode(short x, short y, bool isUser) {
     if(clippingRegion == nullptr) {
         cerr << "AppManager::applyLeftClickClippingMode: clippingRegion is null" << endl;
         return;
@@ -230,9 +246,16 @@ void AppManager::applyLeftClickClippingMode(short x, short y) {
         }
     }
     actionHistory.push_back(new LeftClickAction(actionRank, x, y));
+    if(actionRank == 3) {
+        this->undo.push(this->copyActionVector(this->actionHistory));
+        this->clearRedo();
+    }
+    if(isUser && actionRank == 3) {
+        this->clearRedo();
+    }
 }
 
-void AppManager::applyLeftClickNoneClipping(short x, short y) {
+void AppManager::applyLeftClickNoneClipping(short x, short y, bool isUser) {
     if(clippingRegion != nullptr) {
         cerr << "AppManager::applyLeftClickNoneClipping: clippingRegion is NOT null" << endl;
         return;
@@ -260,14 +283,21 @@ void AppManager::applyLeftClickNoneClipping(short x, short y) {
         actionRank = 3;
     }
     actionHistory.push_back(new LeftClickAction(actionRank, x, y));
+    if(actionRank == 3) {
+        this->undo.push(this->copyActionVector(this->actionHistory));
+        this->clearRedo();
+    }
+    if(isUser && actionRank == 3) {
+        this->clearRedo();
+    }
 }
 
 void AppManager::Private_applyLeftClick(short x, short y, bool isUser) {
     if(clippingAlgorithm == nullptr) {
-        applyLeftClickNoneClipping(x, y);
+        applyLeftClickNoneClipping(x, y, isUser);
     }
     else {
-        applyLeftClickClippingMode(x, y);
+        applyLeftClickClippingMode(x, y, isUser);
     }
     if(isUser) {
         this->sw->updateScreen();
@@ -342,6 +372,31 @@ void AppManager::softSaveScreen(string filepath) {
     }
 }
 
+void AppManager::Private_applyActions(vector< Action* > actions) {
+    actionHistory.clear();
+    shapeHistory.clear();
+    this->reset();
+    for(Action *action : actions) {
+        if(action->getActionType() == ACTION_LEFT_CLICK) {
+            this->Private_applyLeftClick(action->getData()[0], action->getData()[1], false);
+        }
+        else if(action->getActionType() == ACTION_RIGHT_CLICK) {
+            this->Private_applyRightClick(action->getData()[0], action->getData()[1], false);
+        }
+        else if(action->getActionType() == ACTION_MENU_SELECT) {
+            vector< short > tmp;
+            for(int i = 1; i < action->getData().size(); i++) {
+                tmp.push_back(action->getData()[i]);
+            }
+            this->Private_applyMenuSelection(action->getData()[0], tmp, false);
+        }
+        else {
+            cerr << "AppManager::Private_applyActions: unknown action type" << endl;
+        }
+    }
+    this->sw->updateScreen();
+}
+
 void AppManager::loadScreen(string filepath) {
     if(filepath.empty()) {
         return;
@@ -349,33 +404,12 @@ void AppManager::loadScreen(string filepath) {
     if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".ssv") {
         actionHistory.clear();
         shapeHistory.clear();
+        this->reset();
         vector< vector< COLORREF > > screen = FileManager::loadScreen(filepath);
         sw->setScreen(screen, true);
     }
     else if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".hsv"){
-        actionHistory.clear();
-        shapeHistory.clear();
-        vector< Action* > actions = FileManager::loadActions(filepath);
-        this->reset();
-        for(Action *action : actions) {
-            if(action->getActionType() == ACTION_LEFT_CLICK) {
-                this->Private_applyLeftClick(action->getData()[0], action->getData()[1], false);
-            }
-            else if(action->getActionType() == ACTION_RIGHT_CLICK) {
-                this->Private_applyRightClick(action->getData()[0], action->getData()[1], false);
-            }
-            else if(action->getActionType() == ACTION_MENU_SELECT) {
-                vector< short > tmp;
-                for(int i = 1; i < action->getData().size(); i++) {
-                    tmp.push_back(action->getData()[i]);
-                }
-                this->Private_applyMenuSelection(action->getData()[0], tmp, false);
-            }
-            else {
-                cerr << "AppManager::loadScreen: unknown action type" << endl;
-            }
-        }
-        this->sw->updateScreen();
+        Private_applyActions(FileManager::loadActions(filepath));
     }
     else {
         cerr << "AppManager::loadScreen: invalid file extension" << endl;
@@ -383,6 +417,49 @@ void AppManager::loadScreen(string filepath) {
     }
 }
 
+void AppManager::clearUndo() {
+    while(!undo.empty()) {
+        undo.pop();
+    }
+}
+
+void AppManager::clearRedo() {
+    while(!redo.empty()) {
+        redo.pop();
+    }
+}
+
+vector< Action* > AppManager::copyActionVector(vector< Action* > &actions) {
+    vector< Action* > tmp;
+    for(Action *action : actions) {
+        tmp.push_back(action->clone());
+    }
+    return tmp;
+}
+void AppManager::undoStep() {
+    if(undo.size() > 1) {
+        redo.push(this->copyActionVector(undo.top()));
+        undo.pop();
+    }
+    // stack< vector< Action* > > tmp;
+    // while(!redo.empty()) {
+    //     tmp.push(this->copyActionVector(redo.top()));
+    //     redo.pop();
+    // }
+    Private_applyActions(undo.top());
+    // while(!tmp.empty()) {
+    //     redo.push(this->copyActionVector(tmp.top()));
+    //     tmp.pop();
+    // }
+}
+
+void AppManager::redoStep() {
+    if(!redo.empty()) {
+        undo.push(this->copyActionVector(redo.top()));
+        redo.pop();
+    }
+    Private_applyActions(undo.top());
+}
 
 void AppManager::changeMouse() {
     static const LPCTSTR cursors[] = {
