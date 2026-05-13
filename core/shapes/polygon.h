@@ -114,7 +114,7 @@ bool PolygonShape<size>::isInside(const Point &point) const {
     if(size < 3) {
         return false;
     }
-    const double MOE = 0.1; // Margin Of Error
+    const double MOE = 1e-10; // Margin Of Error
     vector< Point > sides = this->getSidePoints();
     int cnt = 0;
     for (int i = 0; i < sides.size(); i++) {
@@ -156,7 +156,7 @@ bool PolygonShape<size>::isInside(const Point &point) const {
         if(a.y != point.y) {
             continue;
         }
-        else if(a.x < point.x) {
+        if(a.x < point.x) {
             continue;
         }
         int bPos = 0, cPos = 0;
