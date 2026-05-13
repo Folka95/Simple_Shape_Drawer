@@ -317,6 +317,12 @@ void AppManager::Private_applyMenuSelection(short choice, vector< short > data, 
     if(mainMenuDecoder(choice) == FILE_MENU && subMenuDecoder(choice) == FILE_SOFT_SAVE) {
         return;
     }
+    if(mainMenuDecoder(choice) == FILE_MENU && subMenuDecoder(choice) == FILE_UNDO) {
+        return;
+    }
+    if(mainMenuDecoder(choice) == FILE_MENU && subMenuDecoder(choice) == FILE_REDO) {
+        return;
+    }
     vector< short > tmp = result;
     tmp.insert(tmp.begin(), choice);
     actionHistory.push_back(new MenuSelectAction(2, tmp));
