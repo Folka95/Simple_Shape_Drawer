@@ -4,11 +4,11 @@
 #include "../../filling_algorithm.h"
 
 
-class non_convex_FillingAlgorithm : public FillingAlgorithm {
+class NonConvexFillingAlgorithm : public FillingAlgorithm {
 private:
     void fill_helper(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const;
 public:
-    non_convex_FillingAlgorithm();
+    NonConvexFillingAlgorithm();
     void fill(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const;
 };
 

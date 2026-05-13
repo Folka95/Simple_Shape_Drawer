@@ -37,6 +37,8 @@
 #include "../algorithms/filling/floodfill/iterive_flood_fill_filling_algorithm.h"
 #include "../algorithms/filling/floodfill/flood_fill_filling_algorithm.h"
 #include "../algorithms/filling/curve/fill_with_curve_filling_algorithm.h"
+#include "../algorithms/filling/linescan/convex_filling_algorithm.h"
+#include "../algorithms/filling/linescan/non_convex_filling_algorithm.h"
 #include "../core/shapes/happy_smile_face.h"
 #include "../core/shapes/polygon.h"
 #include "../core/shapes/sad_smile_face.h"
@@ -481,14 +483,16 @@ inline vector< short > selectFillingMenu(short value, AppManager *appManager, co
             appManager->removeClippingAlgorithm();
             appManager->setFillingAlgorithm(new FillWithCurveFillingAlgorithm());
             return {};
-        //
-        // case FILL_CONVEX:
-        //     appManager->setFillingAlgorithm(new Convex_FillingAlgorithm());
-        //     return {};
-        //
-        // case FILL_NON_CONVEX:
-        //     appManager->setFillingAlgorithm(new NonConvex_FillingAlgorithm());
-        //     return {};
+        
+        case FILL_CONVEX:
+            appManager->removeClippingAlgorithm();
+            appManager->setFillingAlgorithm(new ConvexFillingAlgorithm());
+            return {};
+        
+        case FILL_NON_CONVEX:
+            appManager->removeClippingAlgorithm();
+            appManager->setFillingAlgorithm(new NonConvexFillingAlgorithm());
+            return {};
 
         case FILL_FLOOD_RECURSIVE:
             appManager->setFillingAlgorithm(new FloodFill_FillingAlgorithm());

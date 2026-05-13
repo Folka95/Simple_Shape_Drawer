@@ -1,5 +1,4 @@
 #include "shape.h"
-#include "algorithm"
 
 Shape::Shape(ShapeType type, std::string description) {
     this->points.clear();
@@ -41,13 +40,14 @@ void Shape::takeAction(int actionID) {
 }
 
 Point Shape::centroid(const std::vector< Point > &givenPoints) const {
+    if (givenPoints.empty()) return Point(0, 0);
     double cx = 0, cy = 0;
-    for (auto &[x, y] : givenPoints) {
-        cx += x;
-        cy += y;
+    for (int i = 0; i < givenPoints.size(); i++) {
+        cx += givenPoints[i].x;
+        cy += givenPoints[i].y;
     }
-    cx /= getSize();
-    cy /= getSize();
+    cx /= givenPoints.size();
+    cy /= givenPoints.size();
     return Point(cx, cy);
 }
 
