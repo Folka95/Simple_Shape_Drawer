@@ -50,13 +50,22 @@ bool PolygonShape<size>::isInside(const Point &point) const {
     const double MOE = 1e-8; // Margin Of Error
     vector< Point > sides = this->getSidePoints();
     int cnt = 0;
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < sides.size(); i++) {
         Point a = sides[i];
-        Point b = sides[(i + 1) % size];
-        double m = a.slope(b);
-        if(m == 0) {
+        Point b = sides[(i + 1) % sides.size()];
+        if(a.x == b.x) {
+            if(a.x > point.x) {
+                cnt++;
+            }
             continue;
         }
+        if(a.y == b.y) {
+            if(point.y == a.y) {
+                return false;
+            }
+            continue;
+        }
+        double m = a.slope(b);
         double c = a.y - m * a.x;
         Point intersection = Point((point.y - c) / m, point.y);
         if(abs(intersection.x - point.x) < MOE) {
@@ -71,8 +80,8 @@ bool PolygonShape<size>::isInside(const Point &point) const {
         if(intersection.x < point.x - MOE) {
             continue;
         }
-        if(abs(intersection.x - a.x) < MOE || abs(intersection.x - b.x) < MOE) {
-            return true;
+        if(sides[i].x > point.x && sides[i].y == point.y) {
+            cnt--;
         }
         cnt++;
     }
