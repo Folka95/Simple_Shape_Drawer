@@ -37,9 +37,7 @@ AppManager::~AppManager() {
     this->clearUndo();
 }
 
-
-
-void AppManager::reset() {
+void AppManager::Private_reset(bool isUser) {
     this->removeClippingAlgorithm();
     this->removeDrawingAlgorithm();
     this->removeFillingAlgorithm();
@@ -50,9 +48,16 @@ void AppManager::reset() {
     actionHistory.clear();
     shapeHistory.push_back(new PolygonShape<1>());
     this->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
-    this->clearRedo();
-    this->clearUndo();
-    this->undo.push(this->copyActionVector(this->actionHistory));
+    if(isUser) {
+        this->clearRedo();
+        this->clearUndo();
+        this->undo.push(this->copyActionVector(this->actionHistory));
+    }
+}
+
+
+void AppManager::reset() {
+    Private_reset(true);
 }
 
 void AppManager::Private_setShape(Shape *shape, bool isUser) {
@@ -160,8 +165,8 @@ void AppManager::Private_applyRightClickCurve(short x, short y, bool isUser) {
     shapeHistory.back()->borderColor = borderColor;
     drawingAlgorithm->draw(*shapeHistory.back(), sw);
     actionHistory.push_back(new RightClickAction(3, x, y));
-    this->undo.push(this->copyActionVector(this->actionHistory));
     if(isUser) {
+        this->undo.push(this->copyActionVector(this->actionHistory));
         this->clearRedo();
         this->sw->updateScreen();
     }
@@ -194,11 +199,9 @@ void AppManager::Private_applyRightClick(short x, short y, bool isUser) {
         }
     }
     actionHistory.push_back(new RightClickAction(actionRank, x, y));
-    if(actionRank == 3) {
-        this->undo.push(this->copyActionVector(this->actionHistory));
-    }
     if(isUser) {
         if(actionRank == 3) {
+            this->undo.push(this->copyActionVector(this->actionHistory));
             this->clearRedo();
         }
         this->sw->updateScreen();
@@ -246,11 +249,8 @@ void AppManager::applyLeftClickClippingMode(short x, short y, bool isUser) {
         }
     }
     actionHistory.push_back(new LeftClickAction(actionRank, x, y));
-    if(actionRank == 3) {
-        this->undo.push(this->copyActionVector(this->actionHistory));
-        this->clearRedo();
-    }
     if(isUser && actionRank == 3) {
+        this->undo.push(this->copyActionVector(this->actionHistory));
         this->clearRedo();
     }
 }
@@ -283,11 +283,8 @@ void AppManager::applyLeftClickNoneClipping(short x, short y, bool isUser) {
         actionRank = 3;
     }
     actionHistory.push_back(new LeftClickAction(actionRank, x, y));
-    if(actionRank == 3) {
-        this->undo.push(this->copyActionVector(this->actionHistory));
-        this->clearRedo();
-    }
     if(isUser && actionRank == 3) {
+        this->undo.push(this->copyActionVector(this->actionHistory));
         this->clearRedo();
     }
 }
@@ -372,10 +369,10 @@ void AppManager::softSaveScreen(string filepath) {
     }
 }
 
-void AppManager::Private_applyActions(vector< Action* > actions) {
+void AppManager::Private_applyActions(vector< Action* > actions, bool isUser) {
     actionHistory.clear();
     shapeHistory.clear();
-    this->reset();
+    this->Private_reset(isUser);
     for(Action *action : actions) {
         if(action->getActionType() == ACTION_LEFT_CLICK) {
             this->Private_applyLeftClick(action->getData()[0], action->getData()[1], false);
@@ -409,7 +406,7 @@ void AppManager::loadScreen(string filepath) {
         sw->setScreen(screen, true);
     }
     else if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".hsv"){
-        Private_applyActions(FileManager::loadActions(filepath));
+        Private_applyActions(FileManager::loadActions(filepath), true);
     }
     else {
         cerr << "AppManager::loadScreen: invalid file extension" << endl;
@@ -446,7 +443,7 @@ void AppManager::undoStep() {
     //     tmp.push(this->copyActionVector(redo.top()));
     //     redo.pop();
     // }
-    Private_applyActions(undo.top());
+    Private_applyActions(undo.top(), false);
     // while(!tmp.empty()) {
     //     redo.push(this->copyActionVector(tmp.top()));
     //     tmp.pop();
@@ -458,7 +455,7 @@ void AppManager::redoStep() {
         undo.push(this->copyActionVector(redo.top()));
         redo.pop();
     }
-    Private_applyActions(undo.top());
+    Private_applyActions(undo.top(), false);
 }
 
 void AppManager::changeMouse() {

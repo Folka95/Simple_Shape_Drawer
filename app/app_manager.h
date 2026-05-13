@@ -50,7 +50,8 @@ private:
     void Private_applyRightClickCurve(short x, short y, bool isUser);
     void Private_applyMenuSelection(short choice, vector< short > data, bool isUser);
     void Private_setShape(Shape *shape, bool isUser);
-    void Private_applyActions(vector< Action* > actions);
+    void Private_applyActions(vector< Action* > actions, bool isUser);
+    void Private_reset(bool isUser);
 
     void clearUndo();
     void clearRedo();
