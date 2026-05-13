@@ -4,7 +4,6 @@ Circle_QuarterWithLine_FillingAlgorithm::Circle_QuarterWithLine_FillingAlgorithm
 
 }
 
-
 void Circle_QuarterWithLine_FillingAlgorithm::drawMidpointLine(int x1, int y1, int x2, int y2, ScreenWriter *sw, COLORREF color) const {
     int dx = abs(x2 - x1);
     int dy = abs(y2 - y1);

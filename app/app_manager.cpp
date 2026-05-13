@@ -138,8 +138,6 @@ void AppManager::removeClippingAlgorithm() {
     this->clippingDrawingAlgorithm = nullptr;
 }
 
-
-
 void AppManager::Private_applyRightClickCurve(short x, short y, bool isUser) {
     if(clippingRegion != nullptr) {
         cerr << "AppManager::Private_applyRightClickCurve: clippingRegion is NOT null" << endl;
@@ -321,6 +319,10 @@ void AppManager::Private_applyMenuSelection(short choice, vector< short > data, 
     tmp.insert(tmp.begin(), choice);
     actionHistory.push_back(new MenuSelectAction(2, tmp));
     if(isUser) {
+        if(mainMenuDecoder(choice) == FILE_MENU || mainMenuDecoder(choice) == PREFERENCES_MENU) {
+            undo.push(this->copyActionVector(this->actionHistory));
+            this->clearRedo();
+        }
         this->sw->updateScreen();
     }
 }
