@@ -36,6 +36,11 @@ public:
         return sqrt(dx(other) * dx(other) + dy(other) * dy(other));
     }
 
+    // Linear Interpolation
+    Point lerp(const Point& b, double t) const {
+        return *this + (b - *this) * t;
+    }
+
     // Operators
     Point operator+(const Point& other) const {
         return Point(x + other.x, y + other.y);

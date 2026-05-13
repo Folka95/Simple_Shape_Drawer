@@ -36,6 +36,7 @@
 #include "../algorithms/filling/circle/circle_quarter_with_line_filling_algorithm.h"
 #include "../algorithms/filling/floodfill/iterive_flood_fill_filling_algorithm.h"
 #include "../algorithms/filling/floodfill/flood_fill_filling_algorithm.h"
+#include "../algorithms/filling/curve/fill_with_curve_filling_algorithm.h"
 #include "../core/shapes/happy_smile_face.h"
 #include "../core/shapes/polygon.h"
 #include "../core/shapes/sad_smile_face.h"
@@ -471,13 +472,15 @@ inline vector< short > selectFillingMenu(short value, AppManager *appManager, co
             appManager->setFillingAlgorithm(new Circle_QuarterWithCircle_FillingAlgorithm());
             return {};
 
-        // case FILL_SQUARE_HERMITE:
-        //     appManager->setFillingAlgorithm(new FillSquareHermite_FillingAlgorithm());
-        //     return {};
-        //
-        // case FILL_RECTANGLE_BEZIER:
-        //     appManager->setFillingAlgorithm(new FillRectangleBezier_FillingAlgorithm());
-        //     return {};
+        case FILL_SQUARE_HERMITE:
+            appManager->removeClippingAlgorithm();
+            appManager->setFillingAlgorithm(new FillWithCurveFillingAlgorithm());
+            return {};
+
+        case FILL_RECTANGLE_BEZIER:
+            appManager->removeClippingAlgorithm();
+            appManager->setFillingAlgorithm(new FillWithCurveFillingAlgorithm());
+            return {};
         //
         // case FILL_CONVEX:
         //     appManager->setFillingAlgorithm(new Convex_FillingAlgorithm());

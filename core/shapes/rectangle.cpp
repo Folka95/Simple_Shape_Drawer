@@ -71,6 +71,10 @@ double RectangleShape::getWidth() const {
     return width;
 }
 
+double RectangleShape::getHeight() const {
+    return height;
+}
+
 std::vector< Point > RectangleShape::getSidePoints() const {
     std::vector< Point > tmp = {topLeft, topRight, bottomLeft, bottomRight};
     Point c = this->centroid(tmp);

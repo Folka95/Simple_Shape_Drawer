@@ -99,4 +99,10 @@ add_executable(Simple_Shape_Drawer main.cpp
         algorithms/filling/circle/circle_quarter_with_line_filling_algorithm.cpp
         algorithms/filling/circle/circle_quarter_with_circle_filling_algorithm.cpp
         algorithms/filling/circle/circle_quarter_with_circle_filling_algorithm.h
+        algorithms/filling/curve/fill_with_curve_filling_algorithm.cpp
+        algorithms/filling/curve/fill_with_curve_filling_algorithm.h
+        algorithms/filling/linescan/convex_filling_algorithm.h
+        algorithms/filling/linescan/convex_filling_algorithm.cpp
+        algorithms/filling/linescan/non_convex_filling_algorithm.h
+        algorithms/filling/linescan/non_convex_filling_algorithm.cpp
 )
