@@ -14,9 +14,6 @@ void Line::initialize() {
 }
 
 bool Line::isInside(const Point &point) const {
-    if(this->points[0].slope(point) == point.slope(this->points[1])) {
-        return true;
-    }
     return false;
 }
 
