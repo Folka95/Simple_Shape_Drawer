@@ -13,18 +13,30 @@ void IterFloodFill_FillingAlgorithm::fill(const Shape &shape, const Shape &clipp
         Point current = stack.top();
         stack.pop();
 
-        if(current.x < 0 || current.x >= sw->getWidth() || current.y < 0 || current.y >= sw->getHeight()) {
+        if(sw->outOfBounds(current.x, current.y)) {
             continue;
         }
 
         COLORREF currentColor = sw->getPixel(current.x, current.y);
-        if( shape.isInside(current) && currentColor == fillableColor &&
-            currentColor != shape.borderColor && currentColor != shape.fillColor) {
+
+        if(shape.isInside(current) && currentColor == fillableColor && currentColor != shape.borderColor && currentColor != shape.fillColor) {
             sw->setPixel(current.x, current.y, shape.fillColor);
-            stack.push(Point(current.x + 1, current.y));
-            stack.push(Point(current.x - 1, current.y));
-            stack.push(Point(current.x, current.y + 1));
-            stack.push(Point(current.x, current.y - 1));
+            Point right(current.x + 1, current.y);
+            if (!sw->outOfBounds(right.x, right.y) && shape.isInside(right)) {
+                stack.push(right);
+            }
+            Point left(current.x - 1, current.y);
+            if (!sw->outOfBounds(left.x, left.y) && shape.isInside(left)) {
+                stack.push(left);
+            }
+            Point up(current.x, current.y + 1);
+            if (!sw->outOfBounds(up.x, up.y) && shape.isInside(up)) {
+                stack.push(up);
+            }
+            Point down(current.x, current.y - 1);
+            if (!sw->outOfBounds(down.x, down.y) && shape.isInside(down)) {
+                stack.push(down);
+            }
         }
     }
     sw->deactivate();
