@@ -72,8 +72,8 @@ void AppManager::Private_setShape(Shape *shape, bool isUser) {
     }
 }
 
-void AppManager::setShape(Shape *shape) {
-    Private_setShape(shape, true);
+void AppManager::setShape(Shape *shape, bool isUser) {
+    Private_setShape(shape, isUser);
 }
 
 void AppManager::setBoarderColor(COLORREF color) {
@@ -305,7 +305,7 @@ void AppManager::applyLeftClick(short x, short y) {
 
 
 void AppManager::Private_applyMenuSelection(short choice, vector< short > data, bool isUser) {
-    vector< short > result = selectMainMenu(choice, this, data);
+    vector< short > result = selectMainMenu(choice, this, data, isUser);
     if(mainMenuDecoder(choice) == FILE_MENU && subMenuDecoder(choice) == FILE_LOAD) {
         return;
     }

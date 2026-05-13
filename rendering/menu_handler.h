@@ -292,7 +292,7 @@ inline void createAppMenu(HMENU hMenu) {
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)createClippingMenu(), "Clipping");
 }
 
-inline vector< short > selectFileMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectFileMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (subMenuDecoder(value)) {
         case FILE_CLEAR:
             appManager->clearScreen();
@@ -327,7 +327,7 @@ inline vector< short > selectFileMenu(short value, AppManager *appManager, const
     return {};
 }
 
-inline vector< short > selectPreferencesMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectPreferencesMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (subMenuDecoder(value)) {
         case PREFERENCES_MOUSE_SHAPE:
             appManager->changeMouse();
@@ -364,26 +364,26 @@ inline vector< short > selectPreferencesMenu(short value, AppManager *appManager
     return {};
 }
 
-inline vector< short > selectLineMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectLineMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (subMenuDecoder(value)) {
         case LINE_DDA:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Line());
+            appManager->setShape(new Line(), isUser);
             appManager->setDrawingAlgorithm(new Line_DDA_DrawingAlgorithm());
             return {};
 
         case LINE_MIDPOINT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Line());
+            appManager->setShape(new Line(), isUser);
             appManager->setDrawingAlgorithm(new Line_Midpoint_DrawingAlgorithm());
             return {};
 
         case LINE_PARAMETRIC:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Line());
+            appManager->setShape(new Line(), isUser);
             appManager->setDrawingAlgorithm(new Line_Parametric_DrawingAlgorithm());
             return {};
 
@@ -394,40 +394,40 @@ inline vector< short > selectLineMenu(short value, AppManager *appManager, const
     return {};
 }
 
-inline vector< short > selectCircleMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectCircleMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (subMenuDecoder(value)) {
         case CIRCLE_DIRECT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Circle());
+            appManager->setShape(new Circle(), isUser);
             appManager->setDrawingAlgorithm(new Circle_Direct_DrawingAlgorithm());
             return {};
 
         case CIRCLE_POLAR:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Circle());
+            appManager->setShape(new Circle(), isUser);
             appManager->setDrawingAlgorithm(new Circle_Polar_DrawingAlgorithm());
             return {};
 
         case CIRCLE_ITERATIVE_POLAR:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Circle());
+            appManager->setShape(new Circle(), isUser);
             appManager->setDrawingAlgorithm(new Circle_iterativePolar_DrawingAlgorithm());
             return {};
 
         case CIRCLE_MIDPOINT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Circle());
+            appManager->setShape(new Circle(), isUser);
             appManager->setDrawingAlgorithm(new Circle_MidPoint_DrawingAlgorithm());
             return {};
 
         case CIRCLE_MODIFIED_MIDPOINT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Circle());
+            appManager->setShape(new Circle(), isUser);
             appManager->setDrawingAlgorithm(new Circle_MidPoint_Fast_DrawingAlgorithm());
             return {};
 
@@ -438,26 +438,26 @@ inline vector< short > selectCircleMenu(short value, AppManager *appManager, con
     return {};
 }
 
-inline vector< short > selectEllipseMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectEllipseMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (subMenuDecoder(value)) {
         case ELLIPSE_DIRECT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new EllipseShape());
+            appManager->setShape(new EllipseShape(), isUser);
             appManager->setDrawingAlgorithm(new Ellipse_Direct_DrawingAlgorithm());
             return {};
 
         case ELLIPSE_POLAR:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new EllipseShape());
+            appManager->setShape(new EllipseShape(), isUser);
             appManager->setDrawingAlgorithm(new Ellipse_Polar_DrawingAlgorithm());
             return {};
 
         case ELLIPSE_MIDPOINT:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new EllipseShape());
+            appManager->setShape(new EllipseShape(), isUser);
             appManager->setDrawingAlgorithm(new Ellipse_MidPoint_DrawingAlgorithm());
             return {};
 
@@ -468,13 +468,13 @@ inline vector< short > selectEllipseMenu(short value, AppManager *appManager, co
     return {};
 }
 
-inline vector< short > selectCurvesMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectCurvesMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (subMenuDecoder(value)) {
         case CURVE_CARDINAL_SPLINE: {
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             short Cvalue = (short)InputReader::userPickRange(appManager->getScreenOwner(), 0, 100, 50, "Smoothness Percent %", memoriezedData);
-            appManager->setShape(new CurveShape());
+            appManager->setShape(new CurveShape(), isUser);
             appManager->setDrawingAlgorithm(new Curve_Spline_DrawingAlgorithm(Cvalue));
             return {Cvalue};
         }
@@ -485,7 +485,7 @@ inline vector< short > selectCurvesMenu(short value, AppManager *appManager, con
     return {};
 }
 
-inline vector< short > selectFillingMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectFillingMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (subMenuDecoder(value)) {
         case FILL_CIRCLE_LINES:
             appManager->removeClippingAlgorithm();
@@ -534,12 +534,12 @@ inline vector< short > selectFillingMenu(short value, AppManager *appManager, co
 
 
 
-inline vector< short > selectClippingMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectClippingMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (subMenuDecoder(value)) {
          case CLIP_RECT_POINT:
              appManager->removeDrawingAlgorithm();
              appManager->removeFillingAlgorithm();
-             appManager->setShape(new PolygonShape<1>());
+             appManager->setShape(new PolygonShape<1>(), isUser);
              appManager->setClippingAlgorithm(
                      new Rectangle_Point_ClippingAlgorithm(),
                      new Rectangle_DrawingAlgorithm(),
@@ -550,7 +550,7 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
          case CLIP_RECT_LINE:
              appManager->removeDrawingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Line());
+            appManager->setShape(new Line(), isUser);
             appManager->setClippingAlgorithm(
                     new Rectangle_Line_ClippingAlgorithm(),
                     new Rectangle_DrawingAlgorithm(),
@@ -561,7 +561,7 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
             appManager->removeDrawingAlgorithm();
             appManager->removeFillingAlgorithm();
             pair< Shape *, short > res = InputReader::userReadPolygon(appManager, memoriezedData);
-            appManager->setShape(res.first);
+            appManager->setShape(res.first, isUser);
             appManager->setClippingAlgorithm(
                 new Rectangle_Polygon_ClippingAlgorithm(),
                 new Rectangle_DrawingAlgorithm(),
@@ -572,7 +572,7 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
         case CLIP_SQUARE_POINT:
             appManager->removeDrawingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new PolygonShape<1>());
+            appManager->setShape(new PolygonShape<1>(), isUser);
             appManager->setClippingAlgorithm(
                 new Square_Point_ClippingAlgorithm(),
                 new Square_DrawingAlgorithm(),
@@ -582,7 +582,7 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
         case CLIP_SQUARE_LINE:
             appManager->removeDrawingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Line());
+            appManager->setShape(new Line(), isUser);
             appManager->setClippingAlgorithm(
                 new Square_Line_ClippingAlgorithm(),
                 new Square_DrawingAlgorithm(),
@@ -596,7 +596,7 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
                 new Circle_Polar_DrawingAlgorithm(),
                 new Circle()
             );
-            appManager->setShape(new PolygonShape<1>());
+            appManager->setShape(new PolygonShape<1>(), isUser);
             return {};
 
         case CLIP_CIRCLE_LINE:
@@ -606,7 +606,7 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
                 new Circle_Polar_DrawingAlgorithm(),
                 new Circle()
             );
-            appManager->setShape(new Line());
+            appManager->setShape(new Line(), isUser);
             return {};
 
         default:
@@ -616,17 +616,17 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
     return {};
 }
 
-inline vector< short > selectSmileMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectSmileMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (subMenuDecoder(value)) {
         case SMILE_HAPPY_FACE:
             appManager->removeClippingAlgorithm();
-            appManager->setShape(new HappySmileFace());
+            appManager->setShape(new HappySmileFace(), isUser);
             appManager->setDrawingAlgorithm(new HappySmileFace_DrawingAlgorithm());
             return {};
 
         case SMILE_SAD_FACE:
             appManager->removeClippingAlgorithm();
-            appManager->setShape(new SadSmileFace());
+            appManager->setShape(new SadSmileFace(), isUser);
             appManager->setDrawingAlgorithm(new SadSmileFace_DrawingAlgorithm());
             return {};
         default:
@@ -636,26 +636,26 @@ inline vector< short > selectSmileMenu(short value, AppManager *appManager, cons
     return {};
 }
 
-inline vector< short > selectOtherMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectOtherMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (subMenuDecoder(value)) {
         case OTHER_SQUARE:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new Square());
+            appManager->setShape(new Square(), isUser);
             appManager->setDrawingAlgorithm(new Square_DrawingAlgorithm());
             return {};
 
         case OTHER_RECTANGLE:
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
-            appManager->setShape(new RectangleShape());
+            appManager->setShape(new RectangleShape(), isUser);
             appManager->setDrawingAlgorithm(new Rectangle_DrawingAlgorithm());
             return {};
         case OTHER_POLYGON: {
             appManager->removeClippingAlgorithm();
             appManager->removeFillingAlgorithm();
             pair< Shape *, short > res = InputReader::userReadPolygon(appManager, memoriezedData);
-            appManager->setShape(res.first);
+            appManager->setShape(res.first, isUser);
             appManager->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
             return {res.second};
         }
@@ -666,38 +666,38 @@ inline vector< short > selectOtherMenu(short value, AppManager *appManager, cons
     return {};
 }
 
-inline vector< short > selectMainMenu(short value, AppManager *appManager, const vector< short > &memoriezedData) {
+inline vector< short > selectMainMenu(short value, AppManager *appManager, const vector< short > &memoriezedData, bool isUser) {
     switch (mainMenuDecoder(value)) {
         case FILE_MENU:
-            return selectFileMenu(value, appManager, memoriezedData);
+            return selectFileMenu(value, appManager, memoriezedData, isUser);
 
 
         case PREFERENCES_MENU:
-            return selectPreferencesMenu(value, appManager, memoriezedData);
+            return selectPreferencesMenu(value, appManager, memoriezedData, isUser);
 
         case LINE_MENU:
-            return selectLineMenu(value, appManager, memoriezedData);
+            return selectLineMenu(value, appManager, memoriezedData, isUser);
 
         case CIRCLE_MENU:
-            return selectCircleMenu(value, appManager, memoriezedData);
+            return selectCircleMenu(value, appManager, memoriezedData, isUser);
 
         case ELLIPSE_MENU:
-            return selectEllipseMenu(value, appManager, memoriezedData);
+            return selectEllipseMenu(value, appManager, memoriezedData, isUser);
 
         case CURVE_MENU:
-            return selectCurvesMenu(value, appManager, memoriezedData);
+            return selectCurvesMenu(value, appManager, memoriezedData, isUser);
 
         case FILL_MENU:
-            return selectFillingMenu(value, appManager, memoriezedData);
+            return selectFillingMenu(value, appManager, memoriezedData, isUser);
 
         case CLIP_MENU:
-            return selectClippingMenu(value, appManager, memoriezedData);
+            return selectClippingMenu(value, appManager, memoriezedData, isUser);
 
         case SMILE_MENU:
-            return selectSmileMenu(value, appManager, memoriezedData);
+            return selectSmileMenu(value, appManager, memoriezedData, isUser);
 
         case OTHER_MENU:
-            return selectOtherMenu(value, appManager, memoriezedData);
+            return selectOtherMenu(value, appManager, memoriezedData, isUser);
 
         default:
             std::cerr << "selectMainMenu: Unknown Main Menu value: " << value << '\n';

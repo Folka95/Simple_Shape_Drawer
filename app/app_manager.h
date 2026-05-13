@@ -60,7 +60,7 @@ public:
     AppManager(HWND _hwnd);
     ~AppManager();
 
-    void setShape(Shape *shape);
+    void setShape(Shape *shape, bool isUser = true);
     void setBoarderColor(COLORREF color);
     void setFillColor(COLORREF color);
     void setBackgroundColor(COLORREF color);
