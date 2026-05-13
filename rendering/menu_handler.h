@@ -543,7 +543,8 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
              appManager->setClippingAlgorithm(
                      new Rectangle_Point_ClippingAlgorithm(),
                      new Rectangle_DrawingAlgorithm(),
-                     new RectangleShape()
+                     new RectangleShape(),
+                     isUser
                      );
 
              return {};
@@ -554,7 +555,8 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
             appManager->setClippingAlgorithm(
                     new Rectangle_Line_ClippingAlgorithm(),
                     new Rectangle_DrawingAlgorithm(),
-                    new RectangleShape()
+                    new RectangleShape(),
+                     isUser
             );
              return {};
         case CLIP_RECT_POLYGON: {
@@ -565,7 +567,9 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
             appManager->setClippingAlgorithm(
                 new Rectangle_Polygon_ClippingAlgorithm(),
                 new Rectangle_DrawingAlgorithm(),
-                new RectangleShape());
+                new RectangleShape(),
+                     isUser
+                );
             return {res.second};
         }
 
@@ -576,7 +580,9 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
             appManager->setClippingAlgorithm(
                 new Square_Point_ClippingAlgorithm(),
                 new Square_DrawingAlgorithm(),
-                new Square());
+                new Square(),
+                     isUser
+                );
             return {};
 
         case CLIP_SQUARE_LINE:
@@ -586,7 +592,8 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
             appManager->setClippingAlgorithm(
                 new Square_Line_ClippingAlgorithm(),
                 new Square_DrawingAlgorithm(),
-                new Square());
+                new Square(),
+                     isUser);
             return {};
 
         case CLIP_CIRCLE_POINT:
@@ -594,7 +601,8 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
             appManager->setClippingAlgorithm(
                 new Circle_Point_ClippingAlgorithm(),
                 new Circle_Polar_DrawingAlgorithm(),
-                new Circle()
+                new Circle(),
+                     isUser
             );
             appManager->setShape(new PolygonShape<1>(), isUser);
             return {};
@@ -604,7 +612,8 @@ inline vector< short > selectClippingMenu(short value, AppManager *appManager, c
             appManager->setClippingAlgorithm(
                 new Circle_Line_ClippingAlgorithm(),
                 new Circle_Polar_DrawingAlgorithm(),
-                new Circle()
+                new Circle(),
+                     isUser
             );
             appManager->setShape(new Line(), isUser);
             return {};

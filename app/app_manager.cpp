@@ -42,7 +42,6 @@ void AppManager::Private_reset(bool isUser) {
     this->removeClippingAlgorithm();
     this->removeDrawingAlgorithm();
     this->removeFillingAlgorithm();
-
     sw->setBackgroundColor(RGB(0, 0, 0));
     sw->clearScreen();
     shapeHistory.clear();
@@ -99,15 +98,17 @@ void AppManager::setDrawingAlgorithm(DrawingAlgorithm *drawingAlgorithm) {
     this->drawingAlgorithm = drawingAlgorithm;
 }
 
-void AppManager::setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm, DrawingAlgorithm *clipDrawingAlgorithm, Shape *region) {
+void AppManager::setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm, DrawingAlgorithm *clipDrawingAlgorithm, Shape *region, bool isUser) {
     this->removeClippingAlgorithm();
     this->clippingAlgorithm = clippingAlgorithm;
     this->clippingDrawingAlgorithm = clipDrawingAlgorithm;
     this->clippingRegion = region;
-    cout << largeSeparator << endl;
-    cout << "# This is the clipping region ---- " << endl;
-    cout << this->clippingRegion->getDescription() << endl;
-    cout << largeSeparator << endl;
+    if(isUser) {
+        cout << largeSeparator << endl;
+        cout << "# This is the clipping region ---- " << endl;
+        cout << this->clippingRegion->getDescription() << endl;
+        cout << largeSeparator << endl;
+    }
 }
 
 void AppManager::removeDrawingAlgorithm() {
@@ -333,6 +334,9 @@ void AppManager::applyMenuSelection(short choice) {
 }
 
 void AppManager::clearScreen() {
+    cout << mediumSeparator << endl;
+    cout << "Clearing screen" << endl;
+    cout << mediumSeparator << endl;
     sw->clearScreen();
     Shape *current = shapeHistory.back()->clone();
     this->shapeHistory.clear();
@@ -345,6 +349,10 @@ void AppManager::hardSaveScreen(string filepath) {
         return;
     }
     if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".hsv") {
+        cout << mediumSeparator << endl;
+        filesystem::path p(filepath);
+        cout << "Hard saving screen to (" << p.filename().string() << ")" << endl;
+        cout << mediumSeparator << endl;
         vector< Action* > tmp;
         for(Action *action : actionHistory) {
             tmp.push_back(action->clone());
@@ -364,6 +372,10 @@ void AppManager::softSaveScreen(string filepath) {
         return;
     }
     if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".ssv") {
+        cout << mediumSeparator << endl;
+        filesystem::path p(filepath);
+        cout << "Soft saving screen to (" << p.filename().string() << ")" << endl;
+        cout << mediumSeparator << endl;
         vector< vector< COLORREF > > screen = sw->getScreen();
         FileManager::saveScreen(screen, filepath);
     }
@@ -402,6 +414,10 @@ void AppManager::loadScreen(string filepath) {
         return;
     }
     if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".ssv") {
+        cout << mediumSeparator << endl;
+        filesystem::path p(filepath);
+        cout << "Loading soft save file (" << p.filename().string() << ")" << endl;
+        cout << mediumSeparator << endl;
         actionHistory.clear();
         shapeHistory.clear();
         this->reset();
@@ -409,6 +425,10 @@ void AppManager::loadScreen(string filepath) {
         sw->setScreen(screen, true);
     }
     else if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".hsv"){
+        cout << mediumSeparator << endl;
+        filesystem::path p(filepath);
+        cout << "Loading hard save file (" << p.filename().string() << ")" << endl;
+        cout << mediumSeparator << endl;
         Private_applyActions(FileManager::loadActions(filepath), true);
     }
     else {
@@ -440,6 +460,9 @@ void AppManager::undoStep() {
     if(undo.size() > 1) {
         redo.push(this->copyActionVector(undo.top()));
         undo.pop();
+        cout << mediumSeparator << endl;
+        cout << "Undoing last operation..." << endl;
+        cout << mediumSeparator << endl;
     }
     // stack< vector< Action* > > tmp;
     // while(!redo.empty()) {
@@ -457,6 +480,9 @@ void AppManager::redoStep() {
     if(!redo.empty()) {
         undo.push(this->copyActionVector(redo.top()));
         redo.pop();
+        cout << mediumSeparator << endl;
+        cout << "Redoing last operation..." << endl;
+        cout << mediumSeparator << endl;
     }
     Private_applyActions(undo.top(), false);
 }
@@ -486,6 +512,14 @@ void AppManager::applyMouseCursor() {
 bool AppManager::toggleFeature() {
     featureEnabled = !featureEnabled;
     sw->setAnimation(featureEnabled);
+    cout << mediumSeparator << endl;
+    if(featureEnabled) {
+        cout << "Enabling animation mode..." << endl;
+    }
+    else {
+        cout << "Disabling animation mode..." << endl;
+    }
+    cout << mediumSeparator << endl;
     return featureEnabled;
 }
 

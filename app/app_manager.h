@@ -67,7 +67,7 @@ public:
 
     void setDrawingAlgorithm(DrawingAlgorithm *drawingAlgorithm);
     void setFillingAlgorithm(FillingAlgorithm *fillingAlgorithm);
-    void setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm, DrawingAlgorithm *clipDrawingAlgorithm, Shape *region);
+    void setClippingAlgorithm(ClippingAlgorithm *clippingAlgorithm, DrawingAlgorithm *clipDrawingAlgorithm, Shape *region, bool isUser);
 
     void removeDrawingAlgorithm();
     void removeFillingAlgorithm();
