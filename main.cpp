@@ -29,6 +29,15 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT mcode, WPARAM wp, LPARAM lp) {
         case WM_COMMAND:
             menuSelected(LOWORD(wp));
             break;
+        case WM_KEYDOWN:
+            if (GetKeyState(VK_CONTROL) & 0x8000) {
+                if (wp == 'Z') {
+                    appManager->undoStep();
+                } else if (wp == 'Y') {
+                    appManager->redoStep();
+                }
+            }
+            break;
         case WM_RBUTTONDOWN:
             mouseRightClick(LOWORD(lp), HIWORD(lp));
             break;
