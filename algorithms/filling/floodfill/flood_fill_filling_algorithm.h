@@ -9,7 +9,7 @@ public:
     FloodFill_FillingAlgorithm();
     void fill(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const;
 private:
-    void fill_helper(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const;
+    void fill_helper(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, COLORREF fillableColor , ScreenWriter *sw) const;
 };
 
 

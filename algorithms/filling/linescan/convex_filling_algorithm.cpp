@@ -49,7 +49,7 @@ void ConvexFillingAlgorithm::fill_helper(const Shape &shape, const Shape &clippi
     // Fallback: If the shape doesn't inherently provide boundary points (like Circle/Ellipse)
     if (pts.empty() && !shape.points.empty()) {
         const double PI = std::acos(-1.0);
-        if (shape.getType() == SHAPE_CIRCLE && shape.points.size() >= 2) {
+        if ((shape.getType() == SHAPE_CIRCLE || shape.getType() == SHAPE_SAD_SMILE_FACE || shape.getType() == SHAPE_HAPPY_SMILE_FACE) && shape.points.size() >= 2) {
             double radius = shape.points[0].euclideanDistance(shape.points[1]);
             Point center = shape.points[0];
             int num_segments = 360; 
