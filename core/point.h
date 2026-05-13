@@ -24,6 +24,9 @@ public:
     }
 
     double slope(const Point& other) const {
+        if(dx(other) == 0) {
+            return std::numeric_limits<double>::infinity();;
+        }
         return dy(other) / dx(other);
     }
 

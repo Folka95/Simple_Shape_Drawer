@@ -44,8 +44,39 @@ int PolygonShape<size>::getSize() const {
 
 template< int size >
 bool PolygonShape<size>::isInside(const Point &point) const {
-    // TODO
-    return false;
+    if(size < 3) {
+        return false;
+    }
+    const double MOE = 1e-8; // Margin Of Error
+    vector< Point > sides = this->getSidePoints();
+    int cnt = 0;
+    for (int i = 0; i < size; i++) {
+        Point a = sides[i];
+        Point b = sides[(i + 1) % size];
+        double m = a.slope(b);
+        if(m == 0) {
+            continue;
+        }
+        double c = a.y - m * a.x;
+        Point intersection = Point((point.y - c) / m, point.y);
+        if(abs(intersection.x - point.x) < MOE) {
+            return false;
+        }
+        if(intersection.y < min(a.y, b.y) - MOE || intersection.y > max(a.y, b.y) + MOE) {
+            continue;
+        }
+        if(intersection.x < min(a.x, b.x) - MOE || intersection.x > max(a.x, b.x) + MOE) {
+            continue;
+        }
+        if(intersection.x < point.x - MOE) {
+            continue;
+        }
+        if(abs(intersection.x - a.x) < MOE || abs(intersection.x - b.x) < MOE) {
+            return true;
+        }
+        cnt++;
+    }
+    return cnt % 2 == 1;
 }
 
 template< int size >

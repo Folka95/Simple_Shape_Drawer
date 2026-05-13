@@ -304,33 +304,55 @@ void AppManager::clearScreen() {
     sw->clearScreen();
     Shape *current = shapeHistory.back()->clone();
     this->shapeHistory.clear();
+    current->clear();
     shapeHistory.push_back(current);
 }
 
 void AppManager::hardSaveScreen(string filepath) {
-    vector< Action* > tmp;
-    for(Action *action : actionHistory) {
-        tmp.push_back(action->clone());
+    if(filepath.empty()) {
+        return;
     }
-    if(!tmp.empty() && tmp.back()->getRank() < 2) {
-        tmp.pop_back();
+    if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".hsv") {
+        vector< Action* > tmp;
+        for(Action *action : actionHistory) {
+            tmp.push_back(action->clone());
+        }
+        if(!tmp.empty() && tmp.back()->getRank() < 2) {
+            tmp.pop_back();
+        }
+        FileManager::saveActions(tmp, filepath);
     }
-    FileManager::saveActions(tmp, filepath);
+    else {
+        cerr << "AppManager::hardSaveScreen: filepath is invalid" << endl;
+    }
 }
 
 void AppManager::softSaveScreen(string filepath) {
-    vector< vector< COLORREF > > screen = sw->getScreen();
-    FileManager::saveScreen(screen, filepath);
+    if(filepath.empty()) {
+        return;
+    }
+    if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".ssv") {
+        vector< vector< COLORREF > > screen = sw->getScreen();
+        FileManager::saveScreen(screen, filepath);
+    }
+    else {
+        cerr << "AppManager::softSaveScreen: filepath is invalid" << endl;
+    }
 }
 
 void AppManager::loadScreen(string filepath) {
-    actionHistory.clear();
-    shapeHistory.clear();
-    if(filepath.substr(filepath.size() - 4, 4) == ".ssv") {
+    if(filepath.empty()) {
+        return;
+    }
+    if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".ssv") {
+        actionHistory.clear();
+        shapeHistory.clear();
         vector< vector< COLORREF > > screen = FileManager::loadScreen(filepath);
         sw->setScreen(screen, true);
     }
-    else if(filepath.substr(filepath.size() - 4, 4) == ".hsv"){
+    else if(filepath.size() > 4 && filepath.substr(filepath.size() - 4, 4) == ".hsv"){
+        actionHistory.clear();
+        shapeHistory.clear();
         vector< Action* > actions = FileManager::loadActions(filepath);
         this->reset();
         for(Action *action : actions) {
