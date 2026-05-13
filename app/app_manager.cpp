@@ -487,16 +487,7 @@ void AppManager::undoStep() {
         cout << "Undoing last operation..." << endl;
         cout << mediumSeparator << endl;
     }
-    // stack< vector< Action* > > tmp;
-    // while(!redo.empty()) {
-    //     tmp.push(this->copyActionVector(redo.top()));
-    //     redo.pop();
-    // }
     Private_applyActions(undo.top(), false);
-    // while(!tmp.empty()) {
-    //     redo.push(this->copyActionVector(tmp.top()));
-    //     tmp.pop();
-    // }
 }
 
 void AppManager::redoStep() {
