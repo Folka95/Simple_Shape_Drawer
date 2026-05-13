@@ -21,6 +21,7 @@ AppManager::AppManager(HWND _hwnd) {
     fillColor = RGB(255, 255, 255);
     shapeHistory.push_back(new PolygonShape<1>());
     this->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
+    this->undo.push(this->copyActionVector(this->actionHistory));
 }
 
 AppManager::~AppManager() {
