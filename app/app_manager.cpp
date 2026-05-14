@@ -9,9 +9,9 @@
 using namespace std;
 AppManager::AppManager(HWND _hwnd) {
     this->hwnd = _hwnd;
-    this->featureEnabled = false;
+    this->animationEnabled = false;
     this->sw = new ScreenWriter(_hwnd);
-    sw->setAnimation(this->featureEnabled);
+    sw->setAnimation(this->animationEnabled);
     this->drawingAlgorithm = nullptr;
     this->fillingAlgorithm = nullptr;
     this->clippingAlgorithm = nullptr;
@@ -22,6 +22,7 @@ AppManager::AppManager(HWND _hwnd) {
     shapeHistory.push_back(new PolygonShape<1>());
     this->setDrawingAlgorithm(new Polygon_DrawingAlgorithm());
     this->undo.push(this->copyActionVector(this->actionHistory));
+    currentMouse = 0;
 }
 
 AppManager::~AppManager() {
@@ -323,6 +324,12 @@ void AppManager::Private_applyMenuSelection(short choice, vector< short > data, 
     if(mainMenuDecoder(choice) == FILE_MENU && subMenuDecoder(choice) == FILE_REDO) {
         return;
     }
+    if(mainMenuDecoder(choice) == PREFERENCES_MENU && subMenuDecoder(choice) == PREFERENCES_TOGGLE_ANIMATION) {
+        return;
+    }
+    if(mainMenuDecoder(choice) == PREFERENCES_MENU && subMenuDecoder(choice) == PREFERENCES_MOUSE_SHAPE) {
+        return;
+    }
     vector< short > tmp = result;
     tmp.insert(tmp.begin(), choice);
     actionHistory.push_back(new MenuSelectAction(2, tmp));
@@ -410,8 +417,14 @@ void AppManager::softSaveScreen(string filepath) {
 void AppManager::Private_applyActions(vector< Action* > actions, bool isUser) {
     actionHistory.clear();
     shapeHistory.clear();
+    if(!isUser) {
+        sw->setAnimation(false);
+    }
     this->Private_reset(isUser);
     for(Action *action : actions) {
+        if(!isUser) {
+            sw->setAnimation(false);
+        }
         if(action->getActionType() == ACTION_LEFT_CLICK) {
             this->Private_applyLeftClick(action->getData()[0], action->getData()[1], false);
         }
@@ -488,6 +501,7 @@ void AppManager::undoStep() {
         cout << mediumSeparator << endl;
     }
     Private_applyActions(undo.top(), false);
+    sw->setAnimation(isAnimationEnabled());
 }
 
 void AppManager::redoStep() {
@@ -499,6 +513,7 @@ void AppManager::redoStep() {
         cout << mediumSeparator << endl;
     }
     Private_applyActions(undo.top(), false);
+    sw->setAnimation(isAnimationEnabled());
 }
 
 void AppManager::changeMouse() {
@@ -508,37 +523,30 @@ void AppManager::changeMouse() {
         IDC_CROSS,
         IDC_SIZEALL
     };
-
-    static bool seeded = false;
-    if (!seeded) {
-        std::srand((unsigned)std::time(nullptr));
-        seeded = true;
-    }
-
-    int index = std::rand() % (sizeof(cursors) / sizeof(cursors[0]));
-    mouse.setSystemCursor(cursors[index]);
+    currentMouse = (currentMouse + 1) % 4;
+    mouse.setSystemCursor(cursors[currentMouse]);
 }
 
 void AppManager::applyMouseCursor() {
     mouse.apply();
 }
 
-bool AppManager::toggleFeature() {
-    featureEnabled = !featureEnabled;
-    sw->setAnimation(featureEnabled);
+bool AppManager::toggleAnimation() {
+    animationEnabled = !animationEnabled;
+    sw->setAnimation(animationEnabled);
     cout << mediumSeparator << endl;
-    if(featureEnabled) {
+    if(animationEnabled) {
         cout << "Enabling animation mode..." << endl;
     }
     else {
         cout << "Disabling animation mode..." << endl;
     }
     cout << mediumSeparator << endl;
-    return featureEnabled;
+    return animationEnabled;
 }
 
-bool AppManager::isFeatureEnabled() {
-    return featureEnabled;
+bool AppManager::isAnimationEnabled() {
+    return animationEnabled;
 }
 
 HWND AppManager::getScreenOwner() {

@@ -43,7 +43,8 @@ private:
     void applyLeftClickNoneClipping(short x, short y, bool isUser);
     void reset();
 
-    bool featureEnabled;
+    bool animationEnabled;
+    int currentMouse;
 
     void Private_applyLeftClick(short x, short y, bool isUser);
     void Private_applyRightClick(short x, short y, bool isUser);
@@ -82,8 +83,8 @@ public:
 
     void printState();
 
-    bool toggleFeature();
-    bool isFeatureEnabled();
+    bool toggleAnimation();
+    bool isAnimationEnabled();
 
     void clearScreen();
     void softSaveScreen(string filepath);

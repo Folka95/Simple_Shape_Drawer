@@ -71,7 +71,7 @@ enum PreferencesMenu {
     PREFERENCES_MOUSE_SHAPE,
     PREFERENCES_BORDER_COLOR,
     PREFERENCES_FILL_COLOR,
-    PREFERENCES_TOGGLE_FEATURE
+    PREFERENCES_TOGGLE_ANIMATION
 };
 
 enum LineMenu {
@@ -171,7 +171,7 @@ inline HMENU createPreferencesMenu() {
     AppendMenu(hSubMenu, MF_SEPARATOR, 0, NULL);
     AppendMenu(hSubMenu, MF_STRING, enumEncoder(PREFERENCES_MENU, PREFERENCES_MOUSE_SHAPE), "Change mouse randomly");
     AppendMenu(hSubMenu, MF_SEPARATOR, 0, NULL);
-    AppendMenu(hSubMenu, MF_STRING | (false ? MF_CHECKED : MF_UNCHECKED), enumEncoder(PREFERENCES_MENU, PREFERENCES_TOGGLE_FEATURE), "Enable Animation");
+    AppendMenu(hSubMenu, MF_STRING | (false ? MF_CHECKED : MF_UNCHECKED), enumEncoder(PREFERENCES_MENU, PREFERENCES_TOGGLE_ANIMATION), "Enable Animation");
     return hSubMenu;
 }
 
@@ -350,8 +350,8 @@ inline vector< short > selectPreferencesMenu(short value, AppManager *appManager
             return {GetRValue(color), GetGValue(color), GetBValue(color)};
         }
 
-        case PREFERENCES_TOGGLE_FEATURE: {
-            bool isEnabled = appManager->toggleFeature();
+        case PREFERENCES_TOGGLE_ANIMATION: {
+            bool isEnabled = appManager->toggleAnimation();
             HMENU hMenu = GetMenu(appManager->getScreenOwner());
             CheckMenuItem(hMenu, value, MF_BYCOMMAND | (isEnabled ? MF_CHECKED : MF_UNCHECKED));
             return {};

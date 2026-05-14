@@ -5,7 +5,7 @@ FloodFill_FillingAlgorithm::FloodFill_FillingAlgorithm() : FillingAlgorithm("Flo
 }
 
 void FloodFill_FillingAlgorithm::fill(const Shape &shape, const Shape &clippingRegion, const Point &startPoint, ScreenWriter *sw) const {
-    if (!clippingRegion.isInside(startPoint)) {
+    if (&clippingRegion != nullptr && !clippingRegion.isInside(startPoint)) {
         return;
     }
     sw->activate();
