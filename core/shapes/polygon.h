@@ -36,6 +36,17 @@ PolygonShape<size>::PolygonShape() : Shape(
 template< int size >
 void PolygonShape<size>::initialize() {
     this->area = 0;
+    if(size < 3) {
+        return;
+    }
+    auto triangleArea = [](Point a, Point b, Point c) -> double {
+        return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) / 2.0;
+    };
+    vector< Point > sides = getSidePoints();
+    for(int i = 1; i + 1 < size; i++) {
+        this->area += triangleArea(sides[0], sides[i], sides[i + 1]);
+    }
+    this->area = abs(this->area);
 }
 
 template< int size >
